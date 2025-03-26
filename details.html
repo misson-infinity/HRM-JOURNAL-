@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>জার্নাল বিস্তারিত</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="btn">হোমে ফিরে যান</a>
+        <h1 id="journal-title"></h1>
+    </header>
+
+    <section id="journal-details">
+        <p id="journal-description"></p>
+    </section>
+
+    <footer>
+        <p>Website developed by Md Habibur Rahman Mahi</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const title = urlParams.get('title');
+            const journals = JSON.parse(localStorage.getItem('journals')) || [];
+            const journal = journals.find(j => j.title === title);
+            if (journal) {
+                document.getElementById('journal-title').innerText = journal.title;
+                document.getElementById('journal-description').innerText = journal.description;
+            }
+        });
+    </script>
+</body>
+</html>
