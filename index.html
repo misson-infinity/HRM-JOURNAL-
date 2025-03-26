@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HRM Journal - Home</title>
+    <title>HRM Journal - হোম</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
                     <li><a href="authors.html">লেখক</a></li>
                     <li><a href="about.html">সম্পর্কিত</a></li>
                     <li><a href="contact.html">যোগাযোগ</a></li>
-                    <li><a href="admin.html">অ্যাডমিন ভিউ</a></li>
+                    <li><a href="admin.html">অ্যাডমিন প্যানেল</a></li>
                 </ul>
             </nav>
         </div>
@@ -27,20 +27,30 @@
         <div class="container">
             <h2>সাম্প্রতিক জার্নাল</h2>
             <p>এই মাসের সেরা জার্নাল পড়ুন।</p>
+            <div id="journal-list"></div>
             <a href="journals.html" class="btn">সব জার্নাল দেখুন</a>
-        </div>
-    </section>
-
-    <section class="trending">
-        <div class="container">
-            <h2>ট্রেন্ডিং জার্নাল</h2>
-            <p>বেশি পড়া জার্নালগুলো দেখুন।</p>
-            <a href="journals.html" class="btn">আরও দেখুন</a>
         </div>
     </section>
 
     <footer>
         <p>Website developed by Md Habibur Rahman Mahi</p>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const journals = JSON.parse(localStorage.getItem('journals')) || [];
+            const journalList = document.getElementById('journal-list');
+            journals.forEach(journal => {
+                const journalItem = document.createElement('div');
+                journalItem.classList.add('journal-item');
+                journalItem.innerHTML = `
+                    <h3>${journal.title}</h3>
+                    <p>${journal.description}</p>
+                    <a href="details.html?title=${encodeURIComponent(journal.title)}" class="btn">বিস্তারিত পড়ুন</a>
+                `;
+                journalList.appendChild(journalItem);
+            });
+        });
+    </script>
 </body>
 </html>
