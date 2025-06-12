@@ -1,13 +1,185 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Budget Tracker</title>
+    
+    <!-- PWA and Mobile Theme -->
+    <meta name="theme-color" content="#2A9D8F">
+    <link rel="manifest" href="manifest.json">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="logo.svg" alt="Budget Tracker Logo" class="logo">
+            <h1>Budget Tracker</h1>
+        </div>
+        <div class="theme-switcher">
+            <label class="switch">
+                <input type="checkbox" id="darkModeToggle">
+                <span class="slider round"></span>
+            </label>
+            <span class="theme-icon"><i class="fas fa-moon"></i></span>
+        </div>
+    </header>
+
+    <main>
+        <!-- ফিল্টার সেকশন -->
+        <section class="card filter-section">
+            <div class="filter-controls">
+                <div>
+                    <label for="monthFilter">Month:</label>
+                    <select id="monthFilter">
+                        <option value="0">January</option><option value="1">February</option><option value="2">March</option><option value="3">April</option><option value="4">May</option><option value="5">June</option><option value="6">July</option><option value="7">August</option><option value="8">September</option><option value="9">October</option><option value="10">November</option><option value="11">December</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="yearFilter">Year:</label>
+                    <input type="number" id="yearFilter" min="2000" max="2100">
+                </div>
+            </div>
+            <button id="generatePdfBtn"><i class="fas fa-file-pdf"></i> PDF Report</button>
+        </section>
+
+        <!-- প্রধান মেট্রিক কার্ড -->
+        <section class="summary-cards-container">
+            <div class="stat-card balance">
+                <i class="fas fa-wallet"></i>
+                <div>
+                    <span>Current Balance</span>
+                    <h2 id="currentBalance">₹0.00</h2>
+                </div>
+            </div>
+            <div class="stat-card income">
+                <i class="fas fa-arrow-down"></i>
+                <div>
+                    <span>Total Income</span>
+                    <h2 id="totalIncome">₹0.00</h2>
+                </div>
+            </div>
+            <div class="stat-card expense">
+                <i class="fas fa-arrow-up"></i>
+                <div>
+                    <span>Total Expenses</span>
+                    <h2 id="totalExpenses">₹0.00</h2>
+                </div>
+            </div>
+        </section>
+
+        <!-- চার্ট এবং লেনদেনের সেকশন -->
+        <section class="dashboard-main-content">
+            <div class="card chart-container">
+                <h3>Expense Breakdown</h3>
+                <canvas id="expenseChart"></canvas>
+            </div>
+            <div class="card table-container">
+                <h3>Recent Transactions</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Type</th><th>Description</th><th>Amount</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody id="transactionsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Action Buttons (FAB) -->
+    <div class="fab-container">
+        <button class="fab" id="addIncomeBtn" title="Add Income"><i class="fas fa-plus"></i></button>
+        <button class="fab" id="addExpenseBtn" title="Add Expense"><i class="fas fa-minus"></i></button>
+    </div>
+
+    <!-- Add Income Modal -->
+    <div id="incomeModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeIncomeModal">×</span>
+            <h2><i class="fas fa-hand-holding-usd"></i> Add Income</h2>
+            <form id="incomeForm">
+                <div>
+                    <label for="incomeSource">Source:</label>
+                    <input type="text" id="incomeSource" placeholder="e.g., Salary" required>
+                </div>
+                <div>
+                    <label for="incomeAmount">Amount:</label>
+                    <input type="number" id="incomeAmount" placeholder="e.g., 50000" min="0.01" step="0.01" required>
+                </div>
+                <div>
+                    <label for="incomeDate">Date:</label>
+                    <input type="date" id="incomeDate" required>
+                </div>
+                <button type="submit"><i class="fas fa-check-circle"></i> Save Income</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Expense Modal -->
+    <div id="expenseModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeExpenseModal">×</span>
+            <h2><i class="fas fa-receipt"></i> Add Expense</h2>
+            <form id="expenseForm">
+                <div>
+                    <label for="expenseCategory">Category:</label>
+                    <select id="expenseCategory" required>
+                        <option value="Food">Food</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Bills">Bills & Utilities</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Health">Health</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="expenseDescription">Description:</label>
+                    <input type="text" id="expenseDescription" placeholder="e.g., Groceries" required>
+                </div>
+                <div>
+                    <label for="expenseAmount">Amount:</label>
+                    <input type="number" id="expenseAmount" placeholder="e.g., 75.50" min="0.01" step="0.01" required>
+                </div>
+                <div>
+                    <label for="expenseDate">Date:</label>
+                    <input type="date" id="expenseDate" required>
+                </div>
+                <button type="submit"><i class="fas fa-check-circle"></i> Save Expense</button>
+            </form>
+        </div>
+    </div>
+    
+    <footer>
+        <a href="developer.html" class="footer-profile-link">
+            <img src="profile.jpg" alt="Developer: Md Habibur Rahman Mahi" class="profile-pic">
+            <span class="profile-text">Developer Profile</span>
+        </a>
+    </footer>
+
+    <!-- Chart.js and other libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    
+    <!-- Main App Script -->
+    <script src="script.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(reg => console.log('Service Worker: Registered'))
+                    .catch(err => console.log(`Service Worker: Error: ${err}`));
+            });
+        }
+    </script>
+</body>
 </html>
