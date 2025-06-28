@@ -3,183 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monthly Budget Tracker</title>
+    <title>Infinity Expense Tracker - Pro</title>
     
-    <!-- PWA and Mobile Theme -->
     <meta name="theme-color" content="#2A9D8F">
     <link rel="manifest" href="manifest.json">
     
     <link rel="stylesheet" href="style.css">
     
-    <!-- Font Awesome for Icons -->
+    <!-- External Libraries -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
     <header>
         <div class="logo-container">
             <img src="logo.svg" alt="Budget Tracker Logo" class="logo">
-            <h1>Budget Tracker</h1>
+            <h1>Infinity Tracker</h1>
         </div>
-        <div class="theme-switcher">
-            <label class="switch">
-                <input type="checkbox" id="darkModeToggle">
-                <span class="slider round"></span>
-            </label>
-            <span class="theme-icon"><i class="fas fa-moon"></i></span>
+        <div class="header-controls">
+            <button id="searchBtn" class="header-btn"><i class="fas fa-search"></i></button>
+            <div class="theme-switcher">
+                <label class="switch">
+                    <input type="checkbox" id="darkModeToggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <a href="developer.html" class="header-btn profile-btn">
+                <img src="vector_lecture_design.png" alt="Profile">
+            </a>
         </div>
     </header>
 
     <main>
-        <!-- ফিল্টার সেকশন -->
-        <section class="card filter-section">
+        <!-- Filter Section -->
+        <section class="filter-section card">
             <div class="filter-controls">
+                <h2><i class="fas fa-calendar-alt"></i> Timeframe</h2>
                 <div>
                     <label for="monthFilter">Month:</label>
-                    <select id="monthFilter">
-                        <option value="0">January</option><option value="1">February</option><option value="2">March</option><option value="3">April</option><option value="4">May</option><option value="5">June</option><option value="6">July</option><option value="7">August</option><option value="8">September</option><option value="9">October</option><option value="10">November</option><option value="11">December</option>
-                    </select>
+                    <select id="monthFilter"></select>
                 </div>
                 <div>
                     <label for="yearFilter">Year:</label>
                     <input type="number" id="yearFilter" min="2000" max="2100">
                 </div>
             </div>
-            <button id="generatePdfBtn"><i class="fas fa-file-pdf"></i> PDF Report</button>
+             <div class="export-controls">
+                <h2><i class="fas fa-download"></i> Export</h2>
+                <button id="generatePdfBtn"><i class="fas fa-file-pdf"></i> PDF</button>
+                <button id="exportCsvBtn"><i class="fas fa-file-csv"></i> CSV</button>
+            </div>
         </section>
 
-        <!-- প্রধান মেট্রিক কার্ড -->
-        <section class="summary-cards-container">
-            <div class="stat-card balance">
-                <i class="fas fa-wallet"></i>
-                <div>
-                    <span>Current Balance</span>
-                    <h2 id="currentBalance">₹0.00</h2>
-                </div>
-            </div>
-            <div class="stat-card income">
-                <i class="fas fa-arrow-down"></i>
-                <div>
-                    <span>Total Income</span>
+        <!-- Main Content with Tabs -->
+        <div class="tabs">
+            <button class="tab-link active" onclick="openTab(event, 'Dashboard')"><i class="fas fa-chart-pie"></i> Dashboard</button>
+            <button class="tab-link" onclick="openTab(event, 'Transactions')"><i class="fas fa-exchange-alt"></i> Transactions</button>
+            <button class="tab-link" onclick="openTab(event, 'Budgets')"><i class="fas fa-bullseye"></i> Budgets</button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="Dashboard" class="tab-content active">
+            <section class="dashboard-grid">
+                <div class="summary-card card">
+                    <i class="fas fa-wallet icon-bg income"></i>
+                    <p>Total Income</p>
                     <h2 id="totalIncome">₹0.00</h2>
                 </div>
-            </div>
-            <div class="stat-card expense">
-                <i class="fas fa-arrow-up"></i>
-                <div>
-                    <span>Total Expenses</span>
+                <div class="summary-card card">
+                    <i class="fas fa-receipt icon-bg expense"></i>
+                    <p>Total Expenses</p>
                     <h2 id="totalExpenses">₹0.00</h2>
                 </div>
-            </div>
-        </section>
+                <div class="summary-card card">
+                    <i class="fas fa-piggy-bank icon-bg balance"></i>
+                    <p>Final Balance</p>
+                    <h2 id="currentBalance">₹0.00</h2>
+                </div>
+                 <div class="summary-card card">
+                    <i class="fas fa-chart-line icon-bg transactions"></i>
+                    <p>Transactions</p>
+                    <h2 id="transactionCount">0</h2>
+                </div>
+            </section>
+            <section class="charts-section card">
+                 <h3>Expense Analysis</h3>
+                 <div class="chart-container">
+                    <canvas id="expensePieChart"></canvas>
+                 </div>
+                 <h3>Income vs Expense</h3>
+                 <div class="chart-container">
+                    <canvas id="incomeExpenseBarChart"></canvas>
+                 </div>
+            </section>
+        </div>
 
-        <!-- চার্ট এবং লেনদেনের সেকশন -->
-        <section class="dashboard-main-content">
-            <div class="card chart-container">
-                <h3>Expense Breakdown</h3>
-                <canvas id="expenseChart"></canvas>
+        <!-- Transactions Tab -->
+        <div id="Transactions" class="tab-content">
+            <div class="transaction-controls card">
+                <input type="text" id="searchInput" placeholder="Search transactions...">
+                 <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                </select>
+                <select id="paymentMethodFilter">
+                    <option value="">All Payment Methods</option>
+                </select>
             </div>
-            <div class="card table-container">
-                <h3>Recent Transactions</h3>
+            <div class="table-container card">
+                 <h3><i class="fas fa-list-ul"></i> All Transactions</h3>
                 <div class="table-wrapper">
-                    <table>
+                    <table id="transactionTable">
                         <thead>
-                            <tr><th>Type</th><th>Description</th><th>Amount</th><th>Actions</th></tr>
+                            <tr>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Details</th>
+                                <th>Category</th>
+                                <th>Amount</th>
+                                <th>Actions</th>
+                            </tr>
                         </thead>
-                        <tbody id="transactionsTableBody"></tbody>
+                        <tbody id="transactionTableBody"></tbody>
                     </table>
+                     <div id="emptyState" class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <p>No transactions found for this period.</p>
+                        <span>Add one using the '+' button!</span>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+        
+        <!-- Budgets Tab -->
+        <div id="Budgets" class="tab-content">
+            <section class="card budget-summary">
+                <h3>Overall Monthly Budget</h3>
+                <div class="budget-input-group">
+                    <input type="number" id="overallBudgetInput" placeholder="Set overall budget...">
+                    <button id="setOverallBudgetBtn">Set</button>
+                </div>
+                <p>Spent: <span id="overallSpent">₹0.00</span> of <span id="overallBudget">₹0.00</span></p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="overallProgressBar"></div>
+                </div>
+            </section>
+            <section class="card" id="categoryBudgets">
+                <h3>Category Budgets</h3>
+                <!-- Category budgets will be rendered here by JS -->
+            </section>
+        </div>
     </main>
 
-    <!-- Floating Action Buttons (FAB) -->
-    <div class="fab-container">
-        <button class="fab" id="addIncomeBtn" title="Add Income"><i class="fas fa-plus"></i></button>
-        <button class="fab" id="addExpenseBtn" title="Add Expense"><i class="fas fa-minus"></i></button>
-    </div>
+    <!-- Floating Action Button -->
+    <button class="fab" id="addTransactionBtn"><i class="fas fa-plus"></i></button>
 
-    <!-- Add Income Modal -->
-    <div id="incomeModal" class="modal">
+    <!-- Add/Edit Transaction Modal -->
+    <div id="transactionModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" id="closeIncomeModal">×</span>
-            <h2><i class="fas fa-hand-holding-usd"></i> Add Income</h2>
-            <form id="incomeForm">
-                <div>
-                    <label for="incomeSource">Source:</label>
-                    <input type="text" id="incomeSource" placeholder="e.g., Salary" required>
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Transaction</h2>
+                <button class="close-btn" id="closeModalBtn">×</button>
+            </div>
+            <form id="transactionForm">
+                <input type="hidden" id="transactionId">
+                <div class="type-toggle">
+                    <button type="button" class="toggle-btn active" data-type="expense">Expense</button>
+                    <button type="button" class="toggle-btn" data-type="income">Income</button>
                 </div>
                 <div>
-                    <label for="incomeAmount">Amount:</label>
-                    <input type="number" id="incomeAmount" placeholder="e.g., 50000" min="0.01" step="0.01" required>
+                    <label for="transactionAmount">Amount:</label>
+                    <input type="number" id="transactionAmount" min="0.01" step="0.01" required>
+                </div>
+                <div id="description-field">
+                    <label for="transactionDescription">Description:</label>
+                    <input type="text" id="transactionDescription" required>
+                </div>
+                <div id="category-field">
+                    <label for="transactionCategory">Category:</label>
+                    <select id="transactionCategory"></select>
+                </div>
+                <div id="payment-method-field">
+                    <label for="transactionPaymentMethod">Payment Method:</label>
+                    <select id="transactionPaymentMethod"></select>
                 </div>
                 <div>
-                    <label for="incomeDate">Date:</label>
-                    <input type="date" id="incomeDate" required>
+                    <label for="transactionDate">Date:</label>
+                    <input type="date" id="transactionDate" required>
                 </div>
-                <button type="submit"><i class="fas fa-check-circle"></i> Save Income</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Add Expense Modal -->
-    <div id="expenseModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" id="closeExpenseModal">×</span>
-            <h2><i class="fas fa-receipt"></i> Add Expense</h2>
-            <form id="expenseForm">
-                <div>
-                    <label for="expenseCategory">Category:</label>
-                    <select id="expenseCategory" required>
-                        <option value="Food">Food</option>
-                        <option value="Transport">Transport</option>
-                        <option value="Bills">Bills & Utilities</option>
-                        <option value="Shopping">Shopping</option>
-                        <option value="Entertainment">Entertainment</option>
-                        <option value="Health">Health</option>
-                        <option value="Other">Other</option>
-                    </select>
+                 <div>
+                    <label for="transactionNotes">Notes (Optional):</label>
+                    <textarea id="transactionNotes" rows="2"></textarea>
                 </div>
-                <div>
-                    <label for="expenseDescription">Description:</label>
-                    <input type="text" id="expenseDescription" placeholder="e.g., Groceries" required>
+                <div class="form-footer">
+                    <button type="submit" id="saveTransactionBtn">Save</button>
                 </div>
-                <div>
-                    <label for="expenseAmount">Amount:</label>
-                    <input type="number" id="expenseAmount" placeholder="e.g., 75.50" min="0.01" step="0.01" required>
-                </div>
-                <div>
-                    <label for="expenseDate">Date:</label>
-                    <input type="date" id="expenseDate" required>
-                </div>
-                <button type="submit"><i class="fas fa-check-circle"></i> Save Expense</button>
             </form>
         </div>
     </div>
     
-    <footer>
-        <a href="developer.html" class="footer-profile-link">
-            <img src="profile.jpg" alt="Developer: Md Habibur Rahman Mahi" class="profile-pic">
-            <span class="profile-text">Developer Profile</span>
-        </a>
-    </footer>
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="toast"></div>
 
-    <!-- Chart.js and other libraries -->
+    <!-- External Libraries JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
     
     <!-- Main App Script -->
     <script src="script.js"></script>
-
-    <!-- Service Worker Registration -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(reg => console.log('Service Worker: Registered'))
-                    .catch(err => console.log(`Service Worker: Error: ${err}`));
-            });
-        }
-    </script>
 </body>
 </html>
