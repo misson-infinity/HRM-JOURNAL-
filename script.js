@@ -1,254 +1,319 @@
+// script.js
 document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements
+    // --- STATE MANAGEMENT ---
+    let state = {
+        transactions: [],
+        budgets: {
+            overall: 0,
+            categories: {}
+        },
+        settings: {
+            userName: "Md Habibur Rahman Mahi",
+            currency: "₹"
+        },
+        currentMonth: new Date().getMonth(),
+        currentYear: new Date().getFullYear(),
+        editingTransactionId: null
+    };
+
+    // --- DOM ELEMENTS ---
     const monthFilter = document.getElementById('monthFilter');
     const yearFilter = document.getElementById('yearFilter');
-    const totalIncomeEl = document.getElementById('totalIncome');
-    const totalExpensesEl = document.getElementById('totalExpenses');
-    const currentBalanceEl = document.getElementById('currentBalance');
-    const transactionsTableBody = document.getElementById('transactionsTableBody');
-    const expenseChartCanvas = document.getElementById('expenseChart');
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const themeIcon = document.querySelector('.theme-icon i');
-    const generatePdfBtn = document.getElementById('generatePdfBtn');
-
-    // Modal Elements
-    const incomeModal = document.getElementById('incomeModal');
-    const expenseModal = document.getElementById('expenseModal');
-    const addIncomeBtn = document.getElementById('addIncomeBtn');
-    const addExpenseBtn = document.getElementById('addExpenseBtn');
-    const closeIncomeModal = document.getElementById('closeIncomeModal');
-    const closeExpenseModal = document.getElementById('closeExpenseModal');
+    const fab = document.getElementById('addTransactionBtn');
+    const modal = document.getElementById('transactionModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const transactionForm = document.getElementById('transactionForm');
+    const transactionTableBody = document.getElementById('transactionTableBody');
+    const emptyState = document.getElementById('emptyState');
     
-    // Form Elements
-    const incomeForm = document.getElementById('incomeForm');
-    const expenseForm = document.getElementById('expenseForm');
-
-    // App State
-    let allData = JSON.parse(localStorage.getItem('budgetData')) || {};
-    let expenseChart;
-
     // --- INITIALIZATION ---
     function initializeApp() {
-        loadDarkModePreference();
-        populateFilters();
-        setDefaultDateInputs();
-        setupEventListeners();
-        renderForSelectedMonth();
+        populateDateFilters();
+        loadState();
+        registerEventListeners();
+        renderAll();
     }
 
-    function populateFilters() {
-        const currentDate = new Date();
-        monthFilter.value = currentDate.getMonth();
-        yearFilter.value = currentDate.getFullYear();
+    function populateDateFilters() {
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        monthFilter.innerHTML = months.map((month, index) => `<option value="${index}">${month}</option>`).join('');
+        monthFilter.value = state.currentMonth;
+        yearFilter.value = state.currentYear;
     }
     
-    function setDefaultDateInputs() {
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('incomeDate').value = today;
-        document.getElementById('expenseDate').value = today;
-    }
-
-    // --- DARK MODE ---
-    function loadDarkModePreference() {
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            document.body.classList.add('dark-mode');
-            darkModeToggle.checked = true;
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
+    // --- STATE & DATA PERSISTENCE ---
+    function loadState() {
+        const savedState = localStorage.getItem('infinityTrackerState');
+        if (savedState) {
+            state = JSON.parse(savedState);
+            // Ensure date objects are correctly parsed if stored as strings
+            state.transactions.forEach(t => t.date = new Date(t.date));
         }
+        // Always set current month/year to today on load, but keep historic data
+        state.currentMonth = new Date().getMonth();
+        state.currentYear = new Date().getFullYear();
     }
 
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
-        themeIcon.classList.toggle('fa-moon');
-        themeIcon.classList.toggle('fa-sun');
-        renderForSelectedMonth(); // Re-render chart with new colors
+    function saveState() {
+        localStorage.setItem('infinityTrackerState', JSON.stringify(state));
     }
-
-    // --- MODAL CONTROL ---
-    function openModal(modal) { modal.style.display = "block"; }
-    function closeModal(modal) { modal.style.display = "none"; }
-
-    // --- DATA HANDLING ---
-    function saveData() {
-        localStorage.setItem('budgetData', JSON.stringify(allData));
-    }
-
-    function getMonthYearKey(date) {
-        return `${date.getFullYear()}-${date.getMonth()}`;
-    }
-
-    function addItem(type, itemData) {
-        const date = new Date(itemData.date);
-        const monthYearKey = getMonthYearKey(date);
-        if (!allData[monthYearKey]) {
-            allData[monthYearKey] = { income: [], expenses: [] };
-        }
-        itemData.id = Date.now().toString();
-        allData[monthYearKey][type].push(itemData);
-        saveData();
-        renderForSelectedMonth();
-    }
-
-    function deleteItem(type, id, monthYearKey) {
-        if (allData[monthYearKey] && allData[monthYearKey][type]) {
-            allData[monthYearKey][type] = allData[monthYearKey][type].filter(item => item.id !== id);
-            if (allData[monthYearKey].income.length === 0 && allData[monthYearKey].expenses.length === 0) {
-                delete allData[monthYearKey];
-            }
-            saveData();
-            renderForSelectedMonth();
-        }
-    }
-
+    
     // --- RENDERING ---
-    function renderForSelectedMonth() {
-        const selectedYear = parseInt(yearFilter.value);
-        const selectedMonth = parseInt(monthFilter.value);
-        const currentMonthYearKey = `${selectedYear}-${selectedMonth}`;
-        const monthData = allData[currentMonthYearKey] || { income: [], expenses: [] };
+    function renderAll() {
+        const filteredTransactions = getFilteredTransactions();
+        renderDashboard(filteredTransactions);
+        renderTransactionTable(filteredTransactions);
+        renderBudgets(filteredTransactions);
+        renderCharts(filteredTransactions);
+    }
+    
+    function renderDashboard(transactions) {
+        const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+        const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
         
-        updateSummaryCards(monthData.income, monthData.expenses);
-        renderTransactionsTable(monthData.income, monthData.expenses, currentMonthYearKey);
-        renderExpenseChart(monthData.expenses);
+        document.getElementById('totalIncome').textContent = formatCurrency(income);
+        document.getElementById('totalExpenses').textContent = formatCurrency(expenses);
+        document.getElementById('currentBalance').textContent = formatCurrency(income - expenses);
+        document.getElementById('transactionCount').textContent = transactions.length;
     }
 
-    function updateSummaryCards(incomeItems = [], expenseItems = []) {
-        const totalIncome = incomeItems.reduce((sum, item) => sum + parseFloat(item.amount), 0);
-        const totalExpenses = expenseItems.reduce((sum, item) => sum + parseFloat(item.amount), 0);
-        const balance = totalIncome - totalExpenses;
-
-        totalIncomeEl.textContent = `₹${totalIncome.toFixed(2)}`;
-        totalExpensesEl.textContent = `₹${totalExpenses.toFixed(2)}`;
-        currentBalanceEl.textContent = `₹${balance.toFixed(2)}`;
-    }
-
-    function renderTransactionsTable(incomeItems = [], expenseItems = [], monthYearKey) {
-        transactionsTableBody.innerHTML = '';
-        const allTransactions = [
-            ...incomeItems.map(i => ({...i, type: 'income'})),
-            ...expenseItems.map(e => ({...e, type: 'expense'}))
-        ];
-
-        allTransactions.sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by most recent
-
-        if (allTransactions.length === 0) {
-            const row = transactionsTableBody.insertRow();
-            row.insertCell().colSpan = 4;
-            row.cells[0].textContent = "No transactions this month.";
-            row.cells[0].style.textAlign = "center";
+    function renderTransactionTable(transactions) {
+        transactionTableBody.innerHTML = '';
+        if (transactions.length === 0) {
+            emptyState.classList.add('visible');
             return;
         }
-
-        allTransactions.forEach(item => {
-            const row = transactionsTableBody.insertRow();
-            const typeCell = row.insertCell();
-            const descCell = row.insertCell();
-            const amountCell = row.insertCell();
-            const actionCell = row.insertCell();
-
-            const iconClass = item.type === 'income' ? 'fa-arrow-down income' : 'fa-arrow-up expense';
-            typeCell.innerHTML = `<i class="fas ${iconClass} transaction-type-icon"></i>`;
-            
-            descCell.textContent = item.source || item.description;
-            amountCell.textContent = `${item.type === 'income' ? '+' : '-'} ₹${parseFloat(item.amount).toFixed(2)}`;
-            amountCell.style.color = item.type === 'income' ? 'var(--primary-color)' : 'var(--danger-color)';
-            
-            const deleteBtn = document.createElement('button');
-            deleteBtn.classList.add('delete-btn');
-            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-            deleteBtn.onclick = () => deleteItem(item.type, item.id, monthYearKey);
-            actionCell.appendChild(deleteBtn);
+        emptyState.classList.remove('visible');
+        
+        transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        transactions.forEach(t => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><span class="type-indicator ${t.type}">${t.type}</span></td>
+                <td>${new Date(t.date).toLocaleDateString()}</td>
+                <td>
+                    <div class="details-cell">
+                        <strong>${t.description}</strong>
+                        ${t.notes ? `<small>${t.notes}</small>` : ''}
+                    </div>
+                </td>
+                <td>${t.category || '-'}</td>
+                <td class="amount ${t.type}">${t.type === 'income' ? '+' : '-'} ${formatCurrency(t.amount)}</td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="action-btn edit-btn" onclick="handleEditTransaction('${t.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn duplicate-btn" onclick="handleDuplicateTransaction('${t.id}')"><i class="fas fa-copy"></i></button>
+                        <button class="action-btn delete-btn" onclick="handleDeleteTransaction('${t.id}')"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                </td>
+            `;
+            transactionTableBody.appendChild(row);
         });
     }
 
-    function renderExpenseChart(expenseItems = []) {
-        const categoryTotals = {};
-        expenseItems.forEach(item => {
-            categoryTotals[item.category] = (categoryTotals[item.category] || 0) + parseFloat(item.amount);
-        });
-
-        const labels = Object.keys(categoryTotals);
-        const data = Object.values(categoryTotals);
-
-        if (expenseChart) {
-            expenseChart.destroy();
-        }
-
-        expenseChart = new Chart(expenseChartCanvas, {
-            type: 'doughnut',
+    // --- CHARTS ---
+    let expensePieChart, incomeExpenseBarChart;
+    function renderCharts(transactions) {
+        const expenseData = transactions.filter(t => t.type === 'expense');
+        
+        // Pie Chart
+        const categoryTotals = expenseData.reduce((acc, t) => {
+            acc[t.category] = (acc[t.category] || 0) + t.amount;
+            return acc;
+        }, {});
+        
+        if (expensePieChart) expensePieChart.destroy();
+        expensePieChart = new Chart(document.getElementById('expensePieChart'), {
+            type: 'pie',
             data: {
-                labels: labels,
+                labels: Object.keys(categoryTotals),
                 datasets: [{
-                    data: data,
-                    backgroundColor: ['#E76F51', '#F4A261', '#E9C46A', '#2A9D8F', '#264653', '#8ECAE6', '#219EBC'],
-                    borderColor: document.body.classList.contains('dark-mode') ? 'var(--dark-card-bg)' : 'var(--light-card-bg)',
-                    borderWidth: 4
+                    data: Object.values(categoryTotals),
+                    backgroundColor: ['#E76F51', '#F4A261', '#E9C46A', '#2A9D8F', '#264653', '#84a59d', '#e76f5180']
                 }]
-            },
-            options: {
-                responsive: true,
-                cutout: '70%',
-                plugins: {
-                    legend: { position: 'bottom', labels: { color: document.body.classList.contains('dark-mode') ? '#f0f0f0' : '#333333' } }
-                }
             }
         });
+
+        // Bar Chart
+        const incomeTotal = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+        const expenseTotal = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+
+        if(incomeExpenseBarChart) incomeExpenseBarChart.destroy();
+        incomeExpenseBarChart = new Chart(document.getElementById('incomeExpenseBarChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Income', 'Expense'],
+                datasets: [{
+                    label: 'Amount',
+                    data: [incomeTotal, expenseTotal],
+                    backgroundColor: [ 'rgba(42, 157, 143, 0.8)', 'rgba(231, 111, 81, 0.8)']
+                }]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+        });
     }
 
-    // --- EVENT LISTENERS ---
-    function setupEventListeners() {
-        monthFilter.addEventListener('change', renderForSelectedMonth);
-        yearFilter.addEventListener('change', renderForSelectedMonth);
-        darkModeToggle.addEventListener('change', toggleDarkMode);
 
-        // Modal triggers
-        addIncomeBtn.onclick = () => openModal(incomeModal);
-        addExpenseBtn.onclick = () => openModal(expenseModal);
-        closeIncomeModal.onclick = () => closeModal(incomeModal);
-        closeExpenseModal.onclick = () => closeModal(expenseModal);
-        window.onclick = (event) => {
-            if (event.target == incomeModal) closeModal(incomeModal);
-            if (event.target == expenseModal) closeModal(expenseModal);
-        };
-
-        // Form submissions
-        incomeForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const incomeData = {
-                source: document.getElementById('incomeSource').value,
-                amount: document.getElementById('incomeAmount').value,
-                date: document.getElementById('incomeDate').value,
-            };
-            addItem('income', incomeData);
-            incomeForm.reset();
-            setDefaultDateInputs();
-            closeModal(incomeModal);
+    // --- EVENT LISTENERS & HANDLERS ---
+    function registerEventListeners() {
+        fab.addEventListener('click', () => openModal());
+        closeModalBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
         });
-
-        expenseForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const expenseData = {
-                category: document.getElementById('expenseCategory').value,
-                description: document.getElementById('expenseDescription').value,
-                amount: document.getElementById('expenseAmount').value,
-                date: document.getElementById('expenseDate').value,
-            };
-            addItem('expenses', expenseData);
-            expenseForm.reset();
-            setDefaultDateInputs();
-            closeModal(expenseModal);
-        });
-        
-        generatePdfBtn.addEventListener('click', generatePDF);
+        transactionForm.addEventListener('submit', handleFormSubmit);
+        monthFilter.addEventListener('change', handleFilterChange);
+        yearFilter.addEventListener('change', handleFilterChange);
     }
     
-    // --- PDF GENERATION (simplified for brevity, you can use your previous detailed one) ---
-    function generatePDF() {
-        // PDF generation logic remains the same
-        console.log("Generating PDF...");
+    function handleFilterChange() {
+        state.currentMonth = parseInt(monthFilter.value);
+        state.currentYear = parseInt(yearFilter.value);
+        renderAll();
     }
+
+    function openModal(transaction = null) {
+        transactionForm.reset();
+        if (transaction) {
+            // Edit mode
+            document.getElementById('modalTitle').textContent = "Edit Transaction";
+            state.editingTransactionId = transaction.id;
+            document.getElementById('transactionId').value = transaction.id;
+            document.getElementById('transactionAmount').value = transaction.amount;
+            document.getElementById('transactionDescription').value = transaction.description;
+            document.getElementById('transactionDate').valueAsDate = new Date(transaction.date);
+            // ... populate other fields like category, notes etc.
+        } else {
+            // Add mode
+            document.getElementById('modalTitle').textContent = "Add Transaction";
+            state.editingTransactionId = null;
+            document.getElementById('transactionDate').valueAsDate = new Date();
+        }
+        modal.classList.add('visible');
+    }
+
+    function closeModal() {
+        modal.classList.remove('visible');
+    }
+
+    function handleFormSubmit(e) {
+        e.preventDefault();
+        const newTransaction = {
+            id: state.editingTransactionId || 'id_' + Date.now(),
+            type: transactionForm.querySelector('.toggle-btn.active').dataset.type,
+            amount: parseFloat(document.getElementById('transactionAmount').value),
+            description: document.getElementById('transactionDescription').value,
+            category: 'Default', // Simplified for this example
+            date: new Date(document.getElementById('transactionDate').value),
+            notes: '', // Simplified
+        };
+
+        if (state.editingTransactionId) {
+            // Update existing
+            const index = state.transactions.findIndex(t => t.id === state.editingTransactionId);
+            state.transactions[index] = newTransaction;
+        } else {
+            // Add new
+            state.transactions.push(newTransaction);
+        }
+        
+        saveState();
+        renderAll();
+        closeModal();
+        showToast(state.editingTransactionId ? 'Transaction Updated!' : 'Transaction Added!');
+    }
+    
+    window.handleEditTransaction = (id) => {
+        const transaction = state.transactions.find(t => t.id === id);
+        if(transaction) openModal(transaction);
+    };
+
+    window.handleDeleteTransaction = (id) => {
+        if (confirm('Are you sure you want to delete this transaction?')) {
+            state.transactions = state.transactions.filter(t => t.id !== id);
+            saveState();
+            renderAll();
+            showToast('Transaction Deleted!');
+        }
+    };
+    
+    window.handleDuplicateTransaction = (id) => {
+        const original = state.transactions.find(t => t.id === id);
+        if (original) {
+            const newCopy = {...original, id: 'id_' + Date.now(), date: new Date() };
+            state.transactions.push(newCopy);
+            saveState();
+            renderAll();
+            showToast('Transaction Duplicated!');
+        }
+    };
+
+
+    // --- UTILITY FUNCTIONS ---
+    function formatCurrency(amount) {
+        return `${state.settings.currency}${amount.toFixed(2)}`;
+    }
+
+    function getFilteredTransactions() {
+        return state.transactions.filter(t => 
+            new Date(t.date).getMonth() === state.currentMonth &&
+            new Date(t.date).getFullYear() === state.currentYear
+        );
+    }
+
+    function showToast(message) {
+        const toast = document.getElementById('toastNotification');
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+    
+    window.openTab = (evt, tabName) => {
+        let i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tab-link");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    // PDF Generation (Updated)
+    document.getElementById('generatePdfBtn').addEventListener('click', async () => {
+         try {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            // Your new designed PDF header code here...
+            doc.setFontSize(24);
+            doc.setTextColor('#2A9D8F');
+            doc.text('Infinity Tracker Report', 14, 25);
+            
+            const transactions = getFilteredTransactions();
+            const bodyData = transactions.map(t => [
+                t.type,
+                new Date(t.date).toLocaleDateString(),
+                t.description,
+                t.category,
+                formatCurrency(t.amount)
+            ]);
+
+            doc.autoTable({
+                head: [['Type', 'Date', 'Description', 'Category', 'Amount']],
+                body: bodyData,
+                startY: 50
+            });
+            
+            doc.save('Infinity_Tracker_Report.pdf');
+        } catch (error) {
+            console.error("PDF generation failed:", error);
+            alert("Could not generate PDF. Please try again.");
+        }
+    });
 
     // --- START THE APP ---
     initializeApp();
