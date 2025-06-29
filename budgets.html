@@ -1,1 +1,61 @@
-r
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budgets - Infinity Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar"></nav>
+
+        <div class="main-content">
+            <header class="main-header">
+                <h1><i class='bx bx-target-lock'></i> Budgets</h1>
+                <div class="header-actions">
+                    <button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button>
+                    <button class="fab" id="addTransactionBtn"><i class='bx bx-plus'></i> <span>Add</span></button>
+                </div>
+            </header>
+
+            <main>
+                <div class="card budget-summary">
+                    <h3><i class='bx bx-wallet'></i> Overall Monthly Budget</h3>
+                    <div class="budget-input-group">
+                        <input type="number" id="overallBudgetInput" placeholder="Set overall budget...">
+                        <button id="setOverallBudgetBtn" class="primary-btn">Set Budget</button>
+                    </div>
+                    <p>Spent: <span id="overallSpent">৳0.00</span> of <span id="overallBudget">৳0.00</span></p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="overallProgressBar"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><i class='bx bx-category'></i> Category Budgets</h3>
+                    <div id="categoryBudgetsContainer">
+                        <!-- Category budgets will be rendered here by JS -->
+                    </div>
+                    <button id="addCategoryBudgetBtn" class="secondary-btn"><i class='bx bx-plus-circle'></i> Add Category Budget</button>
+                </div>
+            </main>
+
+            <footer class="main-footer"></footer>
+        </div>
+    </div>
+    
+    <div id="transactionModal" class="modal"></div>
+    <div id="toastNotification" class="toast"></div>
+
+    <script src="ui.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initApp('budgets');
+        });
+    </script>
+</body>
+</html>
