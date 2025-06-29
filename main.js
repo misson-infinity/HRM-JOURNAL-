@@ -1,5 +1,5 @@
 // Infinity X - Financial Tracker - Main Logic
-// Version: 2.1.0 (Fully Functional & Stable)
+// Version: 2.2.0 (Fully Functional & Stable with Mobile Nav)
 "use strict";
 
 let state = {
@@ -9,7 +9,7 @@ let state = {
         { id: 'cat_income_bonus', name: 'Bonus/Gift', icon: 'bx-gift', type: 'income' },
         { id: 'cat_expense_food', name: 'Food & Drinks', icon: 'bx-restaurant', type: 'expense' },
         { id: 'cat_expense_transport', name: 'Transport', icon: 'bx-bus', type: 'expense' },
-        { id: 'cat_expense_bills', name: 'Bills & Utilities', icon: 'bx-file', type: 'expense' },
+        { id: 'cat_expense_bills', name: 'Bills & Utilities', icon: 'bx-file', type: 'expense', isRecurring: true },
         { id: 'cat_expense_health', name: 'Health & Wellness', icon: 'bx-first-aid', type: 'expense' },
         { id: 'cat_expense_shopping', name: 'Shopping', icon: 'bx-shopping-bag', type: 'expense' },
         { id: 'cat_expense_entertainment', name: 'Entertainment', icon: 'bx-movie-play', type: 'expense' },
@@ -22,7 +22,7 @@ let state = {
     },
     ui: {
         currentPage: 'dashboard',
-        isSidebarCollapsed: window.innerWidth < 1200,
+        isSidebarCollapsed: window.innerWidth < 992,
         editingTransactionId: null,
     }
 };
@@ -71,33 +71,54 @@ function loadState() {
         state = { ...state, ...parsed, settings: { ...state.settings, ...parsed.settings }, budgets: { ...state.budgets, ...parsed.budgets } };
         state.transactions = state.transactions.map(t => ({ ...t, date: new Date(t.date) }));
     }
-    state.ui.isSidebarCollapsed = window.innerWidth < 1200;
+    state.ui.isSidebarCollapsed = window.innerWidth < 992;
 }
-function saveState() { localStorage.setItem('infinityXState', JSON.stringify(state)); }
 
-function applyTheme() { document.documentElement.setAttribute('data-theme', state.settings.darkMode ? 'dark' : 'light'); const i = document.querySelector('#theme-toggle-btn i'); if (i) i.className = state.settings.darkMode ? 'bx bxs-sun' : 'bx bxs-moon'; }
-function toggleTheme() { state.settings.darkMode = !state.settings.darkMode; applyTheme(); saveState(); renderPageContent(state.ui.currentPage); }
+function saveState() {
+    localStorage.setItem('infinityXState', JSON.stringify(state));
+}
+
+function applyTheme() {
+    document.documentElement.setAttribute('data-theme', state.settings.darkMode ? 'dark' : 'light');
+    const themeIcon = document.querySelector('#theme-toggle-btn i');
+    if (themeIcon) themeIcon.className = state.settings.darkMode ? 'bx bxs-sun' : 'bx bxs-moon';
+}
+
+function toggleTheme() {
+    state.settings.darkMode = !state.settings.darkMode;
+    applyTheme();
+    saveState();
+    renderPageContent(state.ui.currentPage);
+}
 
 function applySidebarState() {
     const sidebar = document.querySelector('.sidebar');
     const mainContent = document.querySelector('.main-content');
     const menuIcon = document.querySelector('#menu-toggle-btn i');
     if (!sidebar || !mainContent) return;
-    if (state.ui.isSidebarCollapsed) {
-        sidebar.classList.add('collapsed');
-        mainContent.classList.add('full-width');
-        if (menuIcon) menuIcon.className = 'bx bx-menu';
+    if (window.innerWidth > 992) {
+        if (state.ui.isSidebarCollapsed) {
+            sidebar.classList.add('collapsed');
+            mainContent.classList.add('full-width');
+        } else {
+            sidebar.classList.remove('collapsed');
+            mainContent.classList.remove('full-width');
+        }
     } else {
-        sidebar.classList.remove('collapsed');
-        mainContent.classList.remove('full-width');
-        if (menuIcon) menuIcon.className = 'bx bx-x';
+        if (state.ui.isSidebarCollapsed) {
+            sidebar.classList.add('collapsed');
+        } else {
+            sidebar.classList.remove('collapsed');
+        }
     }
+    if (menuIcon) menuIcon.className = state.ui.isSidebarCollapsed ? 'bx bx-menu' : 'bx bx-x';
 }
+
 function toggleSidebar() {
     state.ui.isSidebarCollapsed = !state.ui.isSidebarCollapsed;
     applySidebarState();
     setTimeout(() => {
-        if (state.ui.currentPage === 'dashboard' || state.ui.currentPage === 'reports') {
+        if (['dashboard', 'reports'].includes(state.ui.currentPage)) {
             renderPageContent(state.ui.currentPage);
         }
     }, 400);
@@ -110,12 +131,13 @@ function registerGlobalEventListeners() {
         if (e.target.closest('#theme-toggle-btn')) toggleTheme();
         if (e.target.closest('#generatePdfBtn')) {
             const monthFilter = document.getElementById('reportMonthFilter');
-            if (monthFilter && monthFilter.value) {
-                generatePDF(monthFilter.value);
-            } else {
-                showToast('Please select a month for the report.', 'warning');
-            }
+            if (monthFilter && monthFilter.value) generatePDF(monthFilter.value);
+            else showToast('Please select a month for the report.', 'warning');
         }
+    });
+    window.addEventListener('resize', () => {
+        state.ui.isSidebarCollapsed = window.innerWidth < 992;
+        applySidebarState();
     });
 }
 
@@ -135,6 +157,7 @@ function addOrUpdateTransaction(data) {
     closeModal();
     showToast(`Transaction saved!`, 'success');
 }
+
 function deleteTransaction(id) {
     if (confirm('Are you sure?')) {
         state.transactions = state.transactions.filter(t => t.id !== id);
