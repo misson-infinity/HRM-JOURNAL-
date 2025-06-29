@@ -9,7 +9,22 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-    <div class="app-container">
+    <!-- Splash Screen -->
+    <div id="splash-screen" class="splash-screen">
+        <div class="splash-content">
+            <img src="logo.svg" alt="Infinity Logo" class="splash-logo">
+            <h1 class="splash-title">Infinity Tracker</h1>
+            <p class="splash-slogan">Master Your Money, Shape Your Future.</p>
+            <div class="splash-footer">
+                <p>A Product By</p>
+                <h3>Md Habibur Rahman Mahi</h3>
+                <span>Founder of Infinity Group</span>
+            </div>
+            <div class="loader"></div>
+        </div>
+    </div>
+
+    <div class="app-container hidden">
         <nav class="sidebar"></nav>
         <div class="main-content">
             <header class="main-header">
@@ -20,22 +35,36 @@
                 </div>
             </header>
             <main>
-                <section class="dashboard-grid"></section>
+                <section class="dashboard-overview">
+                    <div class="summary-card main-balance">
+                        <p>Current Balance</p>
+                        <h2 id="currentBalance">৳0.00</h2>
+                        <div class="income-expense-row">
+                            <div><i class='bx bx-up-arrow-alt'></i><span id="totalIncome">৳0.00</span></div>
+                            <div><i class='bx bx-down-arrow-alt'></i><span id="totalExpenses">৳0.00</span></div>
+                        </div>
+                    </div>
+                    <div class="summary-card budget-overview">
+                        <p>Monthly Budget</p>
+                        <h2 id="budgetStatus">Not Set</h2>
+                        <div class="progress-bar-container"><div class="progress-bar" id="budgetProgressBar"></div></div>
+                    </div>
+                </section>
                 <section class="quick-nav-grid">
-                    <a href="transactions.html" class="nav-card"><i class='bx bx-transfer-alt'></i><h4>Transactions</h4><p>View & manage</p></a>
-                    <a href="reports.html" class="nav-card"><i class='bx bxs-report'></i><h4>Reports</h4><p>Analyze finances</p></a>
-                    <a href="budgets.html" class="nav-card"><i class='bx bx-target-lock'></i><h4>Budgets</h4><p>Set & track goals</p></a>
-                    <a href="settings.html" class="nav-card"><i class='bx bxs-cog'></i><h4>Settings</h4><p>Customize app</p></a>
+                    <a href="transactions.html" class="nav-card"><i class='bx bx-transfer-alt'></i><h4>Transactions</h4></a>
+                    <a href="reports.html" class="nav-card"><i class='bx bxs-report'></i><h4>Reports</h4></a>
+                    <a href="budgets.html" class="nav-card"><i class='bx bx-target-lock'></i><h4>Budgets</h4></a>
+                    <a href="settings.html" class="nav-card"><i class='bx bxs-cog'></i><h4>Settings</h4></a>
                 </section>
                 <section class="content-row">
-                    <div class="card" id="recent-transactions-card">
+                    <div class="card">
+                        <h3><i class='bx bx-line-chart'></i> This Month's Flow</h3>
+                        <div class="chart-container"><canvas id="flowChart"></canvas></div>
+                    </div>
+                    <div class="card">
                         <h3><i class='bx bx-history'></i> Recent Transactions</h3>
                         <ul id="recentTransactionsList"></ul>
                         <a href="transactions.html" class="view-all-link">View All <i class='bx bx-right-arrow-alt'></i></a>
-                    </div>
-                    <div class="card" id="expense-chart-card">
-                        <h3><i class='bx bx-pie-chart-alt-2'></i> Expense Breakdown</h3>
-                        <div class="chart-container"><canvas id="expensePieChart"></canvas></div>
                     </div>
                 </section>
             </main>
@@ -43,9 +72,11 @@
         </div>
     </div>
     <div id="modal-container"></div>
-    <div id="toastNotification" class="toast"></div>
+    <div id="toast-container"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
     <script src="ui.js"></script>
     <script src="main.js"></script>
     <script> document.addEventListener('DOMContentLoaded', () => initApp('dashboard')); </script>
