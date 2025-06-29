@@ -1,1 +1,64 @@
-q
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Infinity Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar"></nav>
+
+        <div class="main-content">
+            <header class="main-header">
+                <h1><i class='bx bxs-report'></i> Financial Reports</h1>
+                <div class="header-actions">
+                    <button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button>
+                    <button class="fab" id="addTransactionBtn"><i class='bx bx-plus'></i> <span>Add</span></button>
+                </div>
+            </header>
+
+            <main>
+                <div class="card">
+                    <h3><i class='bx bx-line-chart'></i> Monthly Trends</h3>
+                    <div class="chart-container-large">
+                        <canvas id="monthlyTrendChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="content-row">
+                    <div class="card">
+                        <h3><i class='bx bxs-pie-chart-alt-2'></i> Expense by Category</h3>
+                        <div class="chart-container">
+                            <canvas id="expenseCategoryPieChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3><i class='bx bxs-bar-chart-alt-2'></i> Income vs Expense</h3>
+                         <div class="chart-container">
+                            <canvas id="incomeExpenseBarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="main-footer"></footer>
+        </div>
+    </div>
+    
+    <div id="transactionModal" class="modal"></div>
+    <div id="toastNotification" class="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="ui.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initApp('reports');
+        });
+    </script>
+</body>
+</html>
