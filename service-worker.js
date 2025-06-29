@@ -1,4 +1,4 @@
-const CACHE_NAME = 'infinity-x-v2.1';
+const CACHE_NAME = 'infinity-x-v2.2';
 const urlsToCache = [ '/', 'index.html', 'transactions.html', 'reports.html', 'budgets.html', 'settings.html', 'developer.html', 'style.css', 'main.js', 'ui.js', 'manifest.json', 'logo.svg', 'Picsart_24-12-22_22-58-18-749.png', 'https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css', 'https://cdn.jsdelivr.net/npm/chart.js', 'https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js' ];
 self.addEventListener('install', e => e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(urlsToCache))));
 self.addEventListener('fetch', e => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))));
