@@ -8,7 +8,9 @@ function renderSidebar() {
             <ul>
                 <li><a href="index.html" class="${currentPage === 'dashboard' ? 'active' : ''}"><i class='bx bxs-dashboard'></i> Dashboard</a></li>
                 <li><a href="transactions.html" class="${currentPage === 'transactions' ? 'active' : ''}"><i class='bx bx-transfer-alt'></i> Transactions</a></li>
-                <!-- Add other links here -->
+                <li><a href="reports.html" class="${currentPage === 'reports' ? 'active' : ''}"><i class='bx bxs-report'></i> Reports</a></li>
+                <li><a href="budgets.html" class="${currentPage === 'budgets' ? 'active' : ''}"><i class='bx bx-target-lock'></i> Budgets</a></li>
+                <li><a href="settings.html" class="${currentPage === 'settings' ? 'active' : ''}"><i class='bx bxs-cog'></i> Settings</a></li>
             </ul>
         </nav>
         <div class="sidebar-footer">
@@ -46,11 +48,6 @@ function renderDashboardPage() {
             </li>`).join('') || `<li>No recent transactions.</li>`;
     }
     renderExpensePieChart(document.getElementById('expensePieChart'));
-}
-
-function renderTransactionsPage() {
-    const tableBody = document.querySelector('#transactionTableBody');
-    if(tableBody) tableBody.innerHTML = `<tr><td colspan="5">Transaction list would be here.</td></tr>`;
 }
 
 function renderExpensePieChart(canvas) {
