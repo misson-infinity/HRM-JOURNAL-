@@ -3,213 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infinity Expense Tracker - Pro</title>
-    
-    <meta name="theme-color" content="#2A9D8F">
+    <title>Dashboard - Infinity Tracker</title>
+    <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="manifest.json">
-    
-    <link rel="stylesheet" href="style.css">
-    
-    <!-- External Libraries -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-    <header>
-        <div class="logo-container">
-            <img src="logo.svg" alt="Budget Tracker Logo" class="logo">
-            <h1>Infinity Tracker</h1>
-        </div>
-        <div class="header-controls">
-            <button id="searchBtn" class="header-btn"><i class="fas fa-search"></i></button>
-            <div class="theme-switcher">
-                <label class="switch">
-                    <input type="checkbox" id="darkModeToggle">
-                    <span class="slider round"></span>
-                </label>
-            </div>
-            <a href="developer.html" class="header-btn profile-btn">
-                <img src="vector_lecture_design.png" alt="Profile">
-            </a>
-        </div>
-    </header>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <!-- Sidebar content is injected by ui.js -->
+        </nav>
 
-    <main>
-        <!-- Filter Section -->
-        <section class="filter-section card">
-            <div class="filter-controls">
-                <h2><i class="fas fa-calendar-alt"></i> Timeframe</h2>
-                <div>
-                    <label for="monthFilter">Month:</label>
-                    <select id="monthFilter"></select>
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <header class="main-header">
+                <h1><i class='bx bxs-dashboard'></i> Dashboard</h1>
+                <div class="header-actions">
+                    <button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button>
+                    <button class="fab" id="addTransactionBtn"><i class='bx bx-plus'></i> <span>Add</span></button>
                 </div>
-                <div>
-                    <label for="yearFilter">Year:</label>
-                    <input type="number" id="yearFilter" min="2000" max="2100">
-                </div>
-            </div>
-             <div class="export-controls">
-                <h2><i class="fas fa-download"></i> Export</h2>
-                <button id="generatePdfBtn"><i class="fas fa-file-pdf"></i> PDF</button>
-                <button id="exportCsvBtn"><i class="fas fa-file-csv"></i> CSV</button>
-            </div>
-        </section>
+            </header>
 
-        <!-- Main Content with Tabs -->
-        <div class="tabs">
-            <button class="tab-link active" onclick="openTab(event, 'Dashboard')"><i class="fas fa-chart-pie"></i> Dashboard</button>
-            <button class="tab-link" onclick="openTab(event, 'Transactions')"><i class="fas fa-exchange-alt"></i> Transactions</button>
-            <button class="tab-link" onclick="openTab(event, 'Budgets')"><i class="fas fa-bullseye"></i> Budgets</button>
-        </div>
-
-        <!-- Dashboard Tab -->
-        <div id="Dashboard" class="tab-content active">
-            <section class="dashboard-grid">
-                <div class="summary-card card">
-                    <i class="fas fa-wallet icon-bg income"></i>
-                    <p>Total Income</p>
-                    <h2 id="totalIncome">₹0.00</h2>
-                </div>
-                <div class="summary-card card">
-                    <i class="fas fa-receipt icon-bg expense"></i>
-                    <p>Total Expenses</p>
-                    <h2 id="totalExpenses">₹0.00</h2>
-                </div>
-                <div class="summary-card card">
-                    <i class="fas fa-piggy-bank icon-bg balance"></i>
-                    <p>Final Balance</p>
-                    <h2 id="currentBalance">₹0.00</h2>
-                </div>
-                 <div class="summary-card card">
-                    <i class="fas fa-chart-line icon-bg transactions"></i>
-                    <p>Transactions</p>
-                    <h2 id="transactionCount">0</h2>
-                </div>
-            </section>
-            <section class="charts-section card">
-                 <h3>Expense Analysis</h3>
-                 <div class="chart-container">
-                    <canvas id="expensePieChart"></canvas>
-                 </div>
-                 <h3>Income vs Expense</h3>
-                 <div class="chart-container">
-                    <canvas id="incomeExpenseBarChart"></canvas>
-                 </div>
-            </section>
-        </div>
-
-        <!-- Transactions Tab -->
-        <div id="Transactions" class="tab-content">
-            <div class="transaction-controls card">
-                <input type="text" id="searchInput" placeholder="Search transactions...">
-                 <select id="categoryFilter">
-                    <option value="">All Categories</option>
-                </select>
-                <select id="paymentMethodFilter">
-                    <option value="">All Payment Methods</option>
-                </select>
-            </div>
-            <div class="table-container card">
-                 <h3><i class="fas fa-list-ul"></i> All Transactions</h3>
-                <div class="table-wrapper">
-                    <table id="transactionTable">
-                        <thead>
-                            <tr>
-                                <th>Type</th>
-                                <th>Date</th>
-                                <th>Details</th>
-                                <th>Category</th>
-                                <th>Amount</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="transactionTableBody"></tbody>
-                    </table>
-                     <div id="emptyState" class="empty-state">
-                        <i class="fas fa-folder-open"></i>
-                        <p>No transactions found for this period.</p>
-                        <span>Add one using the '+' button!</span>
+            <main>
+                <section class="dashboard-grid">
+                    <!-- Summary cards are injected by ui.js -->
+                </section>
+                
+                <section class="content-row">
+                    <div class="card" id="recent-transactions-card">
+                        <h3><i class='bx bx-history'></i> Recent Transactions</h3>
+                        <ul id="recentTransactionsList">
+                            <!-- Recent transactions are injected by ui.js -->
+                        </ul>
+                        <a href="transactions.html" class="view-all-link">View All <i class='bx bx-right-arrow-alt'></i></a>
                     </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Budgets Tab -->
-        <div id="Budgets" class="tab-content">
-            <section class="card budget-summary">
-                <h3>Overall Monthly Budget</h3>
-                <div class="budget-input-group">
-                    <input type="number" id="overallBudgetInput" placeholder="Set overall budget...">
-                    <button id="setOverallBudgetBtn">Set</button>
-                </div>
-                <p>Spent: <span id="overallSpent">₹0.00</span> of <span id="overallBudget">₹0.00</span></p>
-                <div class="progress-bar-container">
-                    <div class="progress-bar" id="overallProgressBar"></div>
-                </div>
-            </section>
-            <section class="card" id="categoryBudgets">
-                <h3>Category Budgets</h3>
-                <!-- Category budgets will be rendered here by JS -->
-            </section>
-        </div>
-    </main>
+                    <div class="card" id="expense-chart-card">
+                        <h3><i class='bx bx-pie-chart-alt-2'></i> Expense Breakdown</h3>
+                        <div class="chart-container">
+                            <canvas id="expensePieChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+            </main>
 
-    <!-- Floating Action Button -->
-    <button class="fab" id="addTransactionBtn"><i class="fas fa-plus"></i></button>
-
-    <!-- Add/Edit Transaction Modal -->
-    <div id="transactionModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">Add Transaction</h2>
-                <button class="close-btn" id="closeModalBtn">×</button>
-            </div>
-            <form id="transactionForm">
-                <input type="hidden" id="transactionId">
-                <div class="type-toggle">
-                    <button type="button" class="toggle-btn active" data-type="expense">Expense</button>
-                    <button type="button" class="toggle-btn" data-type="income">Income</button>
-                </div>
-                <div>
-                    <label for="transactionAmount">Amount:</label>
-                    <input type="number" id="transactionAmount" min="0.01" step="0.01" required>
-                </div>
-                <div id="description-field">
-                    <label for="transactionDescription">Description:</label>
-                    <input type="text" id="transactionDescription" required>
-                </div>
-                <div id="category-field">
-                    <label for="transactionCategory">Category:</label>
-                    <select id="transactionCategory"></select>
-                </div>
-                <div id="payment-method-field">
-                    <label for="transactionPaymentMethod">Payment Method:</label>
-                    <select id="transactionPaymentMethod"></select>
-                </div>
-                <div>
-                    <label for="transactionDate">Date:</label>
-                    <input type="date" id="transactionDate" required>
-                </div>
-                 <div>
-                    <label for="transactionNotes">Notes (Optional):</label>
-                    <textarea id="transactionNotes" rows="2"></textarea>
-                </div>
-                <div class="form-footer">
-                    <button type="submit" id="saveTransactionBtn">Save</button>
-                </div>
-            </form>
+            <footer class="main-footer">
+                <!-- Footer content is injected by ui.js -->
+            </footer>
         </div>
     </div>
-    
-    <!-- Toast Notification -->
+
+    <!-- Modals and Toasts -->
+    <div id="transactionModal" class="modal"></div>
     <div id="toastNotification" class="toast"></div>
 
-    <!-- External Libraries JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
-    
-    <!-- Main App Script -->
-    <script src="script.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initApp('dashboard');
+        });
+    </script>
 </body>
 </html>
