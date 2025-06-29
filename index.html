@@ -9,6 +9,7 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
+    <div id="aurora-background"></div>
     <div id="splash-screen">
         <div class="splash-content">
             <img src="logo.svg" alt="Infinity Logo" class="splash-logo">
@@ -24,12 +25,12 @@
     </div>
 
     <div class="app-container hidden">
-        <nav class="sidebar"></nav>
-        <div class="main-content">
+        <nav class="sidebar collapsed"></nav>
+        <div class="main-content full-width">
             <header class="main-header">
-                <div class="header-title">
-                    <h1>Welcome back, <span id="headerUserName"></span>!</h1>
-                    <p>Here's your financial overview for this month.</p>
+                <div class="header-left">
+                    <button id="menu-toggle-btn" class="icon-btn"><i class='bx bx-menu'></i></button>
+                    <div class="header-title"><h1>Welcome back, <span id="headerUserName"></span>!</h1><p>Here's your financial overview.</p></div>
                 </div>
                 <div class="header-actions">
                     <button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button>
@@ -38,41 +39,12 @@
             </header>
             <main>
                 <div class="dashboard-main-grid">
-                    <div class="financial-health-card glass-card">
-                        <h3>Financial Health</h3>
-                        <div class="health-ring-container">
-                            <svg class="health-ring" width="180" height="180" viewBox="0 0 180 180">
-                                <circle class="ring-bg" cx="90" cy="90" r="80"></circle>
-                                <circle id="health-ring-circle" class="ring-fg" cx="90" cy="90" r="80" pathLength="100"></circle>
-                            </svg>
-                            <div id="health-score" class="health-score">0%</div>
-                        </div>
-                        <p id="health-message">Let's get started!</p>
-                    </div>
-                    <div class="balance-card glass-card">
-                        <p>Current Balance</p>
-                        <h2 id="currentBalance">Loading...</h2>
-                        <div class="income-expense-row">
-                            <div><i class='bx bx-up-arrow-alt'></i><span id="totalIncome">Loading...</span></div>
-                            <div><i class='bx bx-down-arrow-alt'></i><span id="totalExpenses">Loading...</span></div>
-                        </div>
-                    </div>
-                    <div class="quick-stats-grid">
-                        <div class="stat-card glass-card"><h4>Transactions</h4><p id="transactionCount">0</p></div>
-                        <div class="stat-card glass-card"><h4>Avg. Daily Spend</h4><p id="avgDailySpend">৳0.00</p></div>
-                        <div class="stat-card glass-card"><h4>Highest Spend</h4><p id="highestSpend">৳0.00</p></div>
-                        <div class="stat-card glass-card"><h4>Top Category</h4><p id="topCategory">N/A</p></div>
-                    </div>
+                    <div class="financial-health-card glass-card"><h3>Financial Health</h3><div class="health-ring-container"><svg class="health-ring" width="180" height="180" viewBox="0 0 180 180"><circle class="ring-bg" cx="90" cy="90" r="80"></circle><circle id="health-ring-circle" class="ring-fg" cx="90" cy="90" r="80" pathLength="100"></circle></svg><div id="health-score" class="health-score">0%</div></div><p id="health-message">Let's get started!</p></div>
+                    <div class="balance-card glass-card"><p>Current Balance</p><h2 id="currentBalance">Loading...</h2><div class="income-expense-row"><div><i class='bx bx-up-arrow-alt'></i><span id="totalIncome">Loading...</span></div><div><i class='bx bx-down-arrow-alt'></i><span id="totalExpenses">Loading...</span></div></div></div>
+                    <div class="quick-stats-grid"><div class="stat-card glass-card"><h4>Transactions</h4><p id="transactionCount">0</p></div><div class="stat-card glass-card"><h4>Avg. Spend</h4><p id="avgDailySpend">৳0.00</p></div><div class="stat-card glass-card"><h4>Highest Spend</h4><p id="highestSpend">৳0.00</p></div><div class="stat-card glass-card"><h4>Top Category</h4><p id="topCategory">N/A</p></div></div>
                 </div>
-                <div class="card">
-                    <h3><i class='bx bx-line-chart'></i> Cash Flow (Last 30 Days)</h3>
-                    <div class="chart-container-large"><canvas id="cashFlowChart"></canvas></div>
-                </div>
-                <div class="card">
-                    <h3><i class='bx bx-history'></i> Recent Activity</h3>
-                    <ul id="recentTransactionsList" class="activity-list"></ul>
-                    <a href="transactions.html" class="view-all-link">View All Transactions <i class='bx bx-right-arrow-alt'></i></a>
-                </div>
+                <div class="card"><h3><i class='bx bx-line-chart'></i> Cash Flow (Last 30 Days)</h3><div class="chart-container-large"><canvas id="cashFlowChart"></canvas></div></div>
+                <div class="card"><h3><i class='bx bx-history'></i> Recent Activity</h3><ul id="recentTransactionsList" class="activity-list"></ul><a href="transactions.html" class="view-all-link">View All Transactions <i class='bx bx-right-arrow-alt'></i></a></div>
             </main>
             <footer class="main-footer"></footer>
         </div>
