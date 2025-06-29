@@ -14,23 +14,11 @@
         <nav class="sidebar"></nav>
         <div class="main-content">
             <header class="main-header">
-                <div class="header-title">
-                    <h1><i class='bx bxs-report'></i> Financial Reports</h1>
-                    <p>Visualize and understand your spending habits.</p>
-                </div>
-                <div class="header-actions">
-                    <button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button>
-                    <button id="generatePdfBtn" class="fab"><i class='bx bxs-file-pdf'></i><span>Download PDF</span></button>
-                </div>
+                <div class="header-left"><button id="menu-toggle-btn" class="icon-btn"><i class='bx bx-menu'></i></button><div class="header-title"><h1><i class='bx bxs-report'></i> Financial Reports</h1><p>Visualize and understand your spending habits.</p></div></div>
+                <div class="header-actions"><button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button><button id="generatePdfBtn" class="fab"><i class='bx bxs-file-pdf'></i><span>Download PDF</span></button></div>
             </header>
             <main>
-                <div class="card">
-                    <div class="report-header">
-                        <h3>Report for: <span id="reportMonth"></span></h3>
-                        <input type="month" id="reportMonthFilter">
-                    </div>
-                    <div id="report-summary-cards" class="dashboard-grid"></div>
-                </div>
+                <div class="card"><div class="report-header"><h3>Select Month to Generate Report</h3><input type="month" id="reportMonthFilter"></div><div id="report-summary-cards" class="dashboard-grid"></div></div>
                 <div class="content-row">
                     <div class="card"><h3><i class='bx bxs-pie-chart-alt-2'></i> Expense by Category</h3><div class="chart-container"><canvas id="reportExpensePieChart"></canvas></div></div>
                     <div class="card"><h3><i class='bx bxs-bar-chart-alt-2'></i> Income vs Expense</h3><div class="chart-container"><canvas id="reportIncomeExpenseBarChart"></canvas></div></div>
