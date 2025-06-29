@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions - Infinity Tracker</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar"></nav>
+
+        <div class="main-content">
+            <header class="main-header">
+                <h1><i class='bx bx-transfer-alt'></i> Transactions</h1>
+                <div class="header-actions">
+                    <button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button>
+                    <button class="fab" id="addTransactionBtn"><i class='bx bx-plus'></i> <span>Add</span></button>
+                </div>
+            </header>
+
+            <main>
+                <div class="card">
+                    <div class="transaction-controls">
+                        <input type="text" id="searchInput" placeholder="Search by description...">
+                        <input type="date" id="startDateFilter">
+                        <input type="date" id="endDateFilter">
+                        <select id="categoryFilter"></select>
+                        <select id="typeFilter">
+                            <option value="all">All Types</option>
+                            <option value="income">Income</option>
+                            <option value="expense">Expense</option>
+                        </select>
+                        <button id="applyFiltersBtn" class="primary-btn">Apply Filters</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Category</th>
+                                    <th>Amount</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="pagination-controls"></div>
+                </div>
+            </main>
+
+            <footer class="main-footer"></footer>
+        </div>
+    </div>
+    
+    <div id="transactionModal" class="modal"></div>
+    <div id="toastNotification" class="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initApp('transactions');
+        });
+    </script>
+</body>
+</html>
