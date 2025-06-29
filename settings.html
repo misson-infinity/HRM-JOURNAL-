@@ -20,13 +20,13 @@
             <main>
                 <div class="card"><h3><i class='bx bxs-user-detail'></i> Profile & Currency</h3><div class="form-group"><label for="userNameInput">Your Name:</label><input type="text" id="userNameInput"></div><div class="form-group"><label for="userTitleInput">Your Title:</label><input type="text" id="userTitleInput"></div><div class="form-group"><label for="currencyInput">Currency Symbol:</label><input type="text" id="currencyInput"></div><button id="saveSettingsBtn" class="primary-btn">Save Profile Settings</button></div>
                 <div class="card"><h3><i class='bx bxs-category-alt'></i> Manage Categories</h3><ul id="category-list"></ul><div class="input-group"><input type="text" id="newCategoryName" placeholder="New category name"><button id="addCategoryBtn" class="secondary-btn">Add</button></div></div>
-                <div class="card danger-zone"><h3><i class='bx bxs-hot'></i> Danger Zone</h3><p>These actions are irreversible. Please be certain.</p><button id="exportDataBtn" class="warning-btn"><i class='bx bxs-download'></i> Export All Data (JSON)</button><button id="importDataBtn" class="secondary-btn"><i class='bx bxs-upload'></i> Import Data</button><input type="file" id="importFileInput" class="hidden"><button id="resetAppBtn" class="danger-btn"><i class='bx bxs-trash'></i> Reset All App Data</button></div>
+                <div class="card danger-zone"><h3><i class='bx bxs-hot'></i> Danger Zone</h3><p>These actions are irreversible.</p><button id="exportDataBtn" class="warning-btn"><i class='bx bxs-download'></i> Export Data</button><button id="importDataBtn" class="secondary-btn"><i class='bx bxs-upload'></i> Import Data</button><input type="file" id="importFileInput" class="hidden"><button id="resetAppBtn" class="danger-btn"><i class='bx bxs-trash'></i> Reset App</button></div>
             </main>
             <footer class="main-footer"></footer>
         </div>
     </div>
     <div id="toast-container"></div>
     <script src="ui.js"></script><script src="main.js"></script>
-    <script>document.addEventListener('DOMContentLoaded', () => initApp('settings'));</script>
+    <script>window.currentPage = 'settings';</script>
 </body>
 </html>
