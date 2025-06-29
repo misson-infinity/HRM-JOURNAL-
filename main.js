@@ -1,9 +1,10 @@
 // Infinity X - Financial Tracker - Main Logic
-// Version: 1.0.0
+// Version: 1.1.0 (Bugfix for initial render)
 // Author: Generated for Md Habibur Rahman Mahi
 
 "use strict";
 
+// --- GLOBAL STATE ---
 let state = {
     transactions: [],
     categories: [
@@ -19,47 +20,72 @@ let state = {
     ],
     budgets: { overall: 0, categories: {} },
     settings: {
-        userName: "Mahi", userTitle: "Founder, Infinity Group", userImage: "vector_lecture_design.png",
-        currency: "৳", darkMode: false, notification: true
+        userName: "Mahi",
+        userTitle: "Founder, Infinity Group",
+        userImage: "vector_lecture_design.png",
+        currency: "৳",
+        darkMode: false,
+        notification: true
     },
-    ui: { currentPage: 'dashboard', editingTransactionId: null, transactionsPerPage: 10, currentPageNumber: 1, filters: {} }
+    ui: {
+        currentPage: 'dashboard',
+        editingTransactionId: null,
+        transactionsPerPage: 10,
+        currentPageNumber: 1,
+        filters: {}
+    }
 };
 
 // --- APP INITIALIZATION ---
 function initApp(page) {
     state.ui.currentPage = page;
+    
+    // Ensure the DOM is fully loaded before doing anything
     document.addEventListener('DOMContentLoaded', () => {
         loadState();
         registerGlobalEventListeners();
-        // Splash Screen Logic
-        setTimeout(() => {
-            const splash = document.getElementById('splash-screen');
-            const app = document.querySelector('.app-container');
+
+        const splash = document.getElementById('splash-screen');
+        const appContainer = document.querySelector('.app-container');
+
+        // This function will be called after the splash screen timeout
+        const startApp = () => {
             if (splash) splash.style.opacity = '0';
-            if (app) app.classList.remove('hidden');
+            if (appContainer) appContainer.classList.remove('hidden');
+            
             setTimeout(() => {
                 if (splash) splash.style.display = 'none';
-                if (app) app.style.opacity = '1';
-                // Initial render after splash screen
+                if (appContainer) appContainer.style.opacity = '1';
+                
+                // Now that the app is visible, render everything
                 applyTheme();
                 renderSidebar();
                 renderFooter();
                 renderPageContent(page);
-            }, 600);
-        }, 3000); // 3-second splash screen
+            }, 600); // This delay matches the CSS transition for a smooth effect
+        };
+
+        // Splash screen timeout
+        setTimeout(startApp, 2500); // Show splash for 2.5 seconds
     });
 }
 
 // --- CORE LOGIC ---
 function renderPageContent(page) {
+    // This function decides which page's content to render
     switch (page) {
-        case 'dashboard': renderDashboardPage(); break;
-        case 'transactions': renderTransactionsPage(); break;
-        case 'reports': renderReportsPage(); break;
-        case 'settings': renderSettingsPage(); break;
-        case 'budgets': renderBudgetsPage(); break;
+        case 'dashboard':
+            renderDashboardPage();
+            break;
+        case 'transactions':
+            renderTransactionsPage();
+            break;
+        // Add cases for other pages here
+        // case 'reports': renderReportsPage(); break;
+        // case 'budgets': renderBudgetsPage(); break;
+        // case 'settings': renderSettingsPage(); break;
     }
-    // Update active link in sidebar
+    // Always update the sidebar to show the active link
     renderSidebar();
 }
 
@@ -68,8 +94,15 @@ function loadState() {
     const savedState = localStorage.getItem('infinityXState');
     if (savedState) {
         const parsed = JSON.parse(savedState);
-        // Merge saved state carefully to avoid breaking on new features
-        state = { ...state, ...parsed, settings: { ...state.settings, ...parsed.settings }, budgets: { ...state.budgets, ...parsed.budgets } };
+        // Deep merge to avoid losing new default properties
+        state = {
+            ...state,
+            ...parsed,
+            settings: { ...state.settings, ...parsed.settings },
+            budgets: { ...state.budgets, ...parsed.budgets },
+            categories: parsed.categories || state.categories // Load saved categories
+        };
+        // Convert date strings back to Date objects
         state.transactions = state.transactions.map(t => ({ ...t, date: new Date(t.date) }));
     }
 }
@@ -81,25 +114,45 @@ function saveState() {
 function applyTheme() {
     document.documentElement.setAttribute('data-theme', state.settings.darkMode ? 'dark' : 'light');
     const themeIcon = document.querySelector('#theme-toggle-btn i');
-    if (themeIcon) themeIcon.className = state.settings.darkMode ? 'bx bxs-sun' : 'bx bxs-moon';
+    if (themeIcon) {
+        themeIcon.className = state.settings.darkMode ? 'bx bxs-sun' : 'bx bxs-moon';
+    }
 }
 function toggleTheme() {
     state.settings.darkMode = !state.settings.darkMode;
     applyTheme();
     saveState();
-    // Re-render charts for new theme colors
-    renderPageContent(state.ui.currentPage);
+    // Re-render charts for new theme colors if on a page with charts
+    if (state.ui.currentPage === 'dashboard' || state.ui.currentPage === 'reports') {
+        renderPageContent(state.ui.currentPage);
+    }
 }
 
 // --- GLOBAL EVENT LISTENERS ---
 function registerGlobalEventListeners() {
-    document.getElementById('addTransactionBtn')?.addEventListener('click', () => openModal());
-    document.getElementById('theme-toggle-btn')?.addEventListener('click', toggleTheme);
-    document.getElementById('generatePdfBtn')?.addEventListener('click', generatePDF);
+    // These listeners are attached once, and the elements are found when needed.
+    // This is more robust than finding them on init only.
+    document.body.addEventListener('click', (e) => {
+        if (e.target.closest('#addTransactionBtn')) {
+            openModal();
+        }
+        if (e.target.closest('#theme-toggle-btn')) {
+            toggleTheme();
+        }
+        if (e.target.closest('#generatePdfBtn')) {
+            generatePDF();
+        }
+    });
 }
 
 // --- UTILITY FUNCTIONS ---
-const formatCurrency = (amount, symbol = true) => `${symbol ? state.settings.currency : ''}${parseFloat(amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const formatCurrency = (amount, symbol = true) => {
+    const formattedAmount = parseFloat(amount || 0).toLocaleString('en-IN', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+    return symbol ? `${state.settings.currency}${formattedAmount}` : formattedAmount;
+};
 const getCategoryById = (id) => state.categories.find(c => c.id === id);
 
 // --- TRANSACTION MANAGEMENT ---
@@ -119,6 +172,7 @@ function addOrUpdateTransaction(data) {
     closeModal();
     showToast(`Transaction ${state.ui.editingTransactionId ? 'updated' : 'added'} successfully!`, 'success');
 }
+
 function deleteTransaction(id) {
     if (confirm('Are you sure you want to delete this transaction? This cannot be undone.')) {
         state.transactions = state.transactions.filter(t => t.id !== id);
@@ -130,6 +184,11 @@ function deleteTransaction(id) {
 
 // --- PDF GENERATION (PROFESSIONAL) ---
 async function generatePDF() {
+    // This requires jspdf and jspdf-autotable to be included in the HTML.
+    if (typeof window.jspdf === 'undefined') {
+        showToast('PDF library not loaded.', 'danger');
+        return;
+    }
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     const { userName, userTitle, userImage, currency } = state.settings;
@@ -149,7 +208,7 @@ async function generatePDF() {
         doc.setFontSize(22);
         doc.setTextColor("#08D9D6");
         doc.text("Infinity X Financial Report", 40, 22);
-
+        
         // User Info Section with Picture
         doc.addImage(imgBase64, 'PNG', 150, 8, 30, 30);
         doc.setFontSize(12);
@@ -165,7 +224,7 @@ async function generatePDF() {
         doc.line(15, 40, 195, 40);
 
         // Body with autoTable
-        const transactions = state.transactions; // Can be filtered later
+        const transactions = state.transactions;
         const head = [['Date', 'Description', 'Category', 'Type', 'Amount']];
         const body = transactions.map(t => [
             t.date.toLocaleDateString(),
@@ -197,6 +256,6 @@ async function generatePDF() {
         showToast("PDF report generated successfully!", "success");
     } catch (error) {
         console.error("PDF generation failed:", error);
-        showToast("Could not generate PDF. Please try again.", "danger");
+        showToast("Could not generate PDF. Please ensure you are online.", "danger");
     }
 }
