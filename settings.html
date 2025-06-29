@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Infinity Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar"></nav>
+
+        <div class="main-content">
+            <header class="main-header">
+                <h1><i class='bx bxs-cog'></i> Settings</h1>
+                <div class="header-actions">
+                    <button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button>
+                </div>
+            </header>
+
+            <main>
+                <div class="card">
+                    <h3><i class='bx bxs-user-detail'></i> Profile Settings</h3>
+                    <div class="setting-item">
+                        <label for="userNameInput">Your Name:</label>
+                        <input type="text" id="userNameInput" placeholder="Enter your name">
+                    </div>
+                    <div class="setting-item">
+                        <label for="userTitleInput">Your Title:</label>
+                        <input type="text" id="userTitleInput" placeholder="e.g., Founder, Student">
+                    </div>
+                     <div class="setting-item">
+                        <label for="currencyInput">Currency Symbol:</label>
+                        <input type="text" id="currencyInput" placeholder="e.g., ৳, $, ₹">
+                    </div>
+                    <button id="saveSettingsBtn" class="primary-btn">Save Profile Settings</button>
+                </div>
+                
+                <div class="card">
+                    <h3><i class='bx bxs-category'></i> Manage Categories</h3>
+                    <div id="category-list"></div>
+                    <div class="input-group">
+                        <input type="text" id="newCategoryName" placeholder="New category name">
+                        <button id="addCategoryBtn" class="secondary-btn">Add Category</button>
+                    </div>
+                </div>
+
+                <div class="card danger-zone">
+                    <h3><i class='bx bxs-hot'></i> Danger Zone</h3>
+                    <p>These actions are irreversible. Please be certain.</p>
+                    <button id="exportDataBtn" class="warning-btn"><i class='bx bxs-download'></i> Export All Data (JSON)</button>
+                    <button id="resetAppBtn" class="danger-btn"><i class='bx bxs-trash'></i> Reset All App Data</button>
+                </div>
+            </main>
+
+            <footer class="main-footer"></footer>
+        </div>
+    </div>
+    
+    <script src="ui.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initApp('settings');
+        });
+    </script>
+</body>
+</html>
