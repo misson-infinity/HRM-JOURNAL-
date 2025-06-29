@@ -14,18 +14,52 @@
         <nav class="sidebar"></nav>
         <div class="main-content">
             <header class="main-header">
-                <div class="header-title"><h1><i class='bx bx-target-lock'></i> Budgets</h1><p>Set financial goals and track your progress.</p></div>
-                <div class="header-actions"><button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button></div>
+                <div class="header-title">
+                    <h1><i class='bx bx-target-lock'></i> Budgets</h1>
+                    <p>Set financial goals and track your progress.</p>
+                </div>
+                <div class="header-actions">
+                    <button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button>
+                </div>
             </header>
             <main>
-                <div class="card budget-summary"><h3><i class='bx bx-wallet'></i> Overall Monthly Budget</h3><div class="input-group"><input type="number" id="overallBudgetInput" placeholder="Set overall budget amount..."><button id="setOverallBudgetBtn" class="primary-btn">Set</button></div><p>Spent: <span id="overallSpent"></span> of <span id="overallBudget"></span></p><div class="progress-bar-container"><div class="progress-bar" id="overallProgressBar"></div></div></div>
-                <div class="card"><h3><i class='bx bx-category'></i> Category Budgets (Envelope System)</h3><div id="categoryBudgetsContainer"></div><button id="addCategoryBudgetBtn" class="secondary-btn"><i class='bx bx-plus-circle'></i> Add New Budget Envelope</button></div>
+                <div class="card budget-summary">
+                    <h3><i class='bx bx-wallet'></i> Overall Monthly Budget</h3>
+                    <div class="input-group">
+                        <input type="number" id="overallBudgetInput" placeholder="Set overall budget amount...">
+                        <button id="setOverallBudgetBtn" class="primary-btn">Set</button>
+                    </div>
+                    <p>Spent: <span id="overallSpent"></span> of <span id="overallBudget"></span></p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="overallProgressBar"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3><i class='bx bx-category'></i> Category Budgets (Envelope System)</h3>
+                    <div id="categoryBudgetsContainer"></div>
+                    <button id="addCategoryBudgetBtn" class="secondary-btn"><i class='bx bx-plus-circle'></i> Add New Budget Envelope</button>
+                </div>
             </main>
             <footer class="main-footer"></footer>
         </div>
     </div>
-    <div id="modal-container"></div><div id="toast-container"></div>
-    <script src="ui.js"></script><script src="main.js"></script>
-    <script>document.addEventListener('DOMContentLoaded', () => initApp('budgets'));</script>
+    <div id="modal-container"></div>
+    <div id="toast-container"></div>
+    <script src="ui.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if state is defined
+            if (typeof state === 'undefined') {
+                console.error('state object is not defined. main.js should define the state object.');
+            }
+            // Initialize the app for 'budgets' page
+            if (typeof initApp === 'function') {
+                initApp('budgets');
+            } else {
+                console.error('initApp function is not defined. Check your main.js!');
+            }
+        });
+    </script>
 </body>
 </html>
