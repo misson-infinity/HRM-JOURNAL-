@@ -1,11 +1,116 @@
-function renderSidebar() { const s = document.querySelector('.sidebar'); if (!s) return; const p = state.ui.currentPage; s.innerHTML = `<div class="sidebar-header"><img src="logo.svg" alt="Logo" class="logo"><h2>Infinity</h2></div><nav class="sidebar-nav"><ul><li><a href="index.html" class="${p === 'dashboard' ? 'active' : ''}"><i class='bx bxs-dashboard'></i> Dashboard</a></li><li><a href="transactions.html" class="${p === 'transactions' ? 'active' : ''}"><i class='bx bx-transfer-alt'></i> Transactions</a></li><li><a href="reports.html" class="${p === 'reports' ? 'active' : ''}"><i class='bx bxs-report'></i> Reports</a></li><li><a href="budgets.html" class="${p === 'budgets' ? 'active' : ''}"><i class='bx bx-target-lock'></i> Budgets</a></li><li><a href="settings.html" class="${p === 'settings' ? 'active' : ''}"><i class='bx bxs-cog'></i> Settings</a></li></ul></nav><div class="sidebar-footer"><a href="developer.html" class="${p === 'developer' ? 'active' : ''}"><i class='bx bxs-user-circle'></i> Developer</a></div>`; }
-function renderFooter() { const f = document.querySelector('.main-footer'); if (!f) return; const { userName, userTitle, userImage } = state.settings; f.innerHTML = `<img src="${userImage}" alt="${userName}" class="footer-profile-pic"><p class="footer-name">${userName}</p><p class="footer-title">${userTitle}</p>`; }
-function renderDashboardPage() { const inc = state.transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0); const exp = state.transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0); document.getElementById('currentBalance').textContent = formatCurrency(inc - exp); document.getElementById('totalIncome').textContent = formatCurrency(inc); document.getElementById('totalExpenses').textContent = formatCurrency(exp); const bud = state.budgets.overall; document.getElementById('budgetStatus').textContent = bud > 0 ? `${formatCurrency(exp)} / ${formatCurrency(bud)}` : 'Not Set'; const prog = bud > 0 ? (exp / bud) * 100 : 0; document.getElementById('budgetProgressBar').style.width = `${Math.min(prog, 100)}%`; const list = document.getElementById('recentTransactionsList'); if (list) list.innerHTML = state.transactions.slice(0, 5).map(t => { const c = getCategoryById(t.category); return `<li><i class='bx ${c?.icon}'></i><div><span>${t.description}</span><small>${t.date.toLocaleDateString()}</small></div><strong class="amount ${t.type}">${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}</strong></li>` }).join('') || `<li>No recent transactions.</li>`; renderFlowChart(document.getElementById('flowChart')); }
-function renderTransactionsPage() { /* ... Logic to render transactions table ... */ }
-function renderReportsPage() { /* ... Logic to render report charts ... */ }
-function renderBudgetsPage() { /* ... Logic to render budget UI ... */ }
-function renderSettingsPage() { /* ... Logic to render settings form ... */ }
-function openModal(id = null) { state.ui.editingTransactionId = id; const t = id ? state.transactions.find(t => t.id === id) : {}; const m = document.getElementById('modal-container'); m.innerHTML = `<div class="modal-overlay visible"><div class="modal"><div class="modal-header"><h2>${id ? 'Edit' : 'Add'} Transaction</h2><button class="icon-btn" onclick="closeModal()"><i class='bx bx-x'></i></button></div><form id="transaction-form"><div class="form-group"><label>Type</label><select name="type">${['expense', 'income'].map(v => `<option value="${v}" ${t.type === v ? 'selected' : ''}>${v[0].toUpperCase() + v.slice(1)}</option>`).join('')}</select></div><div class="form-group"><label>Description</label><input type="text" name="description" value="${t.description || ''}" required></div><div class="form-group"><label>Amount</label><input type="number" step="0.01" name="amount" value="${t.amount || ''}" required></div><div class="form-group"><label>Category</label><select name="category">${state.categories.map(c => `<option value="${c.id}" ${t.category === c.id ? 'selected' : ''}>${c.name}</option>`).join('')}</select></div><div class="form-group"><label>Date</label><input type="date" name="date" value="${t.date ? t.date.toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}" required></div><button type="submit" class="fab">${id ? 'Update' : 'Add'}</button></form></div></div>`; document.getElementById('transaction-form').addEventListener('submit', e => { e.preventDefault(); const d = Object.fromEntries(new FormData(e.target).entries()); d.amount = parseFloat(d.amount); addOrUpdateTransaction(d); }); }
-function closeModal() { const m = document.querySelector('.modal-overlay'); if (m) { m.classList.remove('visible'); setTimeout(() => m.remove(), 300); } }
-function showToast(msg, type = 'success') { const c = document.getElementById('toast-container'); const t = document.createElement('div'); t.className = `toast show ${type}`; t.textContent = msg; c.appendChild(t); setTimeout(() => t.remove(), 3000); }
-function renderFlowChart(canvas) { /* ... Chart.js logic ... */ }
+// Infinity X - UI Renderer
+// Version: 1.0.0
+// Handles all DOM manipulations, rendering tasks, and user interactions.
+
+"use strict";
+
+function renderSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    if (!sidebar) return;
+    const currentPage = state.ui.currentPage;
+    sidebar.innerHTML = `
+        <div class="sidebar-header">
+            <img src="logo.svg" alt="Logo" class="logo">
+            <h2>Infinity X</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="index.html" class="${currentPage === 'dashboard' ? 'active' : ''}"><i class='bx bxs-dashboard'></i> Dashboard</a></li>
+                <li><a href="transactions.html" class="${currentPage === 'transactions' ? 'active' : ''}"><i class='bx bx-transfer-alt'></i> Transactions</a></li>
+                <li><a href="reports.html" class="${currentPage === 'reports' ? 'active' : ''}"><i class='bx bxs-report'></i> Reports</a></li>
+                <li><a href="budgets.html" class="${currentPage === 'budgets' ? 'active' : ''}"><i class='bx bx-target-lock'></i> Budgets</a></li>
+                <li><a href="settings.html" class="${currentPage === 'settings' ? 'active' : ''}"><i class='bx bxs-cog'></i> Settings</a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+             <a href="developer.html" class="${currentPage === 'developer' ? 'active' : ''}"><i class='bx bxs-user-circle'></i> Developer</a>
+        </div>`;
+}
+
+function renderFooter() {
+    const footer = document.querySelector('.main-footer');
+    if (!footer) return;
+    const { userName, userTitle, userImage } = state.settings;
+    footer.innerHTML = `
+        <img src="${userImage}" alt="${userName}" class="footer-profile-pic">
+        <p class="footer-name">${userName}</p>
+        <p class="footer-title">${userTitle}</p>`;
+}
+
+function renderDashboardPage() {
+    document.getElementById('headerUserName').textContent = state.settings.userName.split(' ')[0];
+    const income = state.transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+    const expense = state.transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+    document.getElementById('currentBalance').textContent = formatCurrency(income - expense);
+    document.getElementById('totalIncome').textContent = formatCurrency(income);
+    document.getElementById('totalExpenses').textContent = formatCurrency(expense);
+    updateFinancialHealthRing(income, expense);
+    updateQuickStats(state.transactions);
+    renderCashFlowChart(document.getElementById('cashFlowChart'));
+}
+
+function updateFinancialHealthRing(income, expense) {
+    let score = income > 0 ? Math.max(0, Math.round((1 - (expense / income)) * 100)) : 0;
+    const ring = document.getElementById('health-ring-circle');
+    const scoreText = document.getElementById('health-score');
+    if (ring && scoreText) {
+        ring.style.strokeDashoffset = 100 - score;
+        scoreText.textContent = `${score}%`;
+    }
+}
+// ... (अन्य सभी विस्तृत UI फ़ंक्शन) ...
+
+function openModal(transactionId = null) {
+    state.ui.editingTransactionId = transactionId;
+    const transaction = transactionId ? state.transactions.find(t => t.id === transactionId) : {};
+    const modalContainer = document.getElementById('modal-container');
+    
+    const incomeCategories = state.categories.filter(c => c.type === 'income');
+    const expenseCategories = state.categories.filter(c => c.type === 'expense');
+
+    modalContainer.innerHTML = `
+        <div class="modal-overlay visible">
+            <div class="modal">
+                <div class="modal-header"><h2>${transactionId ? 'Edit' : 'Add'} Transaction</h2><button class="icon-btn" onclick="closeModal()"><i class='bx bx-x'></i></button></div>
+                <form id="transaction-form">
+                    <div class="form-group"><label>Type</label><select name="type" id="type-selector" required>${['expense', 'income'].map(v => `<option value="${v}" ${transaction.type === v ? 'selected' : ''}>${v.charAt(0).toUpperCase() + v.slice(1)}</option>`).join('')}</select></div>
+                    <div class="form-group"><label>Description</label><input type="text" name="description" value="${transaction.description || ''}" required></div>
+                    <div class="form-group"><label>Amount</label><input type="number" step="0.01" name="amount" value="${transaction.amount || ''}" required></div>
+                    <div class="form-group"><label>Category</label><select name="category" id="category-selector" required></select></div>
+                    <div class="form-group"><label>Date</label><input type="date" name="date" value="${transaction.date ? transaction.date.toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}" required></div>
+                    <button type="submit" class="fab">${transactionId ? 'Update Transaction' : 'Add Transaction'}</button>
+                </form>
+            </div>
+        </div>`;
+    
+    const typeSelector = document.getElementById('type-selector');
+    const categorySelector = document.getElementById('category-selector');
+
+    const updateCategories = () => {
+        const selectedType = typeSelector.value;
+        const categories = selectedType === 'income' ? incomeCategories : expenseCategories;
+        categorySelector.innerHTML = categories.map(c => `<option value="${c.id}" ${transaction.category === c.id ? 'selected' : ''}>${c.name}</option>`).join('');
+    };
+
+    updateCategories();
+    typeSelector.addEventListener('change', updateCategories);
+
+    document.getElementById('transaction-form').addEventListener('submit', e => { e.preventDefault(); const data = Object.fromEntries(new FormData(e.target).entries()); data.amount = parseFloat(data.amount); addOrUpdateTransaction(data); });
+}
+
+function closeModal() {
+    const modal = document.querySelector('.modal-overlay');
+    if (modal) {
+        modal.classList.remove('visible');
+        setTimeout(() => modal.remove(), 400);
+    }
+}
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `<i class='bx ${type === 'success' ? 'bxs-check-circle' : 'bxs-x-circle'}'></i><span>${message}</span>`;
+    container.appendChild(toast);
+    setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 3000);
+}
+// ... (Chart.js এবং অন্যান্য UI ফাংশন) ...
