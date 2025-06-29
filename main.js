@@ -1,7 +1,5 @@
 // Infinity X - Financial Tracker - Main Logic
-// Version: 2.0.0 (Fully Functional & Stable)
-// Author: Generated for Md Habibur Rahman Mahi
-
+// Version: 2.1.0 (Fully Functional & Stable)
 "use strict";
 
 let state = {
@@ -22,7 +20,11 @@ let state = {
         userName: "Md Habibur Rahman Mahi", userTitle: "Founder, Infinity Group", userImage: "Picsart_24-12-22_22-58-18-749.png",
         currency: "৳", darkMode: false
     },
-    ui: { currentPage: 'dashboard', editingTransactionId: null }
+    ui: {
+        currentPage: 'dashboard',
+        isSidebarCollapsed: window.innerWidth < 1200,
+        editingTransactionId: null,
+    }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -34,10 +36,8 @@ function initApp(page) {
     state.ui.currentPage = page;
     loadState();
     registerGlobalEventListeners();
-    
     const splash = document.getElementById('splash-screen');
     const appContainer = document.querySelector('.app-container');
-    
     setTimeout(() => {
         if (splash) splash.style.opacity = '0';
         if (appContainer) appContainer.classList.remove('hidden');
@@ -45,6 +45,7 @@ function initApp(page) {
             if (splash) splash.style.display = 'none';
             if (appContainer) appContainer.style.opacity = '1';
             applyTheme();
+            applySidebarState();
             renderSidebar();
             renderFooter();
             renderPageContent(page);
@@ -57,38 +58,68 @@ function renderPageContent(page) {
         case 'dashboard': renderDashboardPage(); break;
         case 'transactions': renderTransactionsPage(); break;
         case 'reports': renderReportsPage(); break;
-        case 'budgets': renderBudgetsPage(); break;
         case 'settings': renderSettingsPage(); break;
-        case 'developer': /* No specific JS needed, just renders */ break;
+        case 'budgets': renderBudgetsPage(); break;
     }
     renderSidebar();
 }
 
 function loadState() {
-    const saved = localStorage.getItem('infinityXState');
-    if (saved) {
-        const parsed = JSON.parse(saved);
+    const savedState = localStorage.getItem('infinityXState');
+    if (savedState) {
+        const parsed = JSON.parse(savedState);
         state = { ...state, ...parsed, settings: { ...state.settings, ...parsed.settings }, budgets: { ...state.budgets, ...parsed.budgets } };
         state.transactions = state.transactions.map(t => ({ ...t, date: new Date(t.date) }));
     }
+    state.ui.isSidebarCollapsed = window.innerWidth < 1200;
 }
 function saveState() { localStorage.setItem('infinityXState', JSON.stringify(state)); }
 
 function applyTheme() { document.documentElement.setAttribute('data-theme', state.settings.darkMode ? 'dark' : 'light'); const i = document.querySelector('#theme-toggle-btn i'); if (i) i.className = state.settings.darkMode ? 'bx bxs-sun' : 'bx bxs-moon'; }
 function toggleTheme() { state.settings.darkMode = !state.settings.darkMode; applyTheme(); saveState(); renderPageContent(state.ui.currentPage); }
 
+function applySidebarState() {
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
+    const menuIcon = document.querySelector('#menu-toggle-btn i');
+    if (!sidebar || !mainContent) return;
+    if (state.ui.isSidebarCollapsed) {
+        sidebar.classList.add('collapsed');
+        mainContent.classList.add('full-width');
+        if (menuIcon) menuIcon.className = 'bx bx-menu';
+    } else {
+        sidebar.classList.remove('collapsed');
+        mainContent.classList.remove('full-width');
+        if (menuIcon) menuIcon.className = 'bx bx-x';
+    }
+}
+function toggleSidebar() {
+    state.ui.isSidebarCollapsed = !state.ui.isSidebarCollapsed;
+    applySidebarState();
+    setTimeout(() => {
+        if (state.ui.currentPage === 'dashboard' || state.ui.currentPage === 'reports') {
+            renderPageContent(state.ui.currentPage);
+        }
+    }, 400);
+}
+
 function registerGlobalEventListeners() {
     document.body.addEventListener('click', (e) => {
+        if (e.target.closest('#menu-toggle-btn') || e.target.closest('.sidebar-header')) toggleSidebar();
         if (e.target.closest('#addTransactionBtn')) openModal();
         if (e.target.closest('#theme-toggle-btn')) toggleTheme();
         if (e.target.closest('#generatePdfBtn')) {
             const monthFilter = document.getElementById('reportMonthFilter');
-            generatePDF(monthFilter.value);
+            if (monthFilter && monthFilter.value) {
+                generatePDF(monthFilter.value);
+            } else {
+                showToast('Please select a month for the report.', 'warning');
+            }
         }
     });
 }
 
-const formatCurrency = (amount) => `${state.settings.currency}${parseFloat(amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const formatCurrency = (amount, symbol = true) => `${symbol ? state.settings.currency : ''}${parseFloat(amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 const getCategoryById = (id) => state.categories.find(c => c.id === id);
 
 function addOrUpdateTransaction(data) {
@@ -102,7 +133,7 @@ function addOrUpdateTransaction(data) {
     saveState();
     renderPageContent(state.ui.currentPage);
     closeModal();
-    showToast('Transaction saved successfully!', 'success');
+    showToast(`Transaction saved!`, 'success');
 }
 function deleteTransaction(id) {
     if (confirm('Are you sure?')) {
@@ -118,19 +149,16 @@ async function generatePDF(monthYear) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
     const { userName, userTitle, userImage } = state.settings;
-
     try {
         const toBase64 = file => new Promise((resolve, reject) => {
             const reader = new FileReader(); reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result); reader.onerror = error => reject(error);
+            reader.onload = () => resolve(reader.result); reader.onerror = reject;
         });
         const imgBlob = await fetch(userImage).then(res => res.blob());
         const imgBase64 = await toBase64(imgBlob);
         
-        // --- PDF Header ---
-        doc.setFillColor(22, 33, 62); // Dark blue background
-        doc.rect(0, 0, 210, 50, 'F');
-        doc.addImage(imgBase64, 'PNG', 15, 10, 30, 30); // বড় ছবি
+        doc.setFillColor(22, 33, 62); doc.rect(0, 0, 210, 50, 'F');
+        doc.addImage(imgBase64, 'PNG', 15, 10, 30, 30);
         doc.setFontSize(26); doc.setTextColor(255, 255, 255); doc.setFont(undefined, 'bold');
         doc.text("Infinity X", 55, 20);
         doc.setFontSize(12); doc.setTextColor(200, 200, 200); doc.setFont(undefined, 'normal');
@@ -141,23 +169,16 @@ async function generatePDF(monthYear) {
         doc.setFontSize(10); doc.setTextColor(200, 200, 200); doc.setFont(undefined, 'normal');
         doc.text(userTitle, 200, 26, { align: 'right' });
         
-        // --- Report Details ---
         const [year, month] = monthYear.split('-');
         const reportDate = new Date(year, month - 1);
         const monthName = reportDate.toLocaleString('default', { month: 'long' });
-        doc.setFontSize(14); doc.setTextColor(40, 40, 40);
-        doc.text(`Report for: ${monthName} ${year}`, 15, 60);
+        doc.setFontSize(14); doc.setTextColor(40, 40, 40); doc.text(`Report for: ${monthName} ${year}`, 15, 60);
 
-        const transactions = state.transactions.filter(t => {
-            const d = new Date(t.date);
-            return d.getFullYear() == year && d.getMonth() == (month - 1);
-        });
-
+        const transactions = state.transactions.filter(t => new Date(t.date).getFullYear() == year && new Date(t.date).getMonth() == (month - 1));
         const head = [['Date', 'Description', 'Category', 'Type', 'Amount']];
         const body = transactions.map(t => [t.date.toLocaleDateString(), t.description, getCategoryById(t.category)?.name || 'N/A', t.type, formatCurrency(t.amount)]);
         doc.autoTable({ head, body, startY: 70, theme: 'grid', headStyles: { fillColor: [8, 217, 214] } });
-
-        // --- Summary ---
+        
         const finalY = doc.lastAutoTable.finalY + 15;
         const income = transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
         const expense = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
@@ -168,6 +189,6 @@ async function generatePDF(monthYear) {
         doc.text(`Final Balance: ${formatCurrency(income - expense)}`, 15, finalY + 22);
 
         doc.save(`InfinityX_Report_${monthName}_${year}.pdf`);
-        showToast("PDF report generated!", "success");
+        showToast("PDF generated!", "success");
     } catch (error) { showToast("Could not generate PDF.", "danger"); }
 }
