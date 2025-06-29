@@ -179,12 +179,7 @@ function closeModal() {
     const modal = document.querySelector('.modal-overlay');
     if (modal) {
         modal.classList.remove('visible');
-        setTimeout(() => modal.remove(), 400);
-    }
-}
-
-function showToast(message, type = 'success') {
-    const container = document.getElementById('toast-container');
+        setTimeout(() => modal.removeElementById('toast-container');
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
     toast.innerHTML = `<i class='bx ${type === 'success' ? 'bxs-check-circle' : 'bxs-x-circle'}'></i><span>${message}</span>`;
