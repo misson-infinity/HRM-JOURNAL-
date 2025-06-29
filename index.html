@@ -1,84 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Infinity Tracker</title>
+    <title>Dashboard - Infinity X</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-    <!-- Splash Screen -->
-    <div id="splash-screen" class="splash-screen">
-        <div class="splash-content">
-            <img src="logo.svg" alt="Infinity Logo" class="splash-logo">
-            <h1 class="splash-title">Infinity Tracker</h1>
-            <p class="splash-slogan">Master Your Money, Shape Your Future.</p>
-            <div class="splash-footer">
-                <p>A Product By</p>
-                <h3>Md Habibur Rahman Mahi</h3>
-                <span>Founder of Infinity Group</span>
-            </div>
-            <div class="loader"></div>
-        </div>
-    </div>
-
+    <div id="aurora-background"></div>
+    <div id="splash-screen"></div>
     <div class="app-container hidden">
         <nav class="sidebar"></nav>
         <div class="main-content">
             <header class="main-header">
-                <h1><i class='bx bxs-dashboard'></i> Dashboard</h1>
+                <div class="header-title">
+                    <h1>Welcome back, <span id="headerUserName"></span>!</h1>
+                    <p>Here's your financial overview for this month.</p>
+                </div>
                 <div class="header-actions">
                     <button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button>
-                    <button class="fab" id="addTransactionBtn"><i class='bx bx-plus'></i> <span>Add Transaction</span></button>
+                    <button class="fab" id="addTransactionBtn"><i class='bx bx-plus'></i><span>Add Transaction</span></button>
                 </div>
             </header>
             <main>
-                <section class="dashboard-overview">
-                    <div class="summary-card main-balance">
+                <div class="dashboard-main-grid">
+                    <div class="financial-health-card glass-card">
+                        <h3>Financial Health</h3>
+                        <div class="health-ring-container">
+                            <svg class="health-ring" width="180" height="180" viewBox="0 0 180 180">
+                                <circle class="ring-bg" cx="90" cy="90" r="80"></circle>
+                                <circle id="health-ring-circle" class="ring-fg" cx="90" cy="90" r="80" pathLength="100"></circle>
+                            </svg>
+                            <div id="health-score" class="health-score">0%</div>
+                        </div>
+                        <p id="health-message">Let's get started!</p>
+                    </div>
+                    <div class="balance-card glass-card">
                         <p>Current Balance</p>
-                        <h2 id="currentBalance">৳0.00</h2>
+                        <h2 id="currentBalance">Loading...</h2>
                         <div class="income-expense-row">
-                            <div><i class='bx bx-up-arrow-alt'></i><span id="totalIncome">৳0.00</span></div>
-                            <div><i class='bx bx-down-arrow-alt'></i><span id="totalExpenses">৳0.00</span></div>
+                            <div><i class='bx bx-up-arrow-alt'></i><span id="totalIncome">Loading...</span></div>
+                            <div><i class='bx bx-down-arrow-alt'></i><span id="totalExpenses">Loading...</span></div>
                         </div>
                     </div>
-                    <div class="summary-card budget-overview">
-                        <p>Monthly Budget</p>
-                        <h2 id="budgetStatus">Not Set</h2>
-                        <div class="progress-bar-container"><div class="progress-bar" id="budgetProgressBar"></div></div>
+                    <div class="quick-stats-grid">
+                        <div class="stat-card glass-card"><h4>Transactions</h4><p id="transactionCount">0</p></div>
+                        <div class="stat-card glass-card"><h4>Avg. Daily Spend</h4><p id="avgDailySpend">৳0.00</p></div>
+                        <div class="stat-card glass-card"><h4>Highest Spend</h4><p id="highestSpend">৳0.00</p></div>
+                        <div class="stat-card glass-card"><h4>Top Category</h4><p id="topCategory">N/A</p></div>
                     </div>
-                </section>
-                <section class="quick-nav-grid">
-                    <a href="transactions.html" class="nav-card"><i class='bx bx-transfer-alt'></i><h4>Transactions</h4></a>
-                    <a href="reports.html" class="nav-card"><i class='bx bxs-report'></i><h4>Reports</h4></a>
-                    <a href="budgets.html" class="nav-card"><i class='bx bx-target-lock'></i><h4>Budgets</h4></a>
-                    <a href="settings.html" class="nav-card"><i class='bx bxs-cog'></i><h4>Settings</h4></a>
-                </section>
-                <section class="content-row">
-                    <div class="card">
-                        <h3><i class='bx bx-line-chart'></i> This Month's Flow</h3>
-                        <div class="chart-container"><canvas id="flowChart"></canvas></div>
-                    </div>
-                    <div class="card">
-                        <h3><i class='bx bx-history'></i> Recent Transactions</h3>
-                        <ul id="recentTransactionsList"></ul>
-                        <a href="transactions.html" class="view-all-link">View All <i class='bx bx-right-arrow-alt'></i></a>
-                    </div>
-                </section>
+                </div>
+                <div class="card">
+                    <h3><i class='bx bx-line-chart'></i> Cash Flow (Last 30 Days)</h3>
+                    <div class="chart-container-large"><canvas id="cashFlowChart"></canvas></div>
+                </div>
+                <div class="card">
+                    <h3><i class='bx bx-bell'></i> Upcoming Bills & Subscriptions</h3>
+                    <ul id="upcomingBillsList" class="activity-list"></ul>
+                </div>
             </main>
             <footer class="main-footer"></footer>
         </div>
     </div>
     <div id="modal-container"></div>
     <div id="toast-container"></div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
-    <script src="ui.js"></script>
-    <script src="main.js"></script>
-    <script> document.addEventListener('DOMContentLoaded', () => initApp('dashboard')); </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script><script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="ui.js"></script><script src="main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', () => initApp('dashboard'));</script>
 </body>
 </html>
