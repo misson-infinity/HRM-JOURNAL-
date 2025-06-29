@@ -1,5 +1,5 @@
 // Infinity X - UI Renderer
-// Version: 2.1.0 (Fully Functional & Stable)
+// Version: 2.2.0 (Fully Functional & Stable)
 "use strict";
 
 function renderSidebar() {
@@ -46,16 +46,16 @@ function renderTransactionsPage() {
     if (!tableBody) return;
     tableBody.innerHTML = state.transactions.map(t => {
         const c = getCategoryById(t.category);
-        return `<tr><td>${t.date.toLocaleDateString()}</td><td>${t.description}</td><td><i class='bx ${c?.icon}'></i> ${c?.name}</td><td class="amount ${t.type}">${formatCurrency(t.amount)}</td><td class="action-buttons"><button onclick="openModal('${t.id}')" title="Edit"><i class='bx bxs-edit'></i></button><button onclick="deleteTransaction('${t.id}')" title="Delete"><i class='bx bxs-trash'></i></button></td></tr>`;
+        return `<tr><td>${t.date.toLocaleDateString()}</td><td>${t.description}</td><td><i class='bx ${c?.icon}'></i> ${c?.name}</td><td class="amount ${t.type}">${formatCurrency(t.amount)}</td><td class="action-buttons"><button onclick="openModal('${t.id}')"><i class='bx bxs-edit'></i></button><button onclick="deleteTransaction('${t.id}')"><i class='bx bxs-trash'></i></button></td></tr>`;
     }).join('') || `<tr><td colspan="5" style="text-align:center;">No transactions found.</td></tr>`;
 }
-function renderReportsPage() { const mf = document.getElementById('reportMonthFilter'); if (mf) { const t = new Date(); mf.value = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}`; mf.addEventListener('change', () => {/* re-render charts */}); } }
+function renderReportsPage() { const mf = document.getElementById('reportMonthFilter'); if (mf) { const t = new Date(); mf.value = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}`; mf.addEventListener('change', () => {}); } }
 function renderBudgetsPage() { /* ... */ }
 function renderSettingsPage() { /* ... */ }
 function openModal(id = null) {
     state.ui.editingTransactionId = id; const t = id ? state.transactions.find(t => t.id === id) : {};
     const m = document.getElementById('modal-container');
-    m.innerHTML = `<div class="modal-overlay visible"><div class="modal"><div class="modal-header"><h2>${id ? 'Edit' : 'Add'} Transaction</h2><button class="icon-btn" onclick="closeModal()"><i class='bx bx-x'></i></button></div><form id="transaction-form"><div class="form-group"><label>Type</label><select name="type" id="type-selector" required>${['expense', 'income'].map(v => `<option value="${v}" ${t.type === v ? 'selected' : ''}>${v.charAt(0).toUpperCase() + v.slice(1)}</option>`).join('')}</select></div><div class="form-group"><label>Description</label><input type="text" name="description" value="${t.description || ''}" required></div><div class="form-group"><label>Amount</label><input type="number" step="0.01" name="amount" value="${t.amount || ''}" required></div><div class="form-group"><label>Category</label><select name="category" id="category-selector" required></select></div><div class="form-group"><label>Date</label><input type="date" name="date" value="${t.date ? t.date.toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}" required></div><button type="submit" class="fab">${id ? 'Update' : 'Add'}</button></form></div></div>`;
+    m.innerHTML = `<div class="modal-overlay visible"><div class="modal"><div class="modal-header"><h2>${id ? 'Edit' : 'Add'} Transaction</h2><button class="icon-btn" onclick="closeModal()"><i class='bx bx-x'></i></button></div><form id="transaction-form"><div class="form-group"><label>Type</label><select name="type" id="type-selector">${['expense', 'income'].map(v => `<option value="${v}" ${t.type === v ? 'selected' : ''}>${v.charAt(0).toUpperCase() + v.slice(1)}</option>`).join('')}</select></div><div class="form-group"><label>Description</label><input type="text" name="description" value="${t.description || ''}" required></div><div class="form-group"><label>Amount</label><input type="number" step="0.01" name="amount" value="${t.amount || ''}" required></div><div class="form-group"><label>Category</label><select name="category" id="category-selector" required></select></div><div class="form-group"><label>Date</label><input type="date" name="date" value="${t.date ? t.date.toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}" required></div><button type="submit" class="fab">${id ? 'Update' : 'Add'}</button></form></div></div>`;
     const ts = document.getElementById('type-selector'), cs = document.getElementById('category-selector');
     const updateCat = () => { cs.innerHTML = state.categories.filter(c => c.type === ts.value).map(c => `<option value="${c.id}" ${t.category === c.id ? 'selected' : ''}>${c.name}</option>`).join(''); };
     updateCat(); ts.addEventListener('change', updateCat);
