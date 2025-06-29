@@ -1,22 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings - Infinity Tracker</title>
+    <title>Settings - Infinity X</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
+    <div id="aurora-background"></div>
     <div class="app-container">
         <nav class="sidebar"></nav>
         <div class="main-content">
-            <header class="main-header"><h1><i class='bx bxs-cog'></i> Settings</h1><div class="header-actions"><button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button></div></header>
+            <header class="main-header">
+                <div class="header-title"><h1><i class='bx bxs-cog'></i> Settings</h1><p>Customize your Infinity X experience.</p></div>
+                <div class="header-actions"><button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button></div>
+            </header>
             <main>
-                <div class="card"><h3><i class='bx bxs-user-detail'></i> Profile & Currency</h3><div class="form-group"><label>Your Name:</label><input type="text" id="userNameInput"></div><div class="form-group"><label>Your Title:</label><input type="text" id="userTitleInput"></div><div class="form-group"><label>Currency Symbol:</label><input type="text" id="currencyInput"></div><button id="saveSettingsBtn" class="primary-btn">Save</button></div>
-                <div class="card"><h3><i class='bx bxs-category-alt'></i> Manage Categories</h3><ul id="category-list"></ul><div class="input-group"><input type="text" id="newCategoryName" placeholder="New category..."><button id="addCategoryBtn" class="secondary-btn">Add</button></div></div>
-                <div class="card danger-zone"><h3><i class='bx bxs-hot'></i> Danger Zone</h3><p>These actions are irreversible.</p><button id="exportDataBtn" class="warning-btn"><i class='bx bxs-download'></i> Export Data</button><button id="resetAppBtn" class="danger-btn"><i class='bx bxs-trash'></i> Reset App</button></div>
+                <div class="card"><h3><i class='bx bxs-user-detail'></i> Profile & Currency</h3><div class="form-group"><label for="userNameInput">Your Name:</label><input type="text" id="userNameInput"></div><div class="form-group"><label for="userTitleInput">Your Title:</label><input type="text" id="userTitleInput"></div><div class="form-group"><label for="currencyInput">Currency Symbol:</label><input type="text" id="currencyInput"></div><button id="saveSettingsBtn" class="primary-btn">Save Profile Settings</button></div>
+                <div class="card"><h3><i class='bx bxs-category-alt'></i> Manage Categories</h3><ul id="category-list"></ul><div class="input-group"><input type="text" id="newCategoryName" placeholder="New category name"><button id="addCategoryBtn" class="secondary-btn">Add</button></div></div>
+                <div class="card danger-zone"><h3><i class='bx bxs-hot'></i> Danger Zone</h3><p>These actions are irreversible. Please be certain.</p><button id="exportDataBtn" class="warning-btn"><i class='bx bxs-download'></i> Export All Data (JSON)</button><button id="importDataBtn" class="secondary-btn"><i class='bx bxs-upload'></i> Import Data</button><input type="file" id="importFileInput" class="hidden"><button id="resetAppBtn" class="danger-btn"><i class='bx bxs-trash'></i> Reset All App Data</button></div>
             </main>
             <footer class="main-footer"></footer>
         </div>
