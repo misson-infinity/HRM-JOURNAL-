@@ -12,34 +12,16 @@
     <div class="app-container">
         <nav class="sidebar"></nav>
         <div class="main-content">
-            <header class="main-header">
-                <h1><i class='bx bx-target-lock'></i> Budgets</h1>
-                <div class="header-actions">
-                    <button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button>
-                </div>
-            </header>
+            <header class="main-header"><h1><i class='bx bx-target-lock'></i> Budgets</h1><div class="header-actions"><button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button></div></header>
             <main>
-                <div class="card budget-summary">
-                    <h3><i class='bx bx-wallet'></i> Overall Monthly Budget</h3>
-                    <div class="input-group">
-                        <input type="number" id="overallBudgetInput" placeholder="Set overall budget...">
-                        <button id="setOverallBudgetBtn" class="primary-btn">Set</button>
-                    </div>
-                    <p>Spent: <span id="overallSpent">৳0.00</span> of <span id="overallBudget">৳0.00</span></p>
-                    <div class="progress-bar-container"><div class="progress-bar" id="overallProgressBar"></div></div>
-                </div>
-                <div class="card">
-                    <h3><i class='bx bx-category'></i> Category Budgets</h3>
-                    <div id="categoryBudgetsContainer"></div>
-                </div>
+                <div class="card budget-summary"><h3><i class='bx bx-wallet'></i> Overall Monthly Budget</h3><div class="input-group"><input type="number" id="overallBudgetInput" placeholder="Set overall budget..."><button id="setOverallBudgetBtn" class="primary-btn">Set</button></div><p>Spent: <span id="overallSpent"></span> of <span id="overallBudget"></span></p><div class="progress-bar-container"><div class="progress-bar" id="overallProgressBar"></div></div></div>
+                <div class="card"><h3><i class='bx bx-category'></i> Category Budgets</h3><div id="categoryBudgetsContainer"></div><button id="addCategoryBudgetBtn" class="secondary-btn"><i class='bx bx-plus-circle'></i> Add Category Budget</button></div>
             </main>
             <footer class="main-footer"></footer>
         </div>
     </div>
-    <div id="modal-container"></div>
-    <div id="toastNotification" class="toast"></div>
-    <script src="ui.js"></script>
-    <script src="main.js"></script>
-    <script> document.addEventListener('DOMContentLoaded', () => initApp('budgets')); </script>
+    <div id="modal-container"></div><div id="toast-container"></div>
+    <script src="ui.js"></script><script src="main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', () => initApp('budgets'));</script>
 </body>
 </html>
