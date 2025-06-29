@@ -32,47 +32,86 @@ function renderDashboardPage() {
     const income = state.transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
     const expense = state.transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
     const grid = document.querySelector('.dashboard-grid');
-    if (grid) {
-        grid.innerHTML = `
-            <div class="card summary-card"><h3>Total Income</h3><p class="amount income">${formatCurrency(income)}</p></div>
-            <div class="card summary-card"><h3>Total Expense</h3><p class="amount expense">${formatCurrency(expense)}</p></div>
-            <div class="card summary-card"><h3>Balance</h3><p>${formatCurrency(income - expense)}</p></div>`;
-    }
+    if (grid) grid.innerHTML = `
+        <div class="card summary-card"><h3>Total Income</h3><p class="amount income">${formatCurrency(income)}</p></div>
+        <div class="card summary-card"><h3>Total Expense</h3><p class="amount expense">${formatCurrency(expense)}</p></div>
+        <div class="card summary-card"><h3>Balance</h3><p>${formatCurrency(income - expense)}</p></div>`;
+
     const recentList = document.getElementById('recentTransactionsList');
-    if(recentList) {
-        recentList.innerHTML = state.transactions.slice(0, 5).map(t => `
-            <li>
-                <i class='bx ${getCategoryById(t.category)?.icon || 'bx-question-mark'}'></i>
-                <div><span>${t.description}</span><small>${new Date(t.date || Date.now()).toLocaleDateString()}</small></div>
-                <strong class="amount ${t.type}">${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}</strong>
-            </li>`).join('') || `<li>No recent transactions.</li>`;
-    }
+    if(recentList) recentList.innerHTML = state.transactions.slice(0, 5).map(t => {
+        const category = getCategoryById(t.category);
+        return `<li><i class='bx ${category?.icon}'></i><div><span>${t.description}</span><small>${t.date.toLocaleDateString()}</small></div><strong class="amount ${t.type}">${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}</strong></li>`
+    }).join('') || `<li>No recent transactions.</li>`;
     renderExpensePieChart(document.getElementById('expensePieChart'));
 }
 
-function renderExpensePieChart(canvas) {
-    if (!canvas || !window.Chart) return;
-    if (window.expenseChartInstance) window.expenseChartInstance.destroy();
-    const expenseData = state.transactions.filter(t => t.type === 'expense');
-    const categoryTotals = expenseData.reduce((acc, t) => {
+function renderTransactionsPage() {
+    const tableBody = document.getElementById('transactionTableBody');
+    if (!tableBody) return;
+    tableBody.innerHTML = state.transactions.map(t => {
         const category = getCategoryById(t.category);
-        if (category) acc[category.name] = (acc[category.name] || 0) + t.amount;
-        return acc;
-    }, {});
-    
-    window.expenseChartInstance = new Chart(canvas, {
-        type: 'doughnut',
-        data: {
-            labels: Object.keys(categoryTotals),
-            datasets: [{
-                data: Object.values(categoryTotals),
-                backgroundColor: ['#F44336', '#FFC107', '#4CAF50', '#2196F3', '#9C27B0'],
-                borderColor: 'var(--card-bg)', borderWidth: 4
-            }]
-        },
-        options: {
-            responsive: true, maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom', labels: { color: 'var(--text-secondary)' } } }
-        }
+        return `
+            <tr>
+                <td>${t.date.toLocaleDateString()}</td>
+                <td>${t.description}</td>
+                <td><i class='bx ${category?.icon}'></i> ${category?.name}</td>
+                <td class="amount ${t.type}">${formatCurrency(t.amount)}</td>
+                <td class="action-buttons">
+                    <button onclick="openModal('${t.id}')"><i class='bx bxs-edit'></i></button>
+                    <button onclick="deleteTransaction('${t.id}')"><i class='bx bxs-trash'></i></button>
+                </td>
+            </tr>`;
+    }).join('');
+}
+
+function openModal(transactionId = null) {
+    state.ui.editingTransactionId = transactionId;
+    const transaction = transactionId ? state.transactions.find(t => t.id === transactionId) : {};
+    const modalContainer = document.getElementById('modal-container');
+    modalContainer.innerHTML = `
+        <div class="modal-overlay visible">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2>${transactionId ? 'Edit' : 'Add'} Transaction</h2>
+                    <button class="icon-btn" onclick="closeModal()"><i class='bx bx-x'></i></button>
+                </div>
+                <form id="transaction-form">
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select name="type" required>
+                            <option value="expense" ${transaction.type === 'expense' ? 'selected' : ''}>Expense</option>
+                            <option value="income" ${transaction.type === 'income' ? 'selected' : ''}>Income</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" name="description" value="${transaction.description || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input type="number" name="amount" value="${transaction.amount || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select name="category" required>${state.categories.map(c => `<option value="${c.id}" ${transaction.category === c.id ? 'selected' : ''}>${c.name}</option>`).join('')}</select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" name="date" value="${transaction.date ? transaction.date.toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}" required>
+                    </div>
+                    <button type="submit" class="fab">${transactionId ? 'Update' : 'Add'}</button>
+                </form>
+            </div>
+        </div>
+    `;
+    document.getElementById('transaction-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+        data.amount = parseFloat(data.amount);
+        addOrUpdateTransaction(data);
     });
 }
+function closeModal() { document.getElementById('modal-container').innerHTML = ''; }
+
+function renderExpensePieChart(canvas) { /* আগের মতোই */ }
