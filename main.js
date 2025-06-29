@@ -26,7 +26,7 @@ function initApp(page) {
 function renderPageContent(page) {
     switch (page) {
         case 'dashboard': renderDashboardPage(); break;
-        case 'transactions': renderTransactionsPage(); break;
+        // Add other page renderers here
     }
 }
 
@@ -52,11 +52,9 @@ function toggleTheme() {
 }
 
 function registerGlobalEventListeners() {
-    document.getElementById('addTransactionBtn')?.addEventListener('click', () => openModal());
+    document.getElementById('addTransactionBtn')?.addEventListener('click', () => alert("Add Transaction Modal will open!"));
     document.getElementById('theme-toggle-btn')?.addEventListener('click', toggleTheme);
 }
 
 const formatCurrency = (amount) => `${state.settings.currency}${parseFloat(amount || 0).toFixed(2)}`;
 const getCategoryById = (id) => state.categories.find(c => c.id === id);
-
-function openModal() { alert("Add Transaction Modal will open here!"); }
