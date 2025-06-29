@@ -10,63 +10,27 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Sidebar Navigation -->
-        <nav class="sidebar">
-            <!-- Sidebar content is injected by ui.js -->
-        </nav>
-
-        <!-- Main Content Area -->
+        <nav class="sidebar"></nav>
         <div class="main-content">
             <header class="main-header">
                 <h1><i class='bx bxs-dashboard'></i> Dashboard</h1>
                 <div class="header-actions">
                     <button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button>
-                    <button class="fab" id="addTransactionBtn"><i class='bx bx-plus'></i> <span>Add</span></button>
+                    <button class="fab" id="addTransactionBtn"><i class='bx bx-plus'></i> <span>Add Transaction</span></button>
                 </div>
             </header>
-
             <main>
-                <!-- Financial Summary Cards -->
-                <section class="dashboard-grid">
-                    <!-- Summary cards are injected by ui.js -->
-                </section>
-
-                <!-- Quick Navigation Buttons -->
+                <section class="dashboard-grid"></section>
                 <section class="quick-nav-grid">
-                    <a href="transactions.html" class="nav-card">
-                        <i class='bx bx-transfer-alt'></i>
-                        <h4>Transactions</h4>
-                        <p>View & manage entries</p>
-                    </a>
-                    <a href="reports.html" class="nav-card">
-                        <i class='bx bxs-report'></i>
-                        <h4>Reports</h4>
-                        <p>Analyze your finances</p>
-                    </a>
-                    <a href="budgets.html" class="nav-card">
-                        <i class='bx bx-target-lock'></i>
-                        <h4>Budgets</h4>
-                        <p>Set & track goals</p>
-                    </a>
-                    <a href="settings.html" class="nav-card">
-                        <i class='bx bxs-cog'></i>
-                        <h4>Settings</h4>
-                        <p>Customize your app</p>
-                    </a>
-                    <a href="developer.html" class="nav-card">
-                        <i class='bx bxs-user-circle'></i>
-                        <h4>Developer</h4>
-                        <p>About the creator</p>
-                    </a>
+                    <a href="transactions.html" class="nav-card"><i class='bx bx-transfer-alt'></i><h4>Transactions</h4><p>View & manage</p></a>
+                    <a href="reports.html" class="nav-card"><i class='bx bxs-report'></i><h4>Reports</h4><p>Analyze finances</p></a>
+                    <a href="budgets.html" class="nav-card"><i class='bx bx-target-lock'></i><h4>Budgets</h4><p>Set & track goals</p></a>
+                    <a href="settings.html" class="nav-card"><i class='bx bxs-cog'></i><h4>Settings</h4><p>Customize app</p></a>
                 </section>
-                
-                <!-- Recent Activities and Chart -->
                 <section class="content-row">
                     <div class="card" id="recent-transactions-card">
                         <h3><i class='bx bx-history'></i> Recent Transactions</h3>
-                        <ul id="recentTransactionsList">
-                            <!-- Recent transactions are injected by ui.js -->
-                        </ul>
+                        <ul id="recentTransactionsList"></ul>
                         <a href="transactions.html" class="view-all-link">View All <i class='bx bx-right-arrow-alt'></i></a>
                     </div>
                     <div class="card" id="expense-chart-card">
@@ -75,24 +39,15 @@
                     </div>
                 </section>
             </main>
-
-            <footer class="main-footer">
-                <!-- Footer content is injected by ui.js -->
-            </footer>
+            <footer class="main-footer"></footer>
         </div>
     </div>
-
-    <!-- Modals and Toasts -->
-    <div id="transactionModal" class="modal"></div>
+    <div id="modal-container"></div>
     <div id="toastNotification" class="toast"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="ui.js"></script>
     <script src="main.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            initApp('dashboard');
-        });
-    </script>
+    <script> document.addEventListener('DOMContentLoaded', () => initApp('dashboard')); </script>
 </body>
 </html>
