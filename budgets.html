@@ -1,21 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Budgets - Infinity Tracker</title>
+    <title>Budgets - Infinity X</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
+    <div id="aurora-background"></div>
     <div class="app-container">
         <nav class="sidebar"></nav>
         <div class="main-content">
-            <header class="main-header"><h1><i class='bx bx-target-lock'></i> Budgets</h1><div class="header-actions"><button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button></div></header>
+            <header class="main-header">
+                <div class="header-title"><h1><i class='bx bx-target-lock'></i> Budgets</h1><p>Set financial goals and track your progress.</p></div>
+                <div class="header-actions"><button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button></div>
+            </header>
             <main>
-                <div class="card budget-summary"><h3><i class='bx bx-wallet'></i> Overall Monthly Budget</h3><div class="input-group"><input type="number" id="overallBudgetInput" placeholder="Set overall budget..."><button id="setOverallBudgetBtn" class="primary-btn">Set</button></div><p>Spent: <span id="overallSpent"></span> of <span id="overallBudget"></span></p><div class="progress-bar-container"><div class="progress-bar" id="overallProgressBar"></div></div></div>
-                <div class="card"><h3><i class='bx bx-category'></i> Category Budgets</h3><div id="categoryBudgetsContainer"></div><button id="addCategoryBudgetBtn" class="secondary-btn"><i class='bx bx-plus-circle'></i> Add Category Budget</button></div>
+                <div class="card budget-summary"><h3><i class='bx bx-wallet'></i> Overall Monthly Budget</h3><div class="input-group"><input type="number" id="overallBudgetInput" placeholder="Set overall budget amount..."><button id="setOverallBudgetBtn" class="primary-btn">Set</button></div><p>Spent: <span id="overallSpent"></span> of <span id="overallBudget"></span></p><div class="progress-bar-container"><div class="progress-bar" id="overallProgressBar"></div></div></div>
+                <div class="card"><h3><i class='bx bx-category'></i> Category Budgets (Envelope System)</h3><div id="categoryBudgetsContainer"></div><button id="addCategoryBudgetBtn" class="secondary-btn"><i class='bx bx-plus-circle'></i> Add New Budget Envelope</button></div>
             </main>
             <footer class="main-footer"></footer>
         </div>
