@@ -1,30 +1,5 @@
 {
-  "name": "Infinity Tracker Pro",
-  "short_name": "Infinity",
-  "description": "A professional-grade financial companion to track, analyze, and master your expenses.",
-  "start_url": "index.html",
-  "display": "standalone",
-  "background_color": "#F0F2F5",
-  "theme_color": "#00A884",
-  "orientation": "portrait-primary",
-  "icons": [
-    {
-      "src": "logo.svg",
-      "type": "image/svg+xml",
-      "sizes": "any",
-      "purpose": "any"
-    },
-    {
-      "src": "logo-192.png",
-      "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "maskable"
-    },
-    {
-      "src": "logo-512.png",
-      "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "any"
-    }
-  ]
+  "name": "Infinity Tracker Pro", "short_name": "Infinity", "description": "A professional-grade financial companion to track, analyze, and master your expenses.",
+  "start_url": "index.html", "display": "standalone", "background_color": "#F0F2F5", "theme_color": "#00A884", "orientation": "portrait-primary",
+  "icons": [ { "src": "logo.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" } ]
 }
