@@ -3,45 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Developer Profile - Infinity Tracker</title>
+    <title>Developer - Infinity Tracker</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Font Awesome এর লিঙ্ক জরুরি কারণ আইকনগুলো এখান থেকেই আসবে -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-    <main class="developer-profile card">
-        <img src="vector_lecture_design.png" alt="Developer Photo" class="dev-photo">
-        <h1>Md Habibur Rahman Mahi</h1>
-        <p>Founder of Infinity Group</p>
-
-        <!-- আপডেট করা সোশ্যাল লিঙ্কস -->
-        <div class="social-links">
-            <a href="https://www.facebook.com/share/1ChuLPL8hG/" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
-            <a href="https://www.instagram.com/h.r_mahi_?igsh=Z242dWFtcDZwdjF2" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="https://wa.me/8801727722018" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-            <a href="https://t.me/@HRMahi05" target="_blank"title="Telegram"><i class="fab fa-telegram"></i></a>
-        </div>
-
-        <section class="dev-section">
-            <h2>About Me</h2>
-            <p>
-                I am Md Habibur Rahman Mahi, a passionate web developer and tech enthusiast from Bangladesh. I specialize in creating responsive and user-friendly websites using HTML, CSS, JavaScript, and modern frameworks. I love solving real-life problems with code and turning ideas into interactive digital solutions. Apart from coding, I enjoy writing, designing, and exploring new technologies. I believe in lifelong learning and always strive to improve myself every day. My goal is to build impactful projects that help people and make a difference. I dream of leading a tech-based initiative that inspires the next generation of creators and innovators.
-            </p>
-        </section>
-
-        <section class="dev-section">
-            <h2>My Skills</h2>
-            <ul class="skills-list">
-                <li>HTML5 & CSS3</li>
-                <li>JavaScript (ES6+)</li>
-                <li>Progressive Web App (PWA)</li>
-                <li>Responsive Design</li>
-                <li>Chart.js</li>
-                <li>Git & GitHub</li>
-            </ul>
-        </section>
+    <div class="app-container">
+        <nav class="sidebar"></nav>
         
-        <a href="index.html" class="back-to-app"><i class="fas fa-arrow-left"></i> Back to App</a>
-    </main>
+        <div class="main-content">
+             <header class="main-header">
+                <h1><i class='bx bxs-user-circle'></i> Developer Profile</h1>
+                 <div class="header-actions">
+                    <button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button>
+                </div>
+            </header>
+            
+            <main class="developer-page">
+                <div class="card developer-card">
+                    <img src="vector_lecture_design.png" alt="Developer Photo" class="dev-photo">
+                    <h1 class="dev-name">Md Habibur Rahman Mahi</h1>
+                    <p class="dev-title">Founder of Infinity Group</p>
+                    
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/share/1ChuLPL8hG/" target="_blank" title="Facebook"><i class='bx bxl-facebook-square'></i></a>
+                        <a href="https://www.instagram.com/h.r_mahi_?igsh=Z242dWFtcDZwdjF2" target="_blank" title="Instagram"><i class='bx bxl-instagram-alt'></i></a>
+                        <a href="https://wa.me/8801727722018" target="_blank" title="WhatsApp"><i class='bx bxl-whatsapp-square'></i></a>
+                        <a href="https://t.me/@HRMahi05" target="_blank" title="Telegram"><i class='bx bxl-telegram'></i></a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>About Me</h2>
+                    <p>I am a passionate web developer and tech enthusiast from Bangladesh, specializing in creating responsive, user-friendly websites. I love solving real-life problems with code and turning ideas into interactive digital solutions. My goal is to build impactful projects that help people and make a difference, and I dream of leading a tech-based initiative to inspire the next generation.</p>
+                </div>
+
+                <div class="card">
+                    <h2>My Skills</h2>
+                    <ul class="skills-list">
+                        <li>HTML5 & CSS3</li>
+                        <li>JavaScript (ES6+)</li>
+                        <li>Progressive Web App (PWA)</li>
+                        <li>Responsive Design</li>
+                        <li>Chart.js & Data Viz</li>
+                        <li>Git & GitHub</li>
+                    </ul>
+                </div>
+            </main>
+            
+            <footer class="main-footer"></footer>
+        </div>
+    </div>
+    
+    <script src="ui.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initApp('developer');
+        });
+    </script>
 </body>
 </html>
