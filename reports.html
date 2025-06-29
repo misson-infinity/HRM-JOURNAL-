@@ -33,7 +33,7 @@
                 </div>
                 <div class="content-row">
                     <div class="card"><h3><i class='bx bxs-pie-chart-alt-2'></i> Expense by Category</h3><div class="chart-container"><canvas id="reportExpensePieChart"></canvas></div></div>
-                    <div class="card"><h3><i class='bx bxs-bar-chart-alt-2'></i> Income vs Expense Comparison</h3><div class="chart-container"><canvas id="reportIncomeExpenseBarChart"></canvas></div></div>
+                    <div class="card"><h3><i class='bx bxs-bar-chart-alt-2'></i> Income vs Expense</h3><div class="chart-container"><canvas id="reportIncomeExpenseBarChart"></canvas></div></div>
                 </div>
             </main>
             <footer class="main-footer"></footer>
@@ -41,6 +41,6 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script src="ui.js"></script><script src="main.js"></script>
-    <script>document.addEventListener('DOMContentLoaded', () => initApp('reports'));</script>
+    <script>window.currentPage = 'reports';</script>
 </body>
 </html>
