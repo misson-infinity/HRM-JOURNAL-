@@ -1,29 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reports - Infinity Tracker</title>
+    <title>Reports - Infinity X</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
+    <div id="aurora-background"></div>
     <div class="app-container">
         <nav class="sidebar"></nav>
         <div class="main-content">
-            <header class="main-header"><h1><i class='bx bxs-report'></i> Reports</h1><div class="header-actions"><button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button><button id="generatePdfBtn" class="fab"><i class='bx bxs-file-pdf'></i><span>PDF</span></button></div></header>
+            <header class="main-header">
+                <div class="header-title">
+                    <h1><i class='bx bxs-report'></i> Financial Reports</h1>
+                    <p>Visualize and understand your spending habits.</p>
+                </div>
+                <div class="header-actions">
+                    <button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button>
+                    <button id="generatePdfBtn" class="fab"><i class='bx bxs-file-pdf'></i><span>Download PDF</span></button>
+                </div>
+            </header>
             <main>
-                <div class="card"><div class="report-header"><h3>Financial Summary</h3><input type="month" id="reportMonthFilter"></div><div id="report-summary-cards" class="dashboard-grid"></div></div>
+                <div class="card">
+                    <div class="report-header">
+                        <h3>Report for: <span id="reportMonth"></span></h3>
+                        <input type="month" id="reportMonthFilter">
+                    </div>
+                    <div id="report-summary-cards" class="dashboard-grid"></div>
+                </div>
                 <div class="content-row">
                     <div class="card"><h3><i class='bx bxs-pie-chart-alt-2'></i> Expense by Category</h3><div class="chart-container"><canvas id="reportExpensePieChart"></canvas></div></div>
-                    <div class="card"><h3><i class='bx bxs-bar-chart-alt-2'></i> Income vs Expense</h3><div class="chart-container"><canvas id="reportIncomeExpenseBarChart"></canvas></div></div>
+                    <div class="card"><h3><i class='bx bxs-bar-chart-alt-2'></i> Income vs Expense Comparison</h3><div class="chart-container"><canvas id="reportIncomeExpenseBarChart"></canvas></div></div>
                 </div>
             </main>
             <footer class="main-footer"></footer>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script src="ui.js"></script><script src="main.js"></script>
     <script>document.addEventListener('DOMContentLoaded', () => initApp('reports'));</script>
 </body>
