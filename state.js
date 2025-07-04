@@ -5,7 +5,6 @@ let state = {
     settings: { currency: CONFIG.DEFAULT_CURRENCY, darkMode: false },
     ui: { currentPage: 'dashboard', isSidebarOpen: window.innerWidth > 768, editingTransactionId: null, filter: {} }
 };
-
 function loadState() {
     const savedState = localStorage.getItem('iExpanseTrackerState');
     if (savedState) {
@@ -14,5 +13,4 @@ function loadState() {
         state.transactions = state.transactions.map(t => ({ ...t, date: new Date(t.date) }));
     } else { state.categories = CONFIG.INITIAL_CATEGORIES; }
 }
-
 function saveState() { localStorage.setItem('iExpanseTrackerState', JSON.stringify(state)); }
