@@ -14,21 +14,7 @@ const CONFIG = {
     },
     DEFAULT_CURRENCY: "৳",
     INITIAL_CATEGORIES: {
-        income: [
-            { id: 'cat_inc_1', name: 'Salary', icon: 'briefcase' },
-            { id: 'cat_inc_2', name: 'Business', icon: 'store' },
-            { id: 'cat_inc_3', name: 'Gifts', icon: 'gift' },
-            { id: 'cat_inc_4', name: 'Other', icon: 'plus-circle' }
-        ],
-        expense: [
-            { id: 'cat_exp_1', name: 'Food & Drinks', icon: 'utensils-crossed' },
-            { id: 'cat_exp_2', name: 'Shopping', icon: 'shopping-bag' },
-            { id: 'cat_exp_3', name: 'Transport', icon: 'bus' },
-            { id: 'cat_exp_4', name: 'Bills & Fees', icon: 'receipt' },
-            { id: 'cat_exp_5', name: 'Entertainment', icon: 'popcorn' },
-            { id: 'cat_exp_6', name: 'Health', icon: 'siren' },
-            { id: 'cat_exp_7', name: 'Education', icon: 'graduation-cap' },
-            { id: 'cat_exp_8', name: 'Other', icon: 'more-horizontal' }
-        ]
+        income: [ { id: 'cat_inc_1', name: 'Salary', icon: 'briefcase-alt-2' }, { id: 'cat_inc_2', name: 'Business', icon: 'store-alt' }, { id: 'cat_inc_3', name: 'Gifts', icon: 'gift' }, { id: 'cat_inc_4', name: 'Other', icon: 'plus-circle' } ],
+        expense: [ { id: 'cat_exp_1', name: 'Food & Drinks', icon: 'restaurant' }, { id: 'cat_exp_2', name: 'Shopping', icon: 'shopping-bag' }, { id: 'cat_exp_3', name: 'Transport', icon: 'bus' }, { id: 'cat_exp_4', name: 'Bills & Fees', icon: 'receipt' }, { id: 'cat_exp_5', name: 'Entertainment', icon: 'movie-play' }, { id: 'cat_exp_6', name: 'Health', icon: 'first-aid' }, { id: 'cat_exp_7', name: 'Education', icon: 'book-reader' }, { id: 'cat_exp_8', name: 'Other', icon: 'dots-horizontal-rounded' } ]
     }
 };
