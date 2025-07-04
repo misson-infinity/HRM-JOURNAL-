@@ -1,31 +1,165 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="bn" class="">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Settings - I Expanse Tracker</title>
-  <link rel="icon" href="images/image (4).png" type="image/png">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4b6cb7">
+    <title>Settings - I Expanse Tracker</title>
+    <link rel="icon" href="images/image (4).png" type="image/png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
-<body>
-  <div class="container">
-    <header class="main-header">
-      <img src="images/image (4).png" class="logo" alt="Infinity Logo">
-      <h1>I Expanse Tracker</h1>
-      <button onclick="window.location.href='index.html'" class="back-btn">← Dashboard</button>
-    </header>
-    <main>
-      <h2>সেটিংস</h2>
-      <section id="settings-section"></section>
-    </main>
-    <footer>
-      <img src="images/image (4).png" class="footer-logo" alt="Logo">
-      Md Habibur Rahman Mahi — Founder and CEO of Infinity Group
-    </footer>
-  </div>
-  <script src="config.js"></script>
-  <script src="state.js"></script>
-  <script src="ui.js"></script>
-  <script src="main.js"></script>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
+    
+    <div class="flex h-screen">
+      <!-- Sidebar -->
+      <aside id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 bg-white dark:bg-slate-800 shadow-xl z-50 transform -translate-x-full md:translate-x-0">
+        <div class="flex items-center justify-center p-4 border-b border-slate-200 dark:border-slate-700 h-16">
+            <img src="images/image (4).png" alt="Logo" class="h-10 w-10 rounded-2xl mr-2 app-logo">
+            <h1 class="text-xl font-bold tracking-wider app-name">I Expanse</h1>
+        </div>
+        <nav class="mt-4">
+            <a href="index.html" class="nav-link flex items-center px-6 py-3 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-slate-700/50">
+                <i data-lucide="layout-dashboard" class="mr-3"></i> Dashboard
+            </a>
+            <a href="transactions.html" class="nav-link flex items-center px-6 py-3 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-slate-700/50">
+              <i data-lucide="arrow-right-left" class="mr-3"></i> Transactions
+            </a>
+            <a href="reports.html" class="nav-link flex items-center px-6 py-3 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-slate-700/50">
+                <i data-lucide="file-text" class="mr-3"></i> Reports
+            </a>
+            <a href="budgets.html" class="nav-link flex items-center px-6 py-3 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-slate-700/50">
+              <i data-lucide="target" class="mr-3"></i> Budgets
+            </a>
+            <a href="settings.html" class="nav-link flex items-center px-6 py-3 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-slate-700/50">
+              <i data-lucide="settings" class="mr-3"></i> Settings
+            </a>
+            <a href="developer.html" class="nav-link flex items-center px-6 py-3 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-slate-700/50">
+                <i data-lucide="code-2" class="mr-3"></i> Developer
+            </a>
+        </nav>
+        <div class="absolute bottom-4 left-0 right-0 px-6">
+            <button id="theme-toggle" class="w-full flex items-center justify-center px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600">
+                <i data-lucide="sun" class="mr-2 dark:hidden"></i>
+                <i data-lucide="moon" class="mr-2 hidden dark:inline"></i>
+                <span id="theme-text">Dark Mode</span>
+            </button>
+        </div>
+    </aside>
+
+      <!-- Main Content -->
+      <main id="main-content" class="main-content flex-1 md:ml-64 overflow-y-auto">
+        <header class="sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm z-30 p-4 flex items-center justify-between shadow-sm h-16">
+            <button id="sidebar-toggle" class="p-2 rounded-full md:hidden hover:bg-slate-200 dark:hover:bg-slate-700">
+                <i data-lucide="infinity" class="h-6 w-6 text-blue-500"></i>
+            </button>
+            <h2 id="page-title" class="text-xl font-semibold tracking-wide ml-2 md:ml-0">Settings</h2>
+            <button id="add-transaction-btn" class="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center font-semibold hover:bg-blue-600 shadow-md">
+                <i data-lucide="plus" class="mr-1 h-5 w-5"></i> Add
+            </button>
+        </header>
+
+        <div class="p-4 md:p-6">
+            <div class="max-w-4xl mx-auto space-y-6">
+                <!-- Manage Categories -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl infinity-shadow">
+                    <h3 class="text-lg font-semibold mb-4">Manage Categories</h3>
+                    
+                    <form id="add-category-form" class="flex flex-col sm:flex-row gap-2 mb-6">
+                        <input type="text" id="new-category-name" placeholder="New category name" class="flex-grow p-2 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-300 dark:border-slate-600 outline-none">
+                        <select id="new-category-type" class="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-300 dark:border-slate-600 outline-none">
+                            <option value="expense">Expense</option>
+                            <option value="income">Income</option>
+                        </select>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600">Add</button>
+                    </form>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 categories-container">
+                        <div>
+                            <h4 class="font-semibold mb-2 text-green-500">Income Categories</h4>
+                            <div id="income-categories-list" class="space-y-2"></div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2 text-red-500">Expense Categories</h4>
+                            <div id="expense-categories-list" class="space-y-2"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- App Data -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl infinity-shadow">
+                    <h3 class="text-lg font-semibold mb-4">App Data</h3>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button id="export-data-btn" class="w-full bg-green-500 text-white py-2 rounded-lg flex items-center justify-center font-semibold hover:bg-green-600">
+                            <i data-lucide="download" class="mr-2 h-5 w-5"></i> Export Data (JSON)
+                        </button>
+                        <button id="reset-app-btn" class="w-full bg-red-500 text-white py-2 rounded-lg flex items-center justify-center font-semibold hover:bg-red-600">
+                            <i data-lucide="refresh-cw" class="mr-2 h-5 w-5"></i> Reset App Data
+                        </button>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2 text-center">Warning: Resetting will delete all your transactions, budgets, and custom categories permanently.</p>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="text-center p-4 text-sm text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700 mt-6 tracking-wide">
+            <span id="footer-text" class="inline-flex items-center gap-1"></span>
+        </footer>
+      </main>
+    </div>
+    
+    <!-- Transaction Modal -->
+    <div id="transaction-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+        <!-- Modal content is identical to other pages, so it's consistent -->
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg w-full max-w-md p-6">
+            <h3 id="modal-title" class="text-xl font-bold mb-4">Add Transaction</h3>
+            <form id="transaction-form">
+                <input type="hidden" id="transaction-id">
+                <div class="mb-4"><label for="type" class="block text-sm font-medium mb-1">Type</label><select id="type" class="w-full p-2 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-300 dark:border-slate-600 outline-none" required><option value="expense">Expense</option><option value="income">Income</option></select></div>
+                <div class="mb-4"><label for="description" class="block text-sm font-medium mb-1">Description</label><input type="text" id="description" class="w-full p-2 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-300 dark:border-slate-600 outline-none" required></div>
+                <div class="grid grid-cols-2 gap-4 mb-4"><div><label for="amount" class="block text-sm font-medium mb-1">Amount</label><input type="number" step="0.01" id="amount" class="w-full p-2 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-300 dark:border-slate-600 outline-none" required></div><div><label for="date" class="block text-sm font-medium mb-1">Date</label><input type="date" id="date" class="w-full p-2 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-300 dark:border-slate-600 outline-none" required></div></div>
+                <div class="mb-4"><label for="category" class="block text-sm font-medium mb-1">Category</label><select id="category" class="w-full p-2 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-300 dark:border-slate-600 outline-none" required></select></div>
+                <div class="flex justify-end space-x-2"><button type="button" id="cancel-button" class="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 font-semibold">Cancel</button><button type="submit" class="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 font-semibold">Save</button></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="state.js"></script>
+    <script src="ui.js"></script>
+    <script src="main.js"></script>
+    <script>
+      // Page specific scripts for Settings
+      document.addEventListener('DOMContentLoaded', () => {
+        const exportBtn = document.getElementById('export-data-btn');
+        const resetBtn = document.getElementById('reset-app-btn');
+
+        if(exportBtn) {
+          exportBtn.addEventListener('click', () => {
+            const dataStr = localStorage.getItem('iExpanseTrackerState_v2');
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            const exportFileDefaultName = 'iExpanse_backup.json';
+            
+            let linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+          });
+        }
+        
+        if(resetBtn) {
+          resetBtn.addEventListener('click', () => {
+            if (confirm('DANGER! This will delete ALL your data permanently. Are you absolutely sure?')) {
+              localStorage.removeItem('iExpanseTrackerState_v2');
+              alert('App data has been reset. The app will now reload.');
+              window.location.reload();
+            }
+          });
+        }
+      });
+    </script>
 </body>
 </html>
