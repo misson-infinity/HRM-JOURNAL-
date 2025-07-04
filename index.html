@@ -1,46 +1,456 @@
 <!DOCTYPE html>
-<html lang="bn" class="">
+<html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>I Expanse Tracker</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/date-fns"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="icon" href="image (4).png" type="image/png">
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>I Expanse Tracker</title>
+  <!-- Infinity Branding -->
+  <link rel="icon" href="images/image (4).png" type="image/png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .infinity-gradient { background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%); }
+    .infinity-shadow { box-shadow: 0 4px 24px 0 #4b6cb733; }
+    .glow { box-shadow: 0 0 24px 2px #4b6cb7cc; }
+    .splash-screen { transition: opacity .6s, visibility .6s; }
+    .sidebar { transition: transform .3s; }
+    .main-content { transition: margin-left .3s; }
+    .spinner { border-top-color: #4b6cb7; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 </head>
-<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
+<body class="bg-slate-50 dark:bg-slate-900">
 
-    <div id="splash-screen" class="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center z-[100]">
-        <img src="image (4).png" alt="App Logo" class="h-24 w-24 mb-4 animate-pulse">
-        <h1 class="text-3xl font-bold text-white">I Expanse Tracker</h1>
-        <p class="text-slate-400 mt-2">Infinity in Control, Clarity in Spending</p>
-        <div class="absolute bottom-10 text-center"><p class="text-slate-500 text-sm">Developed by: Md Habibur Rahman Mahi</p><p class="text-slate-500 text-xs">Founder and CEO of Infinity Group</p></div>
-        <div class="loader"></div>
+<!-- Splash Screen -->
+<div id="splash-screen" class="splash-screen fixed inset-0 infinity-gradient flex flex-col items-center justify-center z-50">
+  <img src="images/image (4).png" alt="Logo" class="h-24 w-24 rounded-3xl mb-4 animate-bounce">
+  <h1 class="text-3xl font-bold text-white tracking-wider flex items-center gap-2">
+    I Expanse Tracker <span class="text-2xl animate-spin">♾️</span>
+  </h1>
+  <p class="text-slate-200 mt-2">Infinity in Control, Clarity in Spending</p>
+  <div class="mt-8 text-center text-slate-300">
+    <div>Developed by: <span class="font-bold text-white">Md Habibur Rahman Mahi</span></div>
+    <div class="text-xs">Founder and CEO of Infinity Group</div>
+  </div>
+</div>
+
+<div class="flex h-screen">
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 bg-white dark:bg-slate-800 shadow-xl z-40 transform -translate-x-full md:translate-x-0">
+    <div class="flex items-center justify-center p-3 border-b border-slate-200 dark:border-slate-700">
+      <img src="images/image (4).png" alt="Infinity Logo" class="h-10 w-10 rounded-2xl mr-2">
+      <h1 class="text-xl font-bold tracking-wider">I Expanse</h1>
     </div>
-
-    <div class="flex h-screen">
-        <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg shadow-lg z-40 transform -translate-x-full md:translate-x-0"></aside>
-        <main id="main-content" class="flex-1 md:ml-64 overflow-y-auto">
-            <header class="sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm z-30 p-4 flex items-center justify-between shadow-sm">
-                <button id="sidebar-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700"><i class='bx bx-infinite text-teal-500 text-2xl'></i></button>
-                <div id="page-title-container" class="text-xl font-semibold"></div>
-                <button id="add-transaction-button" class="bg-teal-500 text-white px-4 py-2 rounded-lg flex items-center font-semibold hover:bg-teal-600 shadow-md"><i class='bx bx-plus mr-2'></i> Add</button>
-            </header>
-            <div id="page-content" class="p-4 md:p-6"></div>
-            <footer class="text-center p-4 text-sm text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700 mt-6">I Expanse Tracker © 2025 | Developed by <a href="#developer" class="nav-link-footer font-semibold text-teal-500">Md Habibur Rahman Mahi</a>.</footer>
-        </main>
+    <nav class="mt-4">
+      <a href="#dashboard" class="nav-link flex items-center px-6 py-3 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/50">
+        <i data-lucide="infinity" class="mr-3 text-blue-500"></i> Dashboard
+      </a>
+      <a href="#reports" class="nav-link flex items-center px-6 py-3 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/50">
+        <i data-lucide="bar-chart-3" class="mr-3"></i> Reports
+      </a>
+      <a href="#developer" class="nav-link flex items-center px-6 py-3 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/50">
+        <i data-lucide="user" class="mr-3"></i> Developer
+      </a>
+    </nav>
+    <div class="absolute bottom-4 left-0 right-0 px-6">
+      <button id="theme-toggle" class="w-full flex items-center justify-center px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600">
+        <i data-lucide="sun" class="mr-2 dark:hidden"></i>
+        <i data-lucide="moon" class="mr-2 hidden dark:inline"></i>
+        <span id="theme-text">Dark Mode</span>
+      </button>
     </div>
+  </aside>
+  <!-- Main Content -->
+  <main id="main-content" class="main-content flex-1 md:ml-64 overflow-y-auto">
+    <header class="sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm z-30 p-4 flex items-center justify-between shadow-sm">
+      <button id="sidebar-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700">
+        <i data-lucide="infinity" class="h-6 w-6 text-blue-500"></i>
+      </button>
+      <h2 id="page-title" class="text-xl font-semibold tracking-wide">Dashboard</h2>
+      <button id="add-transaction-button" class="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center font-semibold hover:bg-blue-600 shadow">
+        <i data-lucide="plus" class="mr-2 h-5 w-5"></i> Add
+      </button>
+    </header>
+    <div class="p-4 md:p-6">
+      <!-- Dashboard Page -->
+      <section id="dashboard-page" class="page">
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="bg-white dark:bg-slate-800 p-6 rounded-xl infinity-shadow flex items-center hover:glow">
+            <div class="p-3 bg-green-100 dark:bg-green-900/50 rounded-full mr-4">
+              <i data-lucide="arrow-down-left" class="text-green-500"></i>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500 dark:text-slate-400">Total Income</p>
+              <p id="total-income" class="text-2xl font-bold">৳0.00</p>
+            </div>
+          </div>
+          <div class="bg-white dark:bg-slate-800 p-6 rounded-xl infinity-shadow flex items-center hover:glow">
+            <div class="p-3 bg-red-100 dark:bg-red-900/50 rounded-full mr-4">
+              <i data-lucide="arrow-up-right" class="text-red-500"></i>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500 dark:text-slate-400">Total Expense</p>
+              <p id="total-expense" class="text-2xl font-bold">৳0.00</p>
+            </div>
+          </div>
+          <div class="bg-white dark:bg-slate-800 p-6 rounded-xl infinity-shadow flex items-center hover:glow">
+            <div class="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-full mr-4">
+              <i data-lucide="wallet" class="text-blue-500"></i>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500 dark:text-slate-400">Balance</p>
+              <p id="total-balance" class="text-2xl font-bold">৳0.00</p>
+            </div>
+          </div>
+        </div>
+        <!-- AI Insight -->
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl infinity-shadow mb-6">
+          <div class="flex flex-col md:flex-row items-center justify-between">
+            <div>
+              <h3 class="text-lg font-semibold">Financial Health Check <span class="text-2xl ml-1">♾️</span></h3>
+              <p class="text-slate-500 dark:text-slate-400 text-sm">Get AI-powered insights on your spending.</p>
+            </div>
+            <button id="get-insights-button" class="mt-4 md:mt-0 bg-gradient-to-r from-blue-400 to-purple-500 text-white px-5 py-2.5 rounded-lg flex items-center font-semibold hover:from-blue-500 hover:to-purple-600 shadow">
+              ✨ Get Financial Insights
+            </button>
+          </div>
+        </div>
+        <!-- Recent Transactions -->
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl infinity-shadow">
+          <h3 class="text-lg font-semibold mb-4">Recent Transactions</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead>
+                <tr class="border-b dark:border-slate-700">
+                  <th class="py-2">Description</th>
+                  <th class="py-2">Category</th>
+                  <th class="py-2">Date</th>
+                  <th class="py-2 text-right">Amount</th>
+                </tr>
+              </thead>
+              <tbody id="transaction-list"></tbody>
+            </table>
+          </div>
+        </div class="chart-container"><canvas id="expense-chart"></canvas></div>
+        </div>
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl infinity-shadow">
+          <h3 class="text-lg font-semibold mb-4">Monthly Overview</h3>
+          <div class="chart-container"><canvas id="monthly-chart"></canvas></div>
+        </div>
+      </section>
+      <!-- Developer Page -->
+      <section id="developer-page" class="page hidden">
+        <div class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-xl infinity-shadow text-center">
+          <img src="images/Picsart_24-12-22_22-58-18-749.png" alt="Developer Photo" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-500">
+          <h2 class="text-2xl font-bold">Md Habibur Rahman Mahi</h2>
+          <h3 class="text-lg text-blue-500 font-semibold mb-4">Founder and CEO of Infinity Group</h3>
+          <p class="max-w-2xl mx-auto text-slate-600 dark:text-slate-400 mb-6">
+            Infinity Group builds innovative, user-centric digital solutions to empower people. Our vision: Technology for everyone, from Bangladesh to the world.
+          </p>
+          <div class="flex justify-center space-x-4">
+            <a href="https://wa.me/8801727722018" target="_blank" class="p-3 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600"><i data-lucide="message-circle" class="text-green-500"></i></a>
+            <a href="https://t.me/+8801727722018" target="_blank" class="p-3 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600"><i data-lucide="send" class="text-blue-500"></i></a>
+            <a href="https://www.instagram.com/h.r_mahi_?igsh=Z242dWFtcDZwdjF2" target="_blank" class="p-3 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600"><i data-lucide="instagram" class="text-pink-500"></i></a>
+            <a href="https://www.facebook.com/share/1L8yaf25bk/" target="_blank" class="p-3 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600"><i data-lucide="facebook" class="text-sky-600"></i></a>
+          </div>
+        </div>
+      </section>
+    </div>
+    <footer class="text-center p-3 text-sm text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700 mt-6 tracking-wide">
+      <span class="inline-flex items-center gap-1">© 2025 <img src="images/image (4).png" class="w-4 h-4 rounded-full"> Md Habibur Rahman Mahi | Infinity Group</span>
+    </footer>
+  </main>
+</div>
 
-    <div id="modal-container"></div>
-    <div id="toast-container" class="fixed bottom-5 right-5 z-[101]"></div>
+<!-- Transaction Modal -->
+<div id="transaction-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+  <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg w-full max-w-md p-6">
+    <h3 id="modal-title" class="text-xl font-bold mb-4">Add Transaction</h3>
+    <form id="transaction-form">
+      <input type="hidden" id="transaction-id">
+      <div class="mb-4">
+        <label for="type" class="block text-sm font-medium mb-1">Type</label>
+        <select id="type" class="w-full p-2 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-300 dark:border-slate-600" required>
+          <option value="expense">Expense</option>
+          <option value="income">Income</option>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label for="description" class="block text-sm font-medium mb-1">Description</label>
+        <input type="text" id="description" class="w-full p-2 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-300 dark:border-slate-600" required>
+      </div>
+      <div class="mb-4">
+        <label for="amount" class="block text-sm font-medium mb-1">Amount</label>
+        <input type="number" id="amount" class="w-full p-2 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-300 dark:border-slate-600" required>
+      </div>
+      <div class="mb-4">
+        <label for="category" class="block text-sm font-medium mb-1">Category</label>
+        <select id="category" class="w-full p-2 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-300 dark:border-slate-600" required>
+          <!-- JS will populate this -->
+        </select>
+      </div>
+      <div class="mb-4">
+        <label for="date" class="block text-sm font-medium mb-1">Date</label>
+        <input type="date" id="date" class="w-full p-2 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-300:border-slate-600" required>
+      </div>
+      <div class="flex justify-end space-x-2">
+        <button type="button" id="cancel-button" class="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300">Cancel</button>
+        <button type="submit" class="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- Insights Modal -->
+<div id="insights-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+  <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg w-full max-w-lg p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-xl font-bold flex items-center">✨ Financial Insights</h3>
+      <button id="close-insights-button" class="p-1 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <div id="insights-content" class="min-h-[200px] text-slate-600 dark:text-slate-300"></div>
+    <p class="text-xs text-center text-slate-400 mt-4">AI-generated advice. Please consult a financial advisor for important decisions.</p>
+  </div>
+</div>
 
-    <script src="config.js"></script><script src="state.js"></script><script src="ui.js"></script><script src="main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  lucide.createIcons();
+  // State
+  let state = {
+    transactions: [
+      { id: 1, type: 'income', description: 'Salary', amount: 50000, category: 'Salary', date: '2025-07-01' },
+      { id: 2, type: 'expense', description: 'Groceries', amount: 3500, category: 'Food', date: '2025-07-02' },
+      { id: 3, type: 'expense', description: 'Internet Bill', amount: 1000, category: 'Bills', date: '2025-07-03' },
+      { id: 4, type: 'expense', description: 'Movie Tickets', amount: 800, category: 'Entertainment', date: '2025-07-04' },
+      { id: 5, type: 'expense', description: 'New Clothes', amount: 2500, category: 'Shopping', date: '2025-07-05' }
+    ],
+    categories: {
+      income: ['Salary', 'Freelance', 'Bonus'],
+      expense: ['Food', 'Transport', 'Bills', 'Entertainment', 'Shopping', 'Health']
+    },
+    currentPage: 'dashboard'
+  };
+
+  // DOM Elements
+  const splashScreen = document.getElementById('splash-screen');
+  const sidebar = document.getElementById('sidebar');
+  const sidebarToggle = document.getElementById('sidebar-toggle');
+  const mainContent = document.getElementById('main-content');
+  const pageTitle = document.getElementById('page-title');
+  const transactionList = document.getElementById('transaction-list');
+  const totalIncomeEl = document.getElementById('total-income');
+  const totalExpenseEl = document.getElementById('total-expense');
+  const totalBalanceEl = document.getElementById('total-balance');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const pages = document.querySelectorAll('.page');
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeText = document.getElementById('theme-text');
+  const addTransactionButton = document.getElementById('add-transaction-button');
+  const transactionModal = document.getElementById('transaction-modal');
+  const cancelButton = document.getElementById('cancel-button');
+  const transactionForm = document.getElementById('transaction-form');
+  const modalTitle = document.getElementById('modal-title');
+  const categorySelect = document.getElementById('category');
+  const typeSelect = document.getElementById('type');
+  const getInsightsButton = document.getElementById('get-insights-button');
+  const insightsModal = document.getElementById('insights-modal');
+  const closeInsightsButton = document.getElementById('close-insights-button');
+  const insightsContent = document.getElementById('insights-content');
+
+  // Charts
+  let expenseChart, monthlyChart;
+  const formatCurrency = amount => `৳${amount.toFixed(2)}`;
+  const formatDate = d => new Date(d).toLocaleDateString('bn-BD', { day: 'numeric', month: 'short', year: 'numeric' });
+
+  const getFinancialSummary = () => {
+    const totalIncome = state.transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+    const totalExpense = state.transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+    const expenseByCategory = state.transactions.filter(t => t.type === 'expense')
+      .reduce((acc, t) => { acc[t.category] = (acc[t.category] || 0) + t.amount; return acc; }, {});
+    return { totalIncome, totalExpense, expenseByCategory };
+  }
+
+  const renderSummary = () => {
+    const { totalIncome, totalExpense } = getFinancialSummary();
+    const balance = totalIncome - totalExpense;
+    totalIncomeEl.textContent = formatCurrency(totalIncome);
+    totalExpenseEl.textContent = formatCurrency(totalExpense);
+    totalBalanceEl.textContent = formatCurrency(balance);
+  };
+
+  const renderTransactions = () => {
+    transactionList.innerHTML = '';
+    if (state.transactions.length === 0) {
+      transactionList.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-slate-500">No transactions yet.</td></tr>`;
+      return;
+    }
+    const recentTransactions = [...state.transactions].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+    recentTransactions.forEach(t => {
+      const row = document.createElement('tr');
+      row.className = `border-b dark:border-slate-700 ${t.type === 'income' ? 'text-green-600' : 'text-red-500'}`;
+      row.innerHTML = `
+        <td class="py-3 font-medium text-slate-800 dark:text-slate-200">${t.description}</td>
+        <td class="py-3 text-slate-500 dark:text-slate-400">${t.category}</td>
+        <td class="py-3 text-slate-500 dark:text-slate-400">${formatDate(t.date)}</td>
+        <td class="py-3 text-right font-semibold">${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}</td>
+      `;
+      transactionList.appendChild(row);
+    });
+  };
+
+  const renderCharts = () => {
+    const { expenseByCategory } = getFinancialSummary();
+    if (expenseChart) expenseChart.destroy();
+    expenseChart = new Chart(document.getElementById('expense-chart'), {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(expenseByCategory),
+        datasets: [{
+          data: Object.values(expenseByCategory),
+          backgroundColor: ['#4b6cb7', '#182848', '#00c6ff', '#3b82f6', '#eab308', '#f43f5e'],
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+    const monthlyData = state.transactions.reduce((acc, t) => {
+      const month = new Date(t.date).toLocaleString('en-US', { month: 'short' });
+      if (!acc[month]) acc[month] = { income: 0, expense: 0 };
+      acc[month][t.type] += t.amount; return acc;
+    }, {});
+    const labels = Object.keys(monthlyData);
+    const incomeValues = labels.map(l => monthlyData[l].income);
+    const expenseValues = labels.map(l => monthlyData[l].expense);
+    if (monthlyChart) monthlyChart.destroy();
+    monthlyChart = new Chart(document.getElementById('monthly-chart'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          { label: 'Income', data: incomeValues, backgroundColor: '#4b6cb7' },
+          { label: 'Expense', data: expenseValues, backgroundColor: '#f43f5e' }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  };
+
+  const updateUI = () => {
+    renderSummary();
+    renderTransactions();
+    if (state.currentPage === 'reports') renderCharts();
+  };
+
+  const navigateTo = pageId => {
+    state.currentPage = pageId;
+    pages.forEach(p => p.classList.add('hidden'));
+    document.getElementById(`${pageId}-page`).classList.remove('hidden');
+    pageTitle.textContent = pageId.charAt(0).toUpperCase() + pageId.slice(1);
+    if (window.innerWidth < 768) sidebar.classList.add('-translate-x-full');
+    updateUI();
+  };
+
+  // Gemini API Call
+  const fetchFinancialInsights = async () => {
+    insightsContent.innerHTML = `<div class="flex justify-center items-center h-full"><div class="spinner h-12 w-12 rounded-full border-4 border-slate-200"></div></div>`;
+    const { totalIncome, totalExpense, expenseByCategory } = getFinancialSummary();
+    if (totalExpense === 0) {
+      insightsContent.innerHTML = `<p>You don't have any expense data yet. Add some expenses to get financial insights.</p>`;
+      return;
+    }
+    const expenseDetails = Object.entries(expenseByCategory).map(([cat, amt]) => `${cat}: ${formatCurrency(amt)}`).join(', ');
+    const prompt = `You are a friendly financial advisor. User's financial data from Bangladesh (BDT):\n- Total Monthly Income: ${formatCurrency(totalIncome)}\n- Total Monthly Expense: ${formatCurrency(totalExpense)}\n- Expense Breakdown: ${expenseDetails}\nGive 3 actionable tips.`;
+    const apiKey = ""; // <-- Your Gemini API Key
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }] })
+      });
+      if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+      const result = await response.json();
+      if (result.candidates && result.candidates[0].content.parts[0].text) {
+        let text = result.candidates[0].content.parts[0].text;
+        text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        text = text.replace(/(\n\s*-\s)/g, '</li><li class="mb-2">');
+        text = text.replace(/\n/g, '<br>');
+        insightsContent.innerHTML = `<ul class="list-disc list-inside">${text}</ul>`;
+      } else {
+        throw new Error("No content received from API.");
+      }
+    } catch (error) {
+      insightsContent.innerHTML = `<p class="text-red-500">Sorry, I couldn't fetch insights at the moment. Please try again later.</p>`;
+    }
+  };
+
+  // Event Listeners
+  sidebarToggle.addEventListener('click', () => sidebar.classList.toggle('-translate-x-full'));
+  navLinks.forEach(link => link.addEventListener('click', e => {
+    e.preventDefault(); navigateTo(link.getAttribute('href').substring(1));
+  }));
+  themeToggle.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    const isDark = document.documentElement.classList.contains('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    themeText.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+  });
+  const openModal = modal => { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+  const closeModal = modal => { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+  addTransactionButton.addEventListener('click', () => {
+    modalTitle.textContent = 'Add Transaction';
+    typeSelect.value = 'expense';
+    updateCategoryOptions();
+    document.getElementById('date').valueAsDate = new Date();
+    openModal(transactionModal);
+  });
+  cancelButton.addEventListener('click', () => closeModal(transactionModal));
+  getInsightsButton.addEventListener('click', () => { openModal(insightsModal); fetchFinancialInsights(); });
+  closeInsightsButton.addEventListener('click', () => closeModal(insightsModal));
+  const updateCategoryOptions = () => {
+    const type = typeSelect.value;
+    const options = state.categories[type];
+    categorySelect.innerHTML = options.map(c => `<option value="${c}">${c}</option>`).join('');
+  };
+  typeSelect.addEventListener('change', updateCategoryOptions);
+  transactionForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const newTransaction = {
+      id: Date.now(),
+      type: document.getElementById('type').value,
+      description: document.getElementById('description').value,
+      amount: parseFloat(document.getElementById('amount').value),
+      category: document.getElementById('category').value,
+      date: document.getElementById('date').value,
+    };
+    state.transactions.push(newTransaction);
+    updateUI();
+    closeModal(transactionModal);
+    transactionForm.reset();
+  });
+
+  // Initial Load
+  setTimeout(() => { splashScreen.style.opacity = '0'; splashScreen.style.visibility = 'hidden'; }, 1400);
+  if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark'); themeText.textContent = 'Light Mode';
+  } else {
+    document.documentElement.classList.remove('dark'); themeText.textContent = 'Dark Mode';
+  }
+  navigateTo('dashboard');
+});
+</script>
 </body>
 </html>
