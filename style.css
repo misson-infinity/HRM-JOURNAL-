@@ -1,29 +1,21 @@
 /*
   I Expanse Tracker - Premium Stylesheet
   Version: 3.0.0 (Final, Complete & Stable)
-  Author: Generated for Md Habibur Rahman Mahi
 */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
-body {
-    font-family: 'Poppins', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
+body { font-family: 'Poppins', sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 .sidebar { transition: transform 0.3s ease-in-out; }
 .main-content { transition: margin-left 0.3s ease-in-out; }
 .splash-screen { transition: opacity 0.5s ease-out, visibility 0.5s ease-out; }
 .glass-card { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .dark .glass-card { background: rgba(30, 41, 59, 0.6); }
-.progress-bar-bg { background-color: #e5e7eb; }
-.dark .progress-bar-bg { background-color: #374151; }
+.progress-bar-bg { background-color: #e5e7eb; } .dark .progress-bar-bg { background-color: #374151; }
 .loader { width: 48px; height: 48px; border: 5px solid rgba(255,255,255,0.2); border-bottom-color: #fff; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; margin-top: 2rem; }
 @keyframes rotation { to { transform: rotate(360deg); } }
 @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 .toast { transition: all 0.5s ease-in-out; transform: translateY(20px); opacity: 0; }
 .toast.show { transform: translateY(0); opacity: 1; }
 .sidebar-overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.5); z-index: 39; transition: opacity 0.3s; }
-/* Mobile Sidebar */
 @media (max-width: 767px) {
     .sidebar { transform: translateX(-100%); }
     .sidebar.open { transform: translateX(0); }
