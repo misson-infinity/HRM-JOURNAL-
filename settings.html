@@ -1,32 +1,31 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings - Infinity X</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Settings - I Expanse Tracker</title>
+  <link rel="icon" href="images/image (4).png" type="image/png">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="aurora-background"></div>
-    <div class="app-container">
-        <nav class="sidebar"></nav>
-        <div class="main-content">
-            <header class="main-header">
-                <div class="header-left"><button id="menu-toggle-btn" class="icon-btn"><i class='bx bx-menu'></i></button><div class="header-title"><h1><i class='bx bxs-cog'></i> Settings</h1><p>Customize your Infinity X experience.</p></div></div>
-                <div class="header-actions"><button id="theme-toggle-btn" class="icon-btn"><i class='bx bx-moon'></i></button></div>
-            </header>
-            <main>
-                <div class="card"><h3><i class='bx bxs-user-detail'></i> Profile & Currency</h3><div class="form-group"><label for="userNameInput">Your Name:</label><input type="text" id="userNameInput"></div><div class="form-group"><label for="userTitleInput">Your Title:</label><input type="text" id="userTitleInput"></div><div class="form-group"><label for="currencyInput">Currency Symbol:</label><input type="text" id="currencyInput"></div><button id="saveSettingsBtn" class="primary-btn">Save Profile Settings</button></div>
-                <div class="card"><h3><i class='bx bxs-category-alt'></i> Manage Categories</h3><ul id="category-list"></ul><div class="input-group"><input type="text" id="newCategoryName" placeholder="New category name"><button id="addCategoryBtn" class="secondary-btn">Add</button></div></div>
-                <div class="card danger-zone"><h3><i class='bx bxs-hot'></i> Danger Zone</h3><p>These actions are irreversible.</p><button id="exportDataBtn" class="warning-btn"><i class='bx bxs-download'></i> Export Data</button><button id="importDataBtn" class="secondary-btn"><i class='bx bxs-upload'></i> Import Data</button><input type="file" id="importFileInput" class="hidden"><button id="resetAppBtn" class="danger-btn"><i class='bx bxs-trash'></i> Reset App</button></div>
-            </main>
-            <footer class="main-footer"></footer>
-        </div>
-    </div>
-    <div id="toast-container"></div>
-    <script src="ui.js"></script><script src="main.js"></script>
-    <script>window.currentPage = 'settings';</script>
+  <div class="container">
+    <header class="main-header">
+      <img src="images/image (4).png" class="logo" alt="Infinity Logo">
+      <h1>I Expanse Tracker</h1>
+      <button onclick="window.location.href='index.html'" class="back-btn">← Dashboard</button>
+    </header>
+    <main>
+      <h2>সেটিংস</h2>
+      <section id="settings-section"></section>
+    </main>
+    <footer>
+      <img src="images/image (4).png" class="footer-logo" alt="Logo">
+      Md Habibur Rahman Mahi — Founder and CEO of Infinity Group
+    </footer>
+  </div>
+  <script src="config.js"></script>
+  <script src="state.js"></script>
+  <script src="ui.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
