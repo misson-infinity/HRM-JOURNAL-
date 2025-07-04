@@ -13,55 +13,34 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="icon" href="image (4).png" type="image/png">
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
 
-    <!-- Splash Screen -->
     <div id="splash-screen" class="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center z-[100]">
         <img src="image (4).png" alt="App Logo" class="h-24 w-24 mb-4 animate-pulse">
         <h1 class="text-3xl font-bold text-white">I Expanse Tracker</h1>
         <p class="text-slate-400 mt-2">Infinity in Control, Clarity in Spending</p>
-        <div class="absolute bottom-10 text-center">
-            <p class="text-slate-500 text-sm">Developed by: Md Habibur Rahman Mahi</p>
-            <p class="text-slate-500 text-xs">Founder and CEO of Infinity Group</p>
-        </div>
+        <div class="absolute bottom-10 text-center"><p class="text-slate-500 text-sm">Developed by: Md Habibur Rahman Mahi</p><p class="text-slate-500 text-xs">Founder and CEO of Infinity Group</p></div>
         <div class="loader"></div>
     </div>
 
     <div class="flex h-screen">
-        <!-- Sidebar -->
         <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg shadow-lg z-40 transform -translate-x-full md:translate-x-0"></aside>
-
-        <!-- Main Content -->
         <main id="main-content" class="flex-1 md:ml-64 overflow-y-auto">
             <header class="sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm z-30 p-4 flex items-center justify-between shadow-sm">
-                <button id="sidebar-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700">
-                    <i class='bx bx-infinite text-teal-500 text-2xl'></i>
-                </button>
+                <button id="sidebar-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700"><i class='bx bx-infinite text-teal-500 text-2xl'></i></button>
                 <div id="page-title-container" class="text-xl font-semibold"></div>
-                <button id="add-transaction-button" class="bg-teal-500 text-white px-4 py-2 rounded-lg flex items-center font-semibold hover:bg-teal-600 shadow-md">
-                    <i class='bx bx-plus mr-2'></i> Add
-                </button>
+                <button id="add-transaction-button" class="bg-teal-500 text-white px-4 py-2 rounded-lg flex items-center font-semibold hover:bg-teal-600 shadow-md"><i class='bx bx-plus mr-2'></i> Add</button>
             </header>
-
-            <div id="page-content" class="p-4 md:p-6">
-                <!-- Dynamic content will be injected here -->
-            </div>
-
-             <footer class="text-center p-4 text-sm text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700 mt-6">
-                I Expanse Tracker © 2025 | Developed by <a href="#" data-page="developer" class="nav-link-footer font-semibold text-teal-500">Md Habibur Rahman Mahi</a>.
-            </footer>
+            <div id="page-content" class="p-4 md:p-6"></div>
+            <footer class="text-center p-4 text-sm text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700 mt-6">I Expanse Tracker © 2025 | Developed by <a href="#developer" class="nav-link-footer font-semibold text-teal-500">Md Habibur Rahman Mahi</a>.</footer>
         </main>
     </div>
 
-    <!-- Modal & Toast Container -->
     <div id="modal-container"></div>
     <div id="toast-container" class="fixed bottom-5 right-5 z-[101]"></div>
 
-    <!-- All JS files -->
-    <script src="config.js"></script>
-    <script src="state.js"></script>
-    <script src="ui.js"></script>
-    <script src="main.js"></script>
+    <script src="config.js"></script><script src="state.js"></script><script src="ui.js"></script><script src="main.js"></script>
 </body>
 </html>
