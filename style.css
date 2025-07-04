@@ -1,23 +1,60 @@
-/*
-  I Expanse Tracker - Premium Stylesheet
-  Version: 3.0.0 (Final, Complete & Stable)
-*/
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-body { font-family: 'Poppins', sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-.sidebar { transition: transform 0.3s ease-in-out; }
-.main-content { transition: margin-left 0.3s ease-in-out; }
-.splash-screen { transition: opacity 0.5s ease-out, visibility 0.5s ease-out; }
-.glass-card { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-.dark .glass-card { background: rgba(30, 41, 59, 0.6); }
-.progress-bar-bg { background-color: #e5e7eb; } .dark .progress-bar-bg { background-color: #374151; }
-.loader { width: 48px; height: 48px; border: 5px solid rgba(255,255,255,0.2); border-bottom-color: #fff; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; margin-top: 2rem; }
-@keyframes rotation { to { transform: rotate(360deg); } }
-@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-.toast { transition: all 0.5s ease-in-out; transform: translateY(20px); opacity: 0; }
-.toast.show { transform: translateY(0); opacity: 1; }
-.sidebar-overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.5); z-index: 39; transition: opacity 0.3s; }
-@media (max-width: 767px) {
-    .sidebar { transform: translateX(-100%); }
-    .sidebar.open { transform: translateX(0); }
-    #main-content { margin-left: 0 !important; }
+/* style.css */
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+body {
+    font-family: 'Inter', 'Hind Siliguri', sans-serif;
+    -webkit-tap-highlight-color: transparent;
 }
+
+/* Infinity Branding */
+.infinity-gradient { background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%); }
+.infinity-shadow { box-shadow: 0 4px 24px 0 rgba(75, 108, 183, 0.2); }
+.glow:hover { box-shadow: 0 0 24px 4px rgba(75, 108, 183, 0.4); transition: box-shadow 0.3s ease-in-out; }
+
+/* Splash Screen */
+.splash-screen { transition: opacity 0.8s ease-out, visibility 0.8s ease-out; }
+.splash-screen.fade-out { opacity: 0; visibility: hidden; }
+
+/* Sidebar & Main Content */
+#sidebar { transition: transform 0.3s ease-in-out; }
+#main-content { transition: margin-left 0.3s ease-in-out; }
+
+/* Active Nav Link */
+.nav-link.active {
+    background-color: #eff6ff; /* blue-50 */
+    color: #2563eb; /* blue-600 */
+    font-weight: 600;
+    border-left: 4px solid #2563eb;
+    padding-left: calc(1.5rem - 4px);
+}
+.dark .nav-link.active {
+    background-color: rgba(59, 130, 246, 0.15);
+    color: #60a5fa; /* blue-400 */
+}
+
+/* Spinner */
+.spinner { border-top-color: #3b82f6; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+.dark ::-webkit-scrollbar-track { background: #1e293b; }
+::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+/* Budget Progress Bar */
+progress {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%; height: 8px; border-radius: 4px;
+    overflow: hidden; border: none;
+}
+progress::-webkit-progress-bar { background-color: #e2e8f0; }
+.dark progress::-webkit-progress-bar { background-color: #334155; }
+progress.progress-green::-webkit-progress-value { background-color: #22c55e; }
+progress.progress-yellow::-webkit-progress-value { background-color: #eab308; }
+progress.progress-red::-webkit-progress-value { background-color: #ef4444; }
+
+/* Ensure modal is above everything */
+#transaction-modal, #ai-insights-modal { z-index: 100 !important; }
