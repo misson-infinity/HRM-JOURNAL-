@@ -1,92 +1,241 @@
 // main.js
-"use strict";
+
+// This is the main script that initializes the app and handles all user interactions.
+
 document.addEventListener('DOMContentLoaded', () => {
-    loadState(); applyTheme();
-    navigateTo(window.location.hash.substring(1) || 'dashboard');
-    registerEventListeners();
-    setTimeout(() => { const s = document.getElementById('splash-screen'); if(s) { s.style.opacity = '0'; s.style.visibility = 'hidden'; } }, 3000);
+    // --- INITIALIZATION ---
+    function initApp() {
+        // 1. Register Service Worker for PWA capabilities
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(registration => console.log('Service Worker registered successfully:', registration))
+                .catch(error => console.log('Service Worker registration failed:', error));
+        }
+
+        // 2. Hide splash screen after a delay
+        setTimeout(() => {
+            document.getElementById('splash-screen').classList.add('fade-out');
+        }, 2000);
+
+        // 3. Render basic app info (name, logo, etc.)
+        renderAppShell();
+        
+        // 4. Set initial theme
+        applyTheme(getSettings().darkMode);
+
+        // 5. Render page-specific content
+        const currentPage = window.location.pathname.split('/').pop();
+        updateActiveNav(currentPage);
+        
+        switch (currentPage) {
+            case 'index.html':
+            case '':
+                updateDashboardSummary();
+                renderRecentTransactions();
+                renderDashboardCharts();
+                break;
+            case 'transactions.html':
+                renderTransactionPage();
+                break;
+            case 'budgets.html':
+                renderBudgetsPage();
+                break;
+            case 'settings.html':
+                renderSettingsPage();
+                break;
+        }
+
+        // 6. Initialize Lucide icons
+        lucide.createIcons();
+        
+        // 7. Setup all event listeners
+        setupEventListeners();
+    }
+
+    // --- EVENT LISTENERS SETUP ---
+    function setupEventListeners() {
+        // Sidebar Toggle
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.getElementById('sidebar');
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+        
+        // Theme Toggle
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            const isDark = toggleDarkMode();
+            applyTheme(isDark);
+        });
+
+        // Add Transaction Button
+        document.getElementById('add-transaction-btn').addEventListener('click', () => {
+            showTransactionModal();
+        });
+
+        // Modal Cancel/Close Buttons
+        document.getElementById('cancel-button').addEventListener('click', hideTransactionModal);
+        document.getElementById('transaction-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'transaction-modal') hideTransactionModal();
+        });
+
+        // Transaction Form
+        document.getElementById('transaction-form').addEventListener('submit', handleTransactionFormSubmit);
+        document.getElementById('type').addEventListener('change', (e) => populateCategorySelect(e.target.value));
+
+        // AI Insights Modal
+        document.getElementById('get-insights-btn')?.addEventListener('click', showInsightsModal);
+        document.getElementById('close-insights-btn')?.addEventListener('click', hideInsightsModal);
+        document.getElementById('ai-insights-modal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'ai-insights-modal') hideInsightsModal();
+        });
+        
+        // Page specific listeners
+        const currentPage = window.location.pathname.split('/').pop();
+
+        if (currentPage === 'transactions.html') {
+             document.getElementById('all-transactions-list').addEventListener('click', handleTransactionListClick);
+        }
+        if (currentPage === 'reports.html') {
+            document.getElementById('generate-report-btn').addEventListener('click', handleReportGeneration);
+        }
+        if (currentPage === 'budgets.html') {
+            document.getElementById('add-budget-form').addEventListener('submit', handleBudgetFormSubmit);
+            document.getElementById('budgets-list').addEventListener('click', handleDeleteBudget);
+        }
+        if (currentPage === 'settings.html') {
+            document.getElementById('add-category-form').addEventListener('submit', handleCategoryFormSubmit);
+            document.querySelector('.categories-container').addEventListener('click', handleDeleteCategory);
+        }
+    }
+
+    // --- EVENT HANDLERS ---
+    function handleTransactionFormSubmit(e) {
+        e.preventDefault();
+        const id = parseInt(document.getElementById('transaction-id').value);
+        const transaction = {
+            type: document.getElementById('type').value,
+            description: document.getElementById('description').value.trim(),
+            amount: parseFloat(document.getElementById('amount').value),
+            category: document.getElementById('category').value,
+            date: document.getElementById('date').value,
+        };
+        
+        if (!transaction.description || !transaction.amount || !transaction.category || !transaction.date) {
+            alert('Please fill all fields.');
+            return;
+        }
+
+        if (id) {
+            updateTransaction({ ...transaction, id });
+        } else {
+            addTransaction(transaction);
+        }
+        
+        hideTransactionModal();
+        refreshPageContent();
+    }
+
+    function handleTransactionListClick(e) {
+        const target = e.target.closest('button');
+        if (!target) return;
+        
+        const id = parseInt(target.dataset.id);
+        if (target.classList.contains('edit-btn')) {
+            const transaction = getTransactionById(id);
+            showTransactionModal(transaction);
+        } else if (target.classList.contains('delete-btn')) {
+            if (confirm('Are you sure you want to delete this transaction?')) {
+                deleteTransaction(id);
+                renderTransactionPage();
+            }
+        }
+    }
+
+    function handleReportGeneration() {
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
+        if (!startDate || !endDate) {
+            alert('Please select both a start and end date.');
+            return;
+        }
+        if (new Date(startDate) > new Date(endDate)) {
+            alert('Start date cannot be after end date.');
+            return;
+        }
+        generatePDFReport(startDate, endDate);
+    }
+    
+    function handleBudgetFormSubmit(e) {
+        e.preventDefault();
+        const category = document.getElementById('budget-category').value;
+        const amount = parseFloat(document.getElementById('budget-amount').value);
+        if (!category || !amount) {
+            alert('Please select a category and enter an amount.');
+            return;
+        }
+        updateBudget(category, amount);
+        renderBudgetsPage();
+        e.target.reset();
+    }
+
+    function handleDeleteBudget(e) {
+        const deleteBtn = e.target.closest('.delete-budget-btn');
+        if (deleteBtn) {
+            const category = deleteBtn.dataset.category;
+            if (confirm(`Are you sure you want to delete the budget for "${category}"?`)) {
+                deleteBudget(category);
+                renderBudgetsPage();
+            }
+        }
+    }
+
+    function handleCategoryFormSubmit(e) {
+        e.preventDefault();
+        const type = document.getElementById('new-category-type').value;
+        const name = document.getElementById('new-category-name').value.trim();
+        if (name) {
+            addCategory(type, name);
+            renderSettingsPage();
+            e.target.reset();
+        }
+    }
+
+    function handleDeleteCategory(e) {
+        const deleteBtn = e.target.closest('.delete-category-btn');
+        if (deleteBtn) {
+            const { type, category } = deleteBtn.dataset;
+            if (confirm(`Are you sure you want to delete the category "${category}"?`)) {
+                deleteCategory(type, category);
+                renderSettingsPage();
+            }
+        }
+    }
+
+    // --- UTILITY FUNCTIONS ---
+    function updateActiveNav(pageName) {
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === pageName) {
+                link.classList.add('active');
+            }
+        });
+    }
+    
+    function refreshPageContent() {
+        // A simple way to refresh content without a full reload
+        const currentPage = window.location.pathname.split('/').pop();
+        if (currentPage === 'index.html' || currentPage === '') {
+            updateDashboardSummary();
+            renderRecentTransactions();
+            if (window.expenseChart) window.expenseChart.destroy();
+            if (window.monthlyChart) window.monthlyChart.destroy();
+            renderDashboardCharts();
+        } else if (currentPage === 'transactions.html') {
+            renderTransactionPage();
+        }
+        // This logic can be expanded for other pages if needed
+    }
+
+    // --- START THE APP ---
+    initApp();
 });
-
-function navigateTo(pageId) { state.ui.currentPage = pageId; window.location.hash = pageId; renderSidebar(); renderPageTitle(); renderPageContent(); updateActiveNavLink(); if (window.innerWidth < 768) { toggleSidebar(false); } }
-
-function registerEventListeners() {
-    document.body.addEventListener('click', (e) => {
-        if (e.target.closest('.nav-link')) { e.preventDefault(); navigateTo(e.target.closest('.nav-link').dataset.page); }
-        if (e.target.closest('.nav-link-footer')) { e.preventDefault(); navigateTo(e.target.closest('.nav-link-footer').dataset.page); }
-        if (e.target.closest('#sidebar-toggle')) { toggleSidebar(); }
-        if (e.target.closest('#add-transaction-button')) { openModal(); }
-    });
-    window.addEventListener('hashchange', () => navigateTo(window.location.hash.substring(1) || 'dashboard'));
-    window.addEventListener('resize', () => { state.ui.isSidebarOpen = window.innerWidth > 768; toggleSidebar(state.ui.isSidebarOpen); });
-}
-
-function addOrUpdateTransaction(data) {
-    if (state.ui.editingTransactionId) {
-        const index = state.transactions.findIndex(t => t.id === state.ui.editingTransactionId);
-        state.transactions[index] = { ...state.transactions[index], ...data, amount: parseFloat(data.amount), date: new Date(data.date) };
-    } else {
-        state.transactions.push({ id: `txn_${Date.now()}`, ...data, amount: parseFloat(data.amount), date: new Date(data.date) });
-    }
-    state.ui.editingTransactionId = null; saveState(); renderPageContent(); closeModal();
-    showToast(`Transaction saved!`, 'bg-green-500');
-}
-
-function deleteTransaction(id) {
-    if (confirm('Are you sure?')) {
-        state.transactions = state.transactions.filter(t => t.id !== id);
-        saveState(); renderPageContent(); showToast('Transaction deleted!', 'bg-red-500');
-    }
-}
-
-function applyTheme() {
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark'); state.settings.darkMode = true;
-    } else {
-        document.documentElement.classList.remove('dark'); state.settings.darkMode = false;
-    }
-}
-
-function toggleTheme() { state.settings.darkMode = !state.settings.darkMode; localStorage.theme = state.settings.darkMode ? 'dark' : 'light'; applyTheme(); renderSidebar(); renderPageContent(); }
-
-function toggleSidebar(forceState = null) {
-    const sidebar = document.getElementById('sidebar'); const main = document.getElementById('main-content');
-    let overlay = document.querySelector('.sidebar-overlay');
-    state.ui.isSidebarOpen = forceState !== null ? forceState : !state.ui.isSidebarOpen;
-    if (window.innerWidth < 768) {
-        if(state.ui.isSidebarOpen) { sidebar.classList.remove('-translate-x-full'); if(!overlay) { const o = document.createElement('div'); o.className = 'sidebar-overlay fixed inset-0 bg-black/50 z-30'; o.onclick = () => toggleSidebar(false); document.body.appendChild(o); }
-        } else { sidebar.classList.add('-translate-x-full'); overlay?.remove(); }
-    } else {
-        if(state.ui.isSidebarOpen) { sidebar.classList.remove('-translate-x-full'); main.classList.remove('md:ml-0'); main.classList.add('md:ml-64'); }
-        else { sidebar.classList.add('-translate-x-full'); main.classList.add('md:ml-0'); main.classList.remove('md:ml-64'); }
-    }
-}
-
-const formatCurrency = (amount) => `${state.settings.currency} ${parseFloat(amount || 0).toLocaleString('en-IN')}`;
-const getCategoryById = (id, type) => state.categories[type]?.find(c => c.id === id);
-
-async function generatePDF(dateFrom, dateTo) {
-    if (!dateFrom || !dateTo) return showToast('Please select a date range.', 'bg-red-500');
-    const { jsPDF } = window.jspdf; const doc = new jsPDF();
-    const { DEVELOPER_NAME, DEVELOPER_TITLE, DEVELOPER_PHOTO, APP_NAME, APP_SLOGAN } = CONFIG;
-    try {
-        const toBase64 = file => new Promise((resolve, reject) => { const reader = new FileReader(); reader.readAsDataURL(file); reader.onload = () => resolve(reader.result); reader.onerror = reject; });
-        const imgBlob = await fetch(DEVELOPER_PHOTO).then(res => res.blob());
-        const imgBase64 = await toBase64(imgBlob);
-
-        doc.setFillColor(30, 41, 59); doc.rect(0, 0, 210, 50, 'F');
-        doc.addImage(imgBase64, 'PNG', 15, 10, 30, 30);
-        doc.setFontSize(24); doc.setTextColor(255, 255, 255); doc.setFont(undefined, 'bold');
-        doc.text(APP_NAME, 55, 22);
-        doc.setFontSize(10); doc.setTextColor(200, 200, 200); doc.setFont(undefined, 'normal');
-        doc.text(APP_SLOGAN, 55, 30);
-        doc.setFontSize(12); doc.text(`Report for: ${DEVELOPER_NAME}`, 200, 20, { align: 'right' });
-        doc.text(`Title: ${DEVELOPER_TITLE}`, 200, 26, { align: 'right' });
-        
-        const transactions = state.transactions.filter(t => new Date(t.date) >= new Date(dateFrom) && new Date(t.date) <= new Date(dateTo));
-        const head = [['Date', 'Description', 'Category', 'Type', 'Amount']];
-        const body = transactions.map(t => [new Date(t.date).toLocaleDateString(), t.description, getCategoryById(t.category, t.type)?.name || 'N/A', t.type.toUpperCase(), formatCurrency(t.amount)]);
-        doc.autoTable({ head, body, startY: 60, theme: 'grid' });
-        
-        doc.save(`IExpanse_Report_${dateFrom}_to_${dateTo}.pdf`);
-    } catch (e) { showToast('Error generating PDF.', 'bg-red-500'); }
-}
