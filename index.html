@@ -28,3 +28,371 @@
     
     <!-- SweetAlert2 for beautiful modals -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Marked.js for rendering Markdown from Gemini -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .infinity-icon {
+            font-size: 2rem;
+            color: #4f46e5;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        /* Sidebar transition */
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        .sidebar-hidden {
+            transform: translateX(-100%);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .main-content {
+            transition: margin-left 0.3s ease-in-out;
+        }
+        /* Glassmorphism effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            @apply bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-indigo-700 transition duration-300;
+        }
+        .btn-secondary {
+            @apply bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-300 transition duration-300;
+        }
+        .btn-ai {
+            @apply bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:from-purple-600 hover:to-indigo-700 transition duration-300;
+        }
+        /* Style for AI response modal */
+        .swal2-html-container {
+            text-align: left;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        .swal2-html-container h2 { @apply text-xl font-bold mt-4 mb-2; }
+        .swal2-html-container ul { @apply list-disc list-inside pl-4 mb-2; }
+        .swal2-html-container li { @apply mb-1; }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <!-- Splash Screen -->
+    <div id="splash-screen" class="fixed inset-0 bg-gray-900 flex flex-col items-center justify-center z-[100]">
+        <div class="text-white text-center">
+            <img src="https://i.ibb.co/9vXy2pX/image-4.png" alt="App Logo" class="w-24 h-24 mx-auto mb-4 animate-bounce">
+            <h1 class="text-4xl font-bold">I Expanse Tracker</h1>
+            <p class="mt-4 text-lg">Developed by:</p>
+            <p class="text-2xl font-semibold">Md Habibur Rahman Mahi</p>
+            <p class="text-md">Founder and CEO of Infinity Group</p>
+            <div class="mt-8">
+                <i class="fas fa-spinner fa-spin text-3xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application Wrapper -->
+    <div id="app-wrapper" class="hidden">
+        <!-- Sidebar Navigation -->
+        <div id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-40 sidebar-hidden">
+            <div class="p-6 text-center border-b">
+                <img src="https://i.ibb.co/9vXy2pX/image-4.png" alt="App Logo" class="w-16 h-16 mx-auto mb-2">
+                <h2 class="text-xl font-bold text-indigo-600">I Expanse Tracker</h2>
+            </div>
+            <nav class="mt-6">
+                <a href="#" id="nav-dashboard" class="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
+                    <i class="fas fa-tachometer-alt w-6"></i><span class="ml-4">Dashboard</span>
+                </a>
+                <a href="#" id="nav-transactions" class="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
+                    <i class="fas fa-exchange-alt w-6"></i><span class="ml-4">Transactions</span>
+                </a>
+                <a href="#" id="nav-ai-tools" class="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
+                    <i class="fas fa-wand-magic-sparkles w-6"></i><span class="ml-4">AI Tools</span>
+                </a>
+                <a href="#" id="nav-reports" class="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
+                    <i class="fas fa-file-pdf w-6"></i><span class="ml-4">Reports</span>
+                </a>
+                <a href="#" id="nav-categories" class="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
+                    <i class="fas fa-tags w-6"></i><span class="ml-4">Categories</span>
+                </a>
+                <a href="#" id="nav-budget" class="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
+                    <i class="fas fa-bullseye w-6"></i><span class="ml-4">Budget</span>
+                </a>
+                 <a href="#" id="nav-goals" class="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
+                    <i class="fas fa-flag-checkered w-6"></i><span class="ml-4">Financial Goals</span>
+                </a>
+                <a href="#" id="nav-developer" class="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
+                    <i class="fas fa-user-tie w-6"></i><span class="ml-4">Developer</span>
+                </a>
+            </nav>
+            <div class="absolute bottom-4 left-0 w-full px-6">
+                <div class="flex justify-center space-x-4">
+                    <label for="theme-toggle" class="flex items-center cursor-pointer">
+                        <div class="relative">
+                            <input type="checkbox" id="theme-toggle" class="sr-only">
+                            <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                            <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Overlay for sidebar on mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-30 hidden"></div>
+
+        <!-- Main Content -->
+        <div id="main-content" class="relative min-h-screen">
+            <!-- Header -->
+            <header class="sticky top-0 bg-white/80 backdrop-blur-sm shadow-sm p-4 z-20 flex justify-between items-center">
+                <button id="sidebar-toggle" class="text-2xl text-indigo-600">
+                    <i class="fas fa-infinity"></i>
+                </button>
+                <h1 id="page-title" class="text-xl font-bold text-gray-800">Dashboard</h1>
+                <button id="add-transaction-button-header" class="btn-primary flex items-center">
+                    <i class="fas fa-plus mr-2"></i> <span class="hidden sm:inline">Add Transaction</span>
+                </button>
+            </header>
+
+            <!-- Page Content -->
+            <main class="p-4 sm:p-6">
+                <div id="page-content-area">
+                    <!-- Content will be loaded here by JavaScript -->
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer class="text-center p-4 text-gray-600 mt-8">
+                <p>&copy; <span id="current-year"></span> I Expanse Tracker. Developed by Md Habibur Rahman Mahi.</p>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- PDF Report Generation Template (Hidden) -->
+    <div id="pdf-report-template" class="hidden">
+        <div class="p-8 bg-white text-gray-800">
+            <div class="flex justify-between items-start border-b-2 border-indigo-500 pb-4 mb-4">
+                <div>
+                    <img src="https://i.ibb.co/9vXy2pX/image-4.png" alt="App Logo" class="w-20 h-20">
+                    <h1 class="text-3xl font-bold text-indigo-600 mt-2">I Expanse Tracker</h1>
+                    <p class="text-gray-500">Your Personal Finance Companion</p>
+                </div>
+                <div class="text-right">
+                    <img src="https://i.ibb.co/L5B7P4V/Picsart-24-12-22-22-58-18-749.png" alt="Developer" class="w-24 h-24 rounded-full border-4 border-indigo-300 ml-auto">
+                    <h2 class="text-xl font-bold mt-2">Md Habibur Rahman Mahi</h2>
+                    <p class="text-sm text-gray-600">Founder and CEO of Infinity Group</p>
+                </div>
+            </div>
+            <div class="text-center my-6">
+                <h2 class="text-2xl font-semibold">Financial Report</h2>
+                <p id="pdf-report-range" class="text-gray-600"></p>
+            </div>
+            <div id="pdf-report-summary" class="grid grid-cols-3 gap-4 my-6 text-center">
+                <!-- Summary will be injected here -->
+            </div>
+            <h3 class="text-xl font-semibold mb-4">Transaction Details</h3>
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-indigo-100">
+                        <th class="p-2 border">Date</th>
+                        <th class="p-2 border">Description</th>
+                        <th class="p-2 border">Category</th>
+                        <th class="p-2 border">Type</th>
+                        <th class="p-2 border text-right">Amount (৳)</th>
+                    </tr>
+                </thead>
+                <tbody id="pdf-report-table-body">
+                    <!-- Transaction rows will be injected here -->
+                </tbody>
+            </table>
+            <div class="mt-8 text-center text-xs text-gray-500">
+                <p>Generated on: <span id="pdf-generation-date"></span></p>
+                <p>This is a computer-generated report.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, addDoc, collection, onSnapshot, query, where, updateDoc, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- App Configuration ---
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'i-expanse-tracker-app';
+        
+        // --- Firebase Initialization ---
+        let app, auth, db, userId;
+
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+        } catch (error) {
+            console.error("Firebase initialization failed:", error);
+            document.body.innerHTML = `<div class="p-8 text-center text-red-500">Failed to connect to the database. Please check the console for errors.</div>`;
+        }
+        
+        // --- Global State ---
+        let transactions = [];
+        let categories = [];
+        let budgets = [];
+        let goals = [];
+        let expenseChart = null;
+        let incomeVsExpenseChart = null;
+
+        // --- Default Categories ---
+        const defaultCategories = [
+            { name: 'Salary', type: 'income', icon: 'fa-money-bill-wave' },
+            { name: 'Business', type: 'income', icon: 'fa-briefcase' },
+            { name: 'Gifts', type: 'income', icon: 'fa-gift' },
+            { name: 'Food', type: 'expense', icon: 'fa-utensils' },
+            { name: 'Transport', type: 'expense', icon: 'fa-bus' },
+            { name: 'Housing', type: 'expense', icon: 'fa-home' },
+            { name: 'Bills', type: 'expense', icon: 'fa-file-invoice-dollar' },
+            { name: 'Health', type: 'expense', icon: 'fa-heartbeat' },
+            { name: 'Education', type: 'expense', icon: 'fa-graduation-cap' },
+            { name: 'Shopping', type: 'expense', icon: 'fa-shopping-cart' },
+            { name: 'Entertainment', type: 'expense', icon: 'fa-film' },
+            { name: 'Others', type: 'expense', icon: 'fa-ellipsis-h' }
+        ];
+
+        // --- UI Elements ---
+        const pageContentArea = document.getElementById('page-content-area');
+        const pageTitle = document.getElementById('page-title');
+
+        // --- Helper Functions ---
+        const formatCurrency = (amount) => `৳ ${parseFloat(amount).toFixed(2)}`;
+        const formatDate = (date) => new Date(date).toLocaleDateString('en-CA'); // YYYY-MM-DD
+
+        // --- Gemini API Function ---
+        const callGeminiAPI = async (prompt) => {
+            const apiKey = ""; // API key is handled by the environment
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ role: "user", parts: [{ text: prompt }] }]
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorBody = await response.json();
+                    console.error("Gemini API Error:", errorBody);
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+
+                const result = await response.json();
+                
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    return result.candidates[0].content.parts[0].text;
+                } else {
+                    console.error("Unexpected API response structure:", result);
+                    // Check for safety ratings blocking the response
+                    if (result.candidates && result.candidates[0]?.finishReason === 'SAFETY') {
+                         return "The response was blocked due to safety concerns. Please try a different prompt.";
+                    }
+                    return "Sorry, I couldn't get a response. Please try again.";
+                }
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                return `An error occurred: ${error.message}. Check the console for details.`;
+            }
+        };
+
+        // --- Page Templates ---
+        const pages = {
+            dashboard: `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="glass-card p-6 text-center">
+                        <h3 class="text-lg font-semibold text-gray-600">Current Balance</h3>
+                        <p id="dashboard-balance" class="text-3xl font-bold text-green-600 mt-2">৳ 0.00</p>
+                    </div>
+                    <div class="glass-card p-6 text-center">
+                        <h3 class="text-lg font-semibold text-gray-600">Total Income (This Month)</h3>
+                        <p id="dashboard-income" class="text-3xl font-bold text-blue-600 mt-2">৳ 0.00</p>
+                    </div>
+                    <div class="glass-card p-6 text-center">
+                        <h3 class="text-lg font-semibold text-gray-600">Total Expense (This Month)</h3>
+                        <p id="dashboard-expense" class="text-3xl font-bold text-red-600 mt-2">৳ 0.00</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="font-bold text-lg mb-4">Expense Breakdown</h3>
+                        <canvas id="expense-chart"></canvas>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="font-bold text-lg mb-4">Income vs Expense (Last 6 Months)</h3>
+                        <canvas id="income-expense-chart"></canvas>
+                    </div>
+                </div>
+                 <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="font-bold text-lg mb-4">Recent Transactions</h3>
+                    <div id="recent-transactions-list" class="space-y-3 max-h-96 overflow-y-auto">
+                        <!-- Recent transactions will be listed here -->
+                    </div>
+                </div>
+            `,
+            transactions: `
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+                        <h2 class="text-2xl font-bold">All Transactions</h2>
+                        <div class="flex items-center gap-2">
+                            <input type="text" id="search-input" placeholder="Search..." class="p-2 border rounded-lg">
+                            <select id="filter-type" class="p-2 border rounded-lg">
+                                <option value="all">All Types</option>
+                                <option value="income">Income</option>
+                                <option value="expense">Expense</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="transactions-list" class="space-y-4"></div>
+                </div>
+            `,
+            'ai-tools': `
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold mb-2">AI Financial Assistant ✨</h2>
+                    <p class="text-gray-600 mb-6">Get smar
