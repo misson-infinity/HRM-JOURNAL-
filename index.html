@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="bn" class="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>I Expanse Tracker - Md Habibur Rahman Mahi</title>
+    <title>I Expanse Tracker</title>
     
-    <!-- App Icon -->
-    <link rel="icon" href="https://i.ibb.co/9vXy2pX/image-4.png" type="image/png">
+    <!-- Favicon (App Icon) -->
+    <!-- User: Niche apnar "image (4).png" file-er link din -->
+    <link rel="icon" href="https://i.ibb.co/9vXyCgS/image-4.png" type="image/png">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -14,899 +15,508 @@
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-    <!-- Chart.js for data visualization -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- jsPDF and html2canvas for PDF generation -->
+    
+    <!-- External Libraries for PDF and Charts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
-    <!-- SweetAlert2 for beautiful modals -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- Marked.js for rendering Markdown from Gemini -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <style>
         /* Custom styles */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5;
-        }
+        body { font-family: 'Inter', sans-serif; }
         .infinity-icon {
             font-size: 2rem;
-            color: #4f46e5;
-            animation: pulse 2s infinite;
+            font-weight: bold;
+            color: #4f46e5; /* Indigo */
         }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        /* Sidebar transition */
-        #sidebar {
-            transition: transform 0.3s ease-in-out;
-        }
-        .sidebar-hidden {
-            transform: translateX(-100%);
-        }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-        .main-content {
-            transition: margin-left 0.3s ease-in-out;
-        }
-        /* Glassmorphism effect */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-        .btn-primary {
-            @apply bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-indigo-700 transition duration-300;
-        }
-        .btn-secondary {
-            @apply bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-300 transition duration-300;
-        }
-        .btn-ai {
-            @apply bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:from-purple-600 hover:to-indigo-700 transition duration-300;
-        }
-        /* Style for AI response modal */
-        .swal2-html-container {
-            text-align: left;
-            max-height: 60vh;
-            overflow-y: auto;
-        }
-        .swal2-html-container h2 { @apply text-xl font-bold mt-4 mb-2; }
-        .swal2-html-container ul { @apply list-disc list-inside pl-4 mb-2; }
-        .swal2-html-container li { @apply mb-1; }
+        .nav-open { transform: translateX(0%); }
+        .nav-closed { transform: translateX(-100%); }
+        .main-content-pushed { margin-left: 280px; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .swal2-popup { border-radius: 1rem; }
     </style>
 </head>
-<body class="antialiased text-gray-800">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
 
-    <!-- Splash Screen -->
-    <div id="splash-screen" class="fixed inset-0 bg-gray-900 flex flex-col items-center justify-center z-[100]">
-        <div class="text-white text-center">
-            <img src="https://i.ibb.co/9vXy2pX/image-4.png" alt="App Logo" class="w-24 h-24 mx-auto mb-4 animate-bounce">
-            <h1 class="text-4xl font-bold">I Expanse Tracker</h1>
-            <p class="mt-4 text-lg">Developed by:</p>
-            <p class="text-2xl font-semibold">Md Habibur Rahman Mahi</p>
-            <p class="text-md">Founder and CEO of Infinity Group</p>
-            <div class="mt-8">
-                <i class="fas fa-spinner fa-spin text-3xl"></i>
+    <!-- ===== LOGIN SCREEN ===== -->
+    <div id="login-view" class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-6">
+        <div class="w-full max-w-sm text-center bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+            <!-- App Logo -->
+            <div class="mx-auto mb-6 w-20 h-20 flex items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900">
+                <span class="text-4xl text-indigo-600 dark:text-indigo-400">♾️</span>
             </div>
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">I Expanse Tracker</h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-2 mb-8">Where Vision Becomes Infinite</p>
+            <button id="login-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-3 transition-transform transform hover:scale-105">
+                <i class="fab fa-google"></i>
+                Sign In with Google
+            </button>
         </div>
     </div>
 
-    <!-- Main Application Wrapper -->
-    <div id="app-wrapper" class="hidden">
-        <!-- Sidebar Navigation -->
-        <div id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-40 sidebar-hidden">
-            <div class="p-6 text-center border-b">
-                <img src="https://i.ibb.co/9vXy2pX/image-4.png" alt="App Logo" class="w-16 h-16 mx-auto mb-2">
-                <h2 class="text-xl font-bold text-indigo-600">I Expanse Tracker</h2>
-            </div>
-            <nav class="mt-6">
-                <a href="#" id="nav-dashboard" class="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
-                    <i class="fas fa-tachometer-alt w-6"></i><span class="ml-4">Dashboard</span>
-                </a>
-                <a href="#" id="nav-transactions" class="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
-                    <i class="fas fa-exchange-alt w-6"></i><span class="ml-4">Transactions</span>
-                </a>
-                <a href="#" id="nav-ai-tools" class="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
-                    <i class="fas fa-wand-magic-sparkles w-6"></i><span class="ml-4">AI Tools</span>
-                </a>
-                <a href="#" id="nav-reports" class="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
-                    <i class="fas fa-file-pdf w-6"></i><span class="ml-4">Reports</span>
-                </a>
-                <a href="#" id="nav-categories" class="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
-                    <i class="fas fa-tags w-6"></i><span class="ml-4">Categories</span>
-                </a>
-                <a href="#" id="nav-budget" class="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
-                    <i class="fas fa-bullseye w-6"></i><span class="ml-4">Budget</span>
-                </a>
-                 <a href="#" id="nav-goals" class="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
-                    <i class="fas fa-flag-checkered w-6"></i><span class="ml-4">Financial Goals</span>
-                </a>
-                <a href="#" id="nav-developer" class="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
-                    <i class="fas fa-user-tie w-6"></i><span class="ml-4">Developer</span>
-                </a>
-            </nav>
-            <div class="absolute bottom-4 left-0 w-full px-6">
-                <div class="flex justify-center space-x-4">
-                    <label for="theme-toggle" class="flex items-center cursor-pointer">
-                        <div class="relative">
-                            <input type="checkbox" id="theme-toggle" class="sr-only">
-                            <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
-                            <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
-                        </div>
-                    </label>
+    <!-- ===== MAIN APP VIEW (Initially Hidden) ===== -->
+    <div id="app-view" class="hidden">
+        <!-- Sliding Navigation Menu -->
+        <nav id="side-nav" class="fixed top-0 left-0 h-full w-72 bg-white dark:bg-gray-800 shadow-lg z-50 transition-transform duration-300 ease-in-out nav-closed">
+            <div class="p-6">
+                <div class="flex items-center gap-3 mb-8">
+                    <span class="text-3xl text-indigo-600 dark:text-indigo-400">♾️</span>
+                    <h1 class="text-xl font-bold">I Expanse Tracker</h1>
                 </div>
+                <ul class="space-y-2">
+                    <li><a href="#" class="nav-link active" data-page="dashboard-page"><i class="fas fa-chart-pie w-6"></i> Dashboard</a></li>
+                    <li><a href="#" class="nav-link" data-page="profile-page"><i class="fas fa-user-circle w-6"></i> Profile</a></li>
+                    <li><a href="#" class="nav-link" data-page="developer-page"><i class="fas fa-code w-6"></i> Developer</a></li>
+                    <li><a href="#" class="nav-link" data-page="settings-page"><i class="fas fa-cog w-6"></i> Settings</a></li>
+                </ul>
             </div>
-        </div>
-        
-        <!-- Overlay for sidebar on mobile -->
-        <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-30 hidden"></div>
+            <div class="absolute bottom-0 w-full p-6">
+                 <button id="logout-btn" class="w-full flex items-center justify-center gap-2 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/50 p-3 rounded-lg">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </nav>
 
         <!-- Main Content -->
-        <div id="main-content" class="relative min-h-screen">
+        <div id="main-content" class="transition-all duration-300 ease-in-out">
             <!-- Header -->
-            <header class="sticky top-0 bg-white/80 backdrop-blur-sm shadow-sm p-4 z-20 flex justify-between items-center">
-                <button id="sidebar-toggle" class="text-2xl text-indigo-600">
-                    <i class="fas fa-infinity"></i>
-                </button>
-                <h1 id="page-title" class="text-xl font-bold text-gray-800">Dashboard</h1>
-                <button id="add-transaction-button-header" class="btn-primary flex items-center">
-                    <i class="fas fa-plus mr-2"></i> <span class="hidden sm:inline">Add Transaction</span>
-                </button>
+            <header class="sticky top-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm z-40 shadow-sm">
+                <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+                    <!-- Infinity Menu Icon -->
+                    <button id="menu-toggle-btn" class="text-indigo-600 dark:text-indigo-400">
+                        <span class="infinity-icon">♾️</span>
+                    </button>
+                    <div class="flex items-center gap-4">
+                        <img id="user-photo" src="https://placehold.co/40x40/E2E8F0/4A5568?text=U" alt="User Photo" class="w-10 h-10 rounded-full object-cover">
+                        <span id="user-name" class="font-semibold hidden sm:block">User</span>
+                    </div>
+                </div>
             </header>
 
-            <!-- Page Content -->
-            <main class="p-4 sm:p-6">
-                <div id="page-content-area">
-                    <!-- Content will be loaded here by JavaScript -->
+            <!-- Page Container -->
+            <div class="p-6">
+                <!-- DASHBOARD PAGE -->
+                <div id="dashboard-page" class="page active">
+                    <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
+                    <!-- Summary Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow">
+                            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Income</h3>
+                            <p id="total-income" class="text-2xl font-bold text-green-500 mt-2">৳0.00</p>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow">
+                            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Expense</h3>
+                            <p id="total-expense" class="text-2xl font-bold text-red-500 mt-2">৳0.00</p>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow">
+                            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Current Balance</h3>
+                            <p id="current-balance" class="text-2xl font-bold text-indigo-500 mt-2">৳0.00</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Charts and Recent Transactions -->
+                    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-6">
+                        <div class="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow">
+                            <h3 class="font-bold mb-4">Expense Categories</h3>
+                            <canvas id="expense-chart"></canvas>
+                        </div>
+                        <div class="lg:col-span-3 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow">
+                            <div class="flex justify-between items-center mb-4">
+                               <h3 class="font-bold">Recent Transactions</h3>
+                               <button id="generate-pdf-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700">
+                                   <i class="fas fa-file-pdf mr-2"></i>Export PDF
+                               </button>
+                            </div>
+                            <div id="transaction-list" class="space-y-3 max-h-96 overflow-y-auto">
+                                <!-- Transaction items will be injected here -->
+                                <p class="text-center text-gray-500 dark:text-gray-400 p-4">No transactions yet.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </main>
 
-            <!-- Footer -->
-            <footer class="text-center p-4 text-gray-600 mt-8">
-                <p>&copy; <span id="current-year"></span> I Expanse Tracker. Developed by Md Habibur Rahman Mahi.</p>
-            </footer>
+                <!-- PROFILE PAGE -->
+                <div id="profile-page" class="page">
+                    <h2 class="text-2xl font-bold mb-6">My Profile</h2>
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow max-w-md mx-auto">
+                        <div class="text-center">
+                            <img id="profile-page-photo" src="https://placehold.co/128x128/E2E8F0/4A5568?text=U" alt="Profile Photo" class="w-32 h-32 rounded-full object-cover mx-auto mb-4 border-4 border-indigo-500">
+                            <input type="file" id="photo-upload" class="hidden" accept="image/*">
+                            <button id="upload-btn" class="text-sm text-indigo-600 hover:underline">Change Photo</button>
+                        </div>
+                        <div class="mt-8">
+                            <label for="profile-name-input" class="block text-sm font-medium text-gray-500 dark:text-gray-400">Display Name</label>
+                            <input type="text" id="profile-name-input" class="mt-1 block w-full bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg p-3 focus:ring-indigo-500 focus:border-indigo-500">
+                            <button id="save-profile-btn" class="mt-6 w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DEVELOPER PAGE -->
+                <div id="developer-page" class="page">
+                    <h2 class="text-2xl font-bold mb-6">About the Developer</h2>
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow max-w-2xl mx-auto">
+                        <div class="flex flex-col sm:flex-row items-center gap-8">
+                            <!-- User: Niche apnar "Picsart_24-12-22_22-58-18-749.png" file-er link din -->
+                            <img src="https://i.ibb.co/hL5YqjW/Picsart-24-12-22-22-58-18-749.png" alt="Developer Photo" class="w-32 h-32 rounded-full object-cover border-4 border-indigo-500">
+                            <div>
+                                <h3 class="text-2xl font-bold">Md Habibur Rahman Mahi</h3>
+                                <p class="text-indigo-500 dark:text-indigo-400">Founder and CEO of Infinity Group</p>
+                                <p class="mt-2 text-gray-600 dark:text-gray-300">A passionate developer dedicated to creating useful and beautiful applications. This expense tracker is built to help you manage your finances with ease.</p>
+                            </div>
+                        </div>
+                        <div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-6">
+                            <h4 class="font-bold mb-4">Connect with me:</h4>
+                            <div class="flex flex-wrap gap-4">
+                                <a href="https://wa.me/8801727722018" target="_blank" class="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"><i class="fab fa-whatsapp text-green-500"></i> WhatsApp/Telegram</a>
+                                <a href="https://www.instagram.com/h.r_mahi_?igsh=Z242dWFtcDZwdjF2" target="_blank" class="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"><i class="fab fa-instagram text-pink-500"></i> Instagram</a>
+                                <a href="https://www.facebook.com/share/1L8yaf25bk/" target="_blank" class="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"><i class="fab fa-facebook text-blue-500"></i> Facebook</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SETTINGS PAGE -->
+                <div id="settings-page" class="page">
+                    <h2 class="text-2xl font-bold mb-6">Settings</h2>
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow max-w-md mx-auto">
+                        <!-- Theme Toggle -->
+                        <div class="flex items-center justify-between mb-6">
+                            <h4 class="font-semibold">Theme</h4>
+                            <button id="theme-toggle-btn" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700">
+                                <i class="fas fa-moon"></i><span id="theme-text"> Dark Mode</span>
+                            </button>
+                        </div>
+                        <!-- Manage Categories -->
+                        <div>
+                            <h4 class="font-semibold mb-4">Manage Categories</h4>
+                            <div class="flex gap-2 mb-4">
+                                <input type="text" id="new-category-input" placeholder="New category name" class="flex-grow bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg p-3 focus:ring-indigo-500 focus:border-indigo-500">
+                                <button id="add-category-btn" class="bg-indigo-600 text-white font-bold px-4 rounded-lg hover:bg-indigo-700">+</button>
+                            </div>
+                            <div id="category-list" class="space-y-2 max-h-60 overflow-y-auto">
+                                <!-- Category items will be injected here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <!-- Floating Action Button to Add Transaction -->
+        <button id="add-transaction-fab" class="fixed bottom-8 right-8 w-16 h-16 bg-indigo-600 text-white rounded-full shadow-lg flex items-center justify-center text-3xl hover:bg-indigo-700 transform hover:scale-110 transition-transform z-40">
+            +
+        </button>
     </div>
-    
-    <!-- PDF Report Generation Template (Hidden) -->
-    <div id="pdf-report-template" class="hidden">
-        <div class="p-8 bg-white text-gray-800">
-            <div class="flex justify-between items-start border-b-2 border-indigo-500 pb-4 mb-4">
-                <div>
-                    <img src="https://i.ibb.co/9vXy2pX/image-4.png" alt="App Logo" class="w-20 h-20">
-                    <h1 class="text-3xl font-bold text-indigo-600 mt-2">I Expanse Tracker</h1>
-                    <p class="text-gray-500">Your Personal Finance Companion</p>
+
+    <!-- PDF Report Template (Hidden) -->
+    <div id="pdf-report-template" class="p-8" style="display: none; width: 800px;">
+        <div class="border-4 border-indigo-500 p-6">
+            <div class="flex justify-between items-center pb-6 border-b-2 border-gray-300">
+                <div class="flex items-center gap-4">
+                     <span class="text-5xl text-indigo-600">♾️</span>
+                     <div>
+                        <h1 class="text-3xl font-bold">I Expanse Tracker</h1>
+                        <p class="text-gray-500">Where Vision Becomes Infinite</p>
+                     </div>
                 </div>
                 <div class="text-right">
-                    <img src="https://i.ibb.co/L5B7P4V/Picsart-24-12-22-22-58-18-749.png" alt="Developer" class="w-24 h-24 rounded-full border-4 border-indigo-300 ml-auto">
-                    <h2 class="text-xl font-bold mt-2">Md Habibur Rahman Mahi</h2>
-                    <p class="text-sm text-gray-600">Founder and CEO of Infinity Group</p>
+                    <img src="https://i.ibb.co/hL5YqjW/Picsart-24-12-22-22-58-18-749.png" alt="Developer" class="w-16 h-16 rounded-full inline-block">
+                    <p class="font-bold mt-2">Md Habibur Rahman Mahi</p>
+                    <p class="text-sm text-gray-600">Founder & CEO, Infinity Group</p>
                 </div>
             </div>
-            <div class="text-center my-6">
-                <h2 class="text-2xl font-semibold">Financial Report</h2>
-                <p id="pdf-report-range" class="text-gray-600"></p>
-            </div>
-            <div id="pdf-report-summary" class="grid grid-cols-3 gap-4 my-6 text-center">
-                <!-- Summary will be injected here -->
-            </div>
-            <h3 class="text-xl font-semibold mb-4">Transaction Details</h3>
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-indigo-100">
-                        <th class="p-2 border">Date</th>
-                        <th class="p-2 border">Description</th>
-                        <th class="p-2 border">Category</th>
-                        <th class="p-2 border">Type</th>
-                        <th class="p-2 border text-right">Amount (৳)</th>
-                    </tr>
-                </thead>
-                <tbody id="pdf-report-table-body">
-                    <!-- Transaction rows will be injected here -->
-                </tbody>
-            </table>
-            <div class="mt-8 text-center text-xs text-gray-500">
-                <p>Generated on: <span id="pdf-generation-date"></span></p>
-                <p>This is a computer-generated report.</p>
+            <div class="mt-6">
+                <h2 class="text-2xl font-bold text-center mb-2">Financial Report</h2>
+                <p id="pdf-date-range" class="text-center text-gray-500 mb-6"></p>
+                <div id="pdf-summary" class="flex justify-around mb-6"></div>
+                <h3 class="font-bold mb-4">All Transactions</h3>
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="p-2">Date</th>
+                            <th class="p-2">Description</th>
+                            <th class="p-2">Category</th>
+                            <th class="p-2 text-right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pdf-transaction-list">
+                        <!-- PDF transaction rows go here -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+
 
     <!-- Firebase SDK -->
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, addDoc, collection, onSnapshot, query, where, updateDoc, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, addDoc, updateDoc, deleteDoc, query, orderBy, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
-        // --- App Configuration ---
-      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBAjSI9qQz1ZQ0oNFP3qxSJPjocDFO1DnI",
-  authDomain: "i-expanse-tracker-5375b.firebaseapp.com",
-  projectId: "i-expanse-tracker-5375b",
-  storageBucket: "i-expanse-tracker-5375b.firebasestorage.app",
-  messagingSenderId: "442895718535",
-  appId: "1:442895718535:web:e09ef6e8fb555b7ebcc022",
-  measurementId: "G-C1644P9YXL"
-};      const appId = typeof __app_id !== 'undefined' ? __app_id : 'i-expanse-tracker-app';
-        
-        // --- Firebase Initialization ---
-        let app, auth, db, userId;
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBAjSI9qQz1ZQ0oNFP3qxSJPjocDFO1DnI",
+            authDomain: "i-expanse-tracker-5375b.firebaseapp.com",
+            projectId: "i-expanse-tracker-5375b",
+            storageBucket: "i-expanse-tracker-5375b.appspot.com",
+            messagingSenderId: "442895718535",
+            appId: "1:442895718535:web:e09ef6e8fb555b7ebcc022",
+            measurementId: "G-C1644P9YXL"
+        };
 
-        try {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-        } catch (error) {
-            console.error("Firebase initialization failed:", error);
-            document.body.innerHTML = `<div class="p-8 text-center text-red-500">Failed to connect to the database. Please check the console for errors.</div>`;
-        }
-        
-        // --- Global State ---
-        let transactions = [];
-        let categories = [];
-        let budgets = [];
-        let goals = [];
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+        const provider = new GoogleAuthProvider();
+
+        let currentUser = null;
+        let transactionsUnsubscribe = null;
+        let categoriesUnsubscribe = null;
         let expenseChart = null;
-        let incomeVsExpenseChart = null;
 
-        // --- Default Categories ---
-        const defaultCategories = [
-            { name: 'Salary', type: 'income', icon: 'fa-money-bill-wave' },
-            { name: 'Business', type: 'income', icon: 'fa-briefcase' },
-            { name: 'Gifts', type: 'income', icon: 'fa-gift' },
-            { name: 'Food', type: 'expense', icon: 'fa-utensils' },
-            { name: 'Transport', type: 'expense', icon: 'fa-bus' },
-            { name: 'Housing', type: 'expense', icon: 'fa-home' },
-            { name: 'Bills', type: 'expense', icon: 'fa-file-invoice-dollar' },
-            { name: 'Health', type: 'expense', icon: 'fa-heartbeat' },
-            { name: 'Education', type: 'expense', icon: 'fa-graduation-cap' },
-            { name: 'Shopping', type: 'expense', icon: 'fa-shopping-cart' },
-            { name: 'Entertainment', type: 'expense', icon: 'fa-film' },
-            { name: 'Others', type: 'expense', icon: 'fa-ellipsis-h' }
-        ];
+        // DOM Elements
+        const loginView = document.getElementById('login-view');
+        const appView = document.getElementById('app-view');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userNameEl = document.getElementById('user-name');
+        const userPhotoEl = document.getElementById('user-photo');
+        const sideNav = document.getElementById('side-nav');
+        const mainContent = document.getElementById('main-content');
+        const menuToggleBtn = document.getElementById('menu-toggle-btn');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
 
-        // --- UI Elements ---
-        const pageContentArea = document.getElementById('page-content-area');
-        const pageTitle = document.getElementById('page-title');
+        // --- AUTHENTICATION ---
+        loginBtn.addEventListener('click', () => {
+            signInWithPopup(auth, provider).catch(error => {
+                console.error("Authentication error:", error);
+                Swal.fire('Error', 'Could not sign in. Please try again.', 'error');
+            });
+        });
 
-        // --- Helper Functions ---
-        const formatCurrency = (amount) => `৳ ${parseFloat(amount).toFixed(2)}`;
-        const formatDate = (date) => new Date(date).toLocaleDateString('en-CA'); // YYYY-MM-DD
+        logoutBtn.addEventListener('click', () => {
+            signOut(auth);
+        });
 
-        // --- Gemini API Function ---
-        const callGeminiAPI = async (prompt) => {
-            const apiKey = ""; // API key is handled by the environment
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-            
-            const payload = {
-                contents: [{ role: "user", parts: [{ text: prompt }] }]
-            };
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                // User is signed in
+                currentUser = user;
+                loginView.classList.add('hidden');
+                appView.classList.remove('hidden');
+                setupUser(user);
+            } else {
+                // User is signed out
+                currentUser = null;
+                loginView.classList.remove('hidden');
+                appView.classList.add('hidden');
+                if (transactionsUnsubscribe) transactionsUnsubscribe();
+                if (categoriesUnsubscribe) categoriesUnsubscribe();
+            }
+        });
 
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+        async function setupUser(user) {
+            const userRef = doc(db, 'users', user.uid);
+            const userDoc = await getDoc(userRef);
+
+            if (!userDoc.exists()) {
+                // New user, create profile
+                await setDoc(userRef, {
+                    name: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    createdAt: new Date()
                 });
+                // Add default categories for new user
+                addDefaultCategories(user.uid);
+            }
+            
+            // Listen for user profile changes
+            onSnapshot(userRef, (doc) => {
+                const userData = doc.data();
+                userNameEl.textContent = userData.name;
+                userPhotoEl.src = userData.photoURL;
+                document.getElementById('profile-page-photo').src = userData.photoURL;
+                document.getElementById('profile-name-input').value = userData.name;
+            });
 
-                if (!response.ok) {
-                    const errorBody = await response.json();
-                    console.error("Gemini API Error:", errorBody);
-                    throw new Error(`API request failed with status ${response.status}`);
-                }
+            // Attach listeners for data
+            listenForTransactions(user.uid);
+            listenForCategories(user.uid);
+        }
 
-                const result = await response.json();
+        async function addDefaultCategories(userId) {
+            const categories = ['Food', 'Transport', 'Shopping', 'Bills', 'Entertainment', 'Salary', 'Investment'];
+            const batch = writeBatch(db);
+            categories.forEach(categoryName => {
+                const newCatRef = doc(collection(db, `users/${userId}/categories`));
+                batch.set(newCatRef, { name: categoryName });
+            });
+            await batch.commit();
+        }
+
+        // --- UI & NAVIGATION ---
+        menuToggleBtn.addEventListener('click', () => {
+            sideNav.classList.toggle('nav-closed');
+        });
+
+        document.body.addEventListener('click', (e) => {
+            if (!sideNav.contains(e.target) && !menuToggleBtn.contains(e.target) && !sideNav.classList.contains('nav-closed')) {
+                sideNav.classList.add('nav-closed');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('data-page');
                 
-                if (result.candidates && result.candidates.length > 0 &&
-                    result.candidates[0].content && result.candidates[0].content.parts &&
-                    result.candidates[0].content.parts.length > 0) {
-                    return result.candidates[0].content.parts[0].text;
-                } else {
-                    console.error("Unexpected API response structure:", result);
-                    // Check for safety ratings blocking the response
-                    if (result.candidates && result.candidates[0]?.finishReason === 'SAFETY') {
-                         return "The response was blocked due to safety concerns. Please try a different prompt.";
-                    }
-                    return "Sorry, I couldn't get a response. Please try again.";
-                }
-            } catch (error) {
-                console.error("Error calling Gemini API:", error);
-                return `An error occurred: ${error.message}. Check the console for details.`;
-            }
-        };
+                pages.forEach(p => p.classList.remove('active'));
+                document.getElementById(pageId).classList.add('active');
 
-        // --- Page Templates ---
-        const pages = {
-            dashboard: `
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    <div class="glass-card p-6 text-center">
-                        <h3 class="text-lg font-semibold text-gray-600">Current Balance</h3>
-                        <p id="dashboard-balance" class="text-3xl font-bold text-green-600 mt-2">৳ 0.00</p>
-                    </div>
-                    <div class="glass-card p-6 text-center">
-                        <h3 class="text-lg font-semibold text-gray-600">Total Income (This Month)</h3>
-                        <p id="dashboard-income" class="text-3xl font-bold text-blue-600 mt-2">৳ 0.00</p>
-                    </div>
-                    <div class="glass-card p-6 text-center">
-                        <h3 class="text-lg font-semibold text-gray-600">Total Expense (This Month)</h3>
-                        <p id="dashboard-expense" class="text-3xl font-bold text-red-600 mt-2">৳ 0.00</p>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="font-bold text-lg mb-4">Expense Breakdown</h3>
-                        <canvas id="expense-chart"></canvas>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="font-bold text-lg mb-4">Income vs Expense (Last 6 Months)</h3>
-                        <canvas id="income-expense-chart"></canvas>
-                    </div>
-                </div>
-                 <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="font-bold text-lg mb-4">Recent Transactions</h3>
-                    <div id="recent-transactions-list" class="space-y-3 max-h-96 overflow-y-auto">
-                        <!-- Recent transactions will be listed here -->
-                    </div>
-                </div>
-            `,
-            transactions: `
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-                        <h2 class="text-2xl font-bold">All Transactions</h2>
-                        <div class="flex items-center gap-2">
-                            <input type="text" id="search-input" placeholder="Search..." class="p-2 border rounded-lg">
-                            <select id="filter-type" class="p-2 border rounded-lg">
-                                <option value="all">All Types</option>
-                                <option value="income">Income</option>
-                                <option value="expense">Expense</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div id="transactions-list" class="space-y-4"></div>
-                </div>
-            `,
-            'ai-tools': `
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-2xl font-bold mb-2">AI Financial Assistant ✨</h2>
-                    <p class="text-gray-600 mb-6">Get smart insights and suggestions to improve your financial health.</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- AI Financial Health Check -->
-                        <div class="border p-6 rounded-lg shadow-sm flex flex-col">
-                            <i class="fas fa-heart-pulse text-4xl text-red-500 mx-auto mb-4"></i>
-                            <h3 class="text-xl font-bold text-center mb-2">Financial Health Check</h3>
-                            <p class="text-gray-600 text-center mb-4 flex-grow">Analyze your spending habits for the last 30 days and get personalized advice.</p>
-                            <button id="ai-health-check-btn" class="btn-ai mt-auto w-full">✨ Get Analysis</button>
-                        </div>
-
-                        <!-- AI Smart Budget Generator -->
-                        <div class="border p-6 rounded-lg shadow-sm flex flex-col">
-                            <i class="fas fa-lightbulb text-4xl text-yellow-500 mx-auto mb-4"></i>
-                            <h3 class="text-xl font-bold text-center mb-2">Smart Budget Generator</h3>
-                            <p class="text-gray-600 text-center mb-4 flex-grow">Let AI create a personalized monthly budget plan based on your income and spending.</p>
-                            <button id="ai-budget-gen-btn" class="btn-ai mt-auto w-full">✨ Generate Budget</button>
-                        </div>
-
-                        <!-- AI Goal Planner -->
-                        <div class="border p-6 rounded-lg shadow-sm flex flex-col">
-                            <i class="fas fa-rocket text-4xl text-green-500 mx-auto mb-4"></i>
-                            <h3 class="text-xl font-bold text-center mb-2">Goal Savings Planner</h3>
-                            <p class="text-gray-600 text-center mb-4 flex-grow">Select one of your financial goals and get a custom step-by-step savings plan.</p>
-                            <button id="ai-goal-plan-btn" class="btn-ai mt-auto w-full">✨ Create Plan</button>
-                        </div>
-                    </div>
-                </div>
-            `,
-            reports: `
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-2xl font-bold mb-4">Generate Report</h2>
-                    <div class="flex flex-wrap gap-4 items-end">
-                        <div>
-                            <label for="start-date" class="block text-sm font-medium text-gray-700">Start Date</label>
-                            <input type="date" id="start-date" class="mt-1 p-2 border rounded-lg w-full">
-                        </div>
-                        <div>
-                            <label for="end-date" class="block text-sm font-medium text-gray-700">End Date</label>
-                            <input type="date" id="end-date" class="mt-1 p-2 border rounded-lg w-full">
-                        </div>
-                        <button id="generate-pdf-button" class="btn-primary">
-                            <i class="fas fa-file-pdf mr-2"></i>Generate PDF
-                        </button>
-                    </div>
-                </div>
-            `,
-            categories: `
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl font-bold">Manage Categories</h2>
-                        <button id="add-category-button" class="btn-primary"><i class="fas fa-plus mr-2"></i>Add Category</button>
-                    </div>
-                    <div id="categories-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
-                </div>
-            `,
-            budget: `
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-2xl font-bold mb-4">Monthly Budgets</h2>
-                    <div id="budget-list" class="space-y-4"></div>
-                </div>
-            `,
-            goals: `
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl font-bold">Financial Goals</h2>
-                        <button id="add-goal-button" class="btn-primary"><i class="fas fa-plus mr-2"></i>Set New Goal</button>
-                    </div>
-                    <div id="goals-list" class="space-y-4"></div>
-                </div>
-            `,
-            developer: `
-                <div class="bg-white p-8 rounded-lg shadow-lg text-center">
-                    <img src="https://i.ibb.co/L5B7P4V/Picsart-24-12-22-22-58-18-749.png" alt="Md Habibur Rahman Mahi" class="w-40 h-40 rounded-full mx-auto border-4 border-indigo-500 shadow-xl">
-                    <h2 class="text-3xl font-bold mt-6">Md Habibur Rahman Mahi</h2>
-                    <p class="text-indigo-600 font-semibold text-lg">Founder and CEO of Infinity Group</p>
-                    <p class="max-w-2xl mx-auto mt-4 text-gray-600">
-                        A passionate developer and entrepreneur dedicated to creating innovative solutions that make a difference. Infinity Group is committed to pushing the boundaries of technology.
-                    </p>
-                    <div class="mt-8 flex justify-center items-center space-x-6 text-3xl">
-                        <a href="https://wa.me/8801727722018" target="_blank" class="text-green-500 hover:text-green-600 transition-colors"><i class="fab fa-whatsapp-square"></i></a>
-                        <a href="https://t.me/hr_mahi" target="_blank" class="text-blue-400 hover:text-blue-500 transition-colors"><i class="fab fa-telegram"></i></a>
-                        <a href="https://www.instagram.com/h.r_mahi_?igsh=Z242dWFtcDZwdjF2" target="_blank" class="text-pink-500 hover:text-pink-600 transition-colors"><i class="fab fa-instagram-square"></i></a>
-                        <a href="https://www.facebook.com/share/1L8yaf25bk/" target="_blank" class="text-blue-600 hover:text-blue-700 transition-colors"><i class="fab fa-facebook-square"></i></a>
-                    </div>
-                     <div class="mt-6 text-sm text-gray-500">
-                        <p>WhatsApp & Telegram: <strong>01727722018</strong></p>
-                    </div>
-                </div>
-            `
-        };
-
-        // --- Router/Page Loader ---
-        const loadPage = (page) => {
-            if (!pages[page]) {
-                console.error(`Page "${page}" not found.`);
-                return;
-            }
-            // A quick fix for page title from 'ai-tools' to 'AI Tools'
-            const title = page === 'ai-tools' ? 'AI Tools' : page.charAt(0).toUpperCase() + page.slice(1);
-            pageTitle.textContent = title;
-            pageContentArea.innerHTML = pages[page];
-
-            // Run page-specific logic
-            switch (page) {
-                case 'dashboard': renderDashboard(); break;
-                case 'transactions':
-                    renderTransactionsList();
-                    document.getElementById('search-input').addEventListener('input', renderTransactionsList);
-                    document.getElementById('filter-type').addEventListener('change', renderTransactionsList);
-                    break;
-                case 'ai-tools':
-                    document.getElementById('ai-health-check-btn').addEventListener('click', getFinancialHealthCheck);
-                    document.getElementById('ai-budget-gen-btn').addEventListener('click', generateAIBudget);
-                    document.getElementById('ai-goal-plan-btn').addEventListener('click', getGoalPlan);
-                    break;
-                case 'reports':
-                    document.getElementById('generate-pdf-button').addEventListener('click', generatePDF);
-                    break;
-                case 'categories':
-                    renderCategories();
-                    document.getElementById('add-category-button').addEventListener('click', () => showCategoryModal());
-                    break;
-                case 'budget': renderBudgets(); break;
-                case 'goals':
-                    renderGoals();
-                    document.getElementById('add-goal-button').addEventListener('click', () => showGoalModal());
-                    break;
-                case 'developer': break; // No dynamic content
-            }
-        };
-
-        // --- AI Tools Functions ---
-        const getFinancialHealthCheck = async () => {
-            Swal.fire({ title: 'Analyzing your data...', text: 'The AI is checking your financial health. Please wait.', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
-            
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            
-            const recentTransactions = transactions.filter(t => new Date(t.date) > thirtyDaysAgo);
-            const income = recentTransactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
-            const expense = recentTransactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
-            const expenseByCategory = recentTransactions.filter(t => t.type === 'expense').reduce((acc, t) => {
-                acc[t.category] = (acc[t.category] || 0) + t.amount;
-                return acc;
-            }, {});
-
-            if(recentTransactions.length < 3) {
-                Swal.fire('Not Enough Data', 'Please add more transactions to get an AI analysis.', 'info');
-                return;
-            }
-
-            const prompt = `
-                As a friendly financial advisor in Bangladesh, analyze the following financial data for the last 30 days and provide a "Financial Health Check". The currency is BDT (৳).
-
-                - Total Income: ${formatCurrency(income)}
-                - Total Expense: ${formatCurrency(expense)}
-                - Net Savings/Loss: ${formatCurrency(income - expense)}
-                - Expense Breakdown: ${JSON.stringify(expenseByCategory)}
-
-                Please provide:
-                1.  A brief, overall summary of the financial situation.
-                2.  Point out the top 3 spending categories.
-                3.  Provide 3-4 actionable, encouraging tips for saving more money or managing expenses better, tailored to a user in Bangladesh.
-                4.  Conclude with a positive and motivational sentence.
-
-                Format the response in simple Markdown.
-            `;
-
-            const response = await callGeminiAPI(prompt);
-            const formattedHtml = marked.parse(response);
-
-            Swal.fire({
-                title: '✨ Your Financial Health Check',
-                html: formattedHtml,
-                width: '80%',
-                confirmButtonText: 'Great, thanks!'
-            });
-        };
-
-        const generateAIBudget = async () => {
-            Swal.fire({ title: 'Generating your budget...', text: 'The AI is creating a smart budget plan. Please wait.', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
-
-            const lastMonth = new Date();
-            lastMonth.setMonth(lastMonth.getMonth() - 1);
-            const firstDay = new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 1);
-            const lastDay = new Date(lastMonth.getFullYear(), lastMonth.getMonth() + 1, 0);
-
-            const monthTransactions = transactions.filter(t => {
-                const tDate = new Date(t.date);
-                return tDate >= firstDay && tDate <= lastDay;
-            });
-            
-            const income = monthTransactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
-            const expenseByCategory = monthTransactions.filter(t => t.type === 'expense').reduce((acc, t) => {
-                acc[t.category] = (acc[t.category] || 0) + t.amount;
-                return acc;
-            }, {});
-
-            if (income === 0) {
-                Swal.fire('Not Enough Data', 'Please add your income for last month to generate a budget.', 'info');
-                return;
-            }
-
-            const prompt = `
-                Based on the user's financial data from last month in Bangladesh (currency BDT), create a suggested monthly budget plan.
-
-                - Monthly Income: ${income}
-                - Last Month's Expenses by Category: ${JSON.stringify(expenseByCategory)}
-
-                Instructions:
-                1.  Use the 50/30/20 rule (50% Needs, 30% Wants, 20% Savings) as a guideline, but adjust it based on the user's actual spending.
-                2.  Categorize the user's existing expense categories into 'Needs' and 'Wants'.
-                3.  Provide a clear, suggested budget for each expense category.
-                4.  Give a brief explanation for your suggestions.
-                5.  Format the response in simple Markdown with clear headings.
-            `;
-            
-            const response = await callGeminiAPI(prompt);
-            const formattedHtml = marked.parse(response);
-
-            Swal.fire({
-                title: '✨ Your AI-Generated Budget Plan',
-                html: formattedHtml,
-                width: '80%',
-                confirmButtonText: 'Looks Good!'
-            });
-        };
-
-        const getGoalPlan = async () => {
-            if (goals.length === 0) {
-                Swal.fire('No Goals Set', 'Please set a financial goal first on the "Financial Goals" page.', 'info');
-                return;
-            }
-
-            const inputOptions = goals.reduce((acc, goal) => {
-                acc[goal.id] = `${goal.name} (${formatCurrency(goal.targetAmount)})`;
-                return acc;
-            }, {});
-
-            const { value: goalId } = await Swal.fire({
-                title: 'Select a Goal to Plan For',
-                input: 'select',
-                inputOptions: inputOptions,
-                inputPlaceholder: 'Select a goal',
-                showCancelButton: true,
-            });
-
-            if (goalId) {
-                Swal.fire({ title: 'Creating your plan...', text: 'The AI is building a savings strategy. Please wait.', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
+                navLinks.forEach(l => l.classList.remove('active', 'bg-indigo-100', 'dark:bg-indigo-900', 'text-indigo-600'));
+                link.classList.add('active', 'bg-indigo-100', 'dark:bg-indigo-900', 'text-indigo-600');
                 
-                const goal = goals.find(g => g.id === goalId);
-                const monthlyIncome = transactions
-                    .filter(t => t.type === 'income' && new Date(t.date) > new Date(new Date().setMonth(new Date().getMonth()-1)))
-                    .reduce((s, t) => s + t.amount, 0);
-
-                const prompt = `
-                    A user in Bangladesh wants to save for a financial goal. Create a simple, motivational, and actionable savings plan for them.
-
-                    - Goal Name: ${goal.name}
-                    - Target Amount: ${formatCurrency(goal.targetAmount)}
-                    - Currently Saved: ${formatCurrency(goal.currentAmount)}
-                    - Amount Remaining: ${formatCurrency(goal.targetAmount - goal.currentAmount)}
-                    - User's Approximate Monthly Income: ${formatCurrency(monthlyIncome)}
-
-                    Please provide:
-                    1.  A suggested monthly savings amount.
-                    2.  An estimated timeline to reach the goal based on that savings amount.
-                    3.  A list of 3-5 practical tips to help them save this money (e.g., "Try a no-spend weekend once a month", "Automate your savings transfer").
-                    4.  Keep the tone encouraging and positive.
-                    5.  Format the response in simple Markdown.
-                `;
-                
-                const response = await callGeminiAPI(prompt);
-                const formattedHtml = marked.parse(response);
-
-                Swal.fire({
-                    title: `✨ Savings Plan for ${goal.name}`,
-                    html: formattedHtml,
-                    width: '80%',
-                    confirmButtonText: 'I can do this!'
-                });
-            }
-        };
-
-        // --- Render Functions ---
-        const renderDashboard = () => {
-            const now = new Date();
-            const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-            
-            const monthTransactions = transactions.filter(t => new Date(t.date) >= firstDayOfMonth);
-            
-            const totalIncome = transactions.reduce((sum, t) => t.type === 'income' ? sum + t.amount : sum, 0);
-            const totalExpense = transactions.reduce((sum, t) => t.type === 'expense' ? sum + t.amount : sum, 0);
-            const monthIncome = monthTransactions.reduce((sum, t) => t.type === 'income' ? sum + t.amount : sum, 0);
-            const monthExpense = monthTransactions.reduce((sum, t) => t.type === 'expense' ? sum + t.amount : sum, 0);
-
-            document.getElementById('dashboard-balance').textContent = formatCurrency(totalIncome - totalExpense);
-            document.getElementById('dashboard-income').textContent = formatCurrency(monthIncome);
-            document.getElementById('dashboard-expense').textContent = formatCurrency(monthExpense);
-            
-            renderExpenseChart(monthTransactions);
-            renderIncomeVsExpenseChart();
-            renderRecentTransactions();
-        };
-
-        const renderRecentTransactions = () => {
-            const listEl = document.getElementById('recent-transactions-list');
-            const recent = [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
-            if (recent.length === 0) {
-                listEl.innerHTML = `<p class="text-gray-500 text-center">No recent transactions.</p>`;
-                return;
-            }
-            listEl.innerHTML = recent.map(t => createTransactionItemHTML(t)).join('');
-        };
+                sideNav.classList.add('nav-closed');
+            });
+        });
         
-        const renderTransactionsList = () => {
-            const listEl = document.getElementById('transactions-list');
-            const searchVal = document.getElementById('search-input').value.toLowerCase();
-            const filterType = document.getElementById('filter-type').value;
+        // Add basic styling to nav links
+        navLinks.forEach(link => {
+            link.classList.add('flex', 'items-center', 'gap-4', 'p-3', 'rounded-lg', 'hover:bg-gray-100', 'dark:hover:bg-gray-700', 'transition-colors');
+        });
+        document.querySelector('.nav-link[data-page="dashboard-page"]').classList.add('active', 'bg-indigo-100', 'dark:bg-indigo-900', 'text-indigo-600');
 
-            const filtered = transactions
-                .filter(t => {
-                    const descriptionMatch = t.description.toLowerCase().includes(searchVal);
-                    const categoryMatch = t.category.toLowerCase().includes(searchVal);
-                    const typeMatch = filterType === 'all' || t.type === filterType;
-                    return (descriptionMatch || categoryMatch) && typeMatch;
-                })
-                .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-            if (filtered.length === 0) {
-                listEl.innerHTML = `<p class="text-gray-500 text-center py-8">No transactions found.</p>`;
+        // --- TRANSACTIONS ---
+        let allTransactions = [];
+        function listenForTransactions(userId) {
+            const txCollection = collection(db, `users/${userId}/transactions`);
+            const q = query(txCollection, orderBy('date', 'desc'));
+            transactionsUnsubscribe = onSnapshot(q, (snapshot) => {
+                allTransactions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderTransactions(allTransactions);
+                updateDashboard(allTransactions);
+                updateChart(allTransactions);
+            });
+        }
+
+        function renderTransactions(transactions) {
+            const listEl = document.getElementById('transaction-list');
+            listEl.innerHTML = '';
+            if (transactions.length === 0) {
+                listEl.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400 p-4">No transactions yet. Press the + button to add one!</p>';
                 return;
             }
-            listEl.innerHTML = filtered.map(t => createTransactionItemHTML(t)).join('');
-            
-            document.querySelectorAll('.edit-transaction').forEach(btn => btn.addEventListener('click', (e) => {
-                const id = e.currentTarget.dataset.id;
-                showTransactionModal(transactions.find(t => t.id === id));
-            }));
-            document.querySelectorAll('.delete-transaction').forEach(btn => btn.addEventListener('click', (e) => {
-                const id = e.currentTarget.dataset.id;
-                deleteTransaction(id);
-            }));
-        };
-        
-        const createTransactionItemHTML = (t) => {
-            const isIncome = t.type === 'income';
-            const category = categories.find(c => c.name === t.category) || { icon: 'fa-question-circle' };
-            return `
-                <div class="flex items-center justify-between p-4 rounded-lg bg-gray-50 hover:bg-gray-100">
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-full ${isIncome ? 'bg-blue-100 text-blue-600' : 'bg-red-100 text-red-600'} flex items-center justify-center text-xl mr-4">
-                            <i class="fas ${category.icon}"></i>
+            transactions.forEach(tx => {
+                const date = tx.date.toDate().toLocaleDateString('en-GB');
+                const amountColor = tx.type === 'income' ? 'text-green-500' : 'text-red-500';
+                const sign = tx.type === 'income' ? '+' : '-';
+
+                const item = document.createElement('div');
+                item.className = 'flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg';
+                item.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center ${tx.type === 'income' ? 'bg-green-100 dark:bg-green-900' : 'bg-red-100 dark:bg-red-900'}">
+                            <i class="fas ${tx.type === 'income' ? 'fa-arrow-down' : 'fa-arrow-up'} ${amountColor}"></i>
                         </div>
                         <div>
-                            <p class="font-bold">${t.description}</p>
-                            <p class="text-sm text-gray-500">${t.category} &bull; ${formatDate(t.date)}</p>
+                            <p class="font-semibold">${tx.description}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">${date} - ${tx.category}</p>
                         </div>
                     </div>
                     <div class="text-right">
-                        <p class="font-bold text-lg ${isIncome ? 'text-blue-600' : 'text-red-600'}">
-                            ${isIncome ? '+' : '-'} ${formatCurrency(t.amount)}
-                        </p>
-                        <div class="text-xs space-x-2 mt-1">
-                            <button class="text-indigo-600 hover:underline edit-transaction" data-id="${t.id}">Edit</button>
-                            <button class="text-red-600 hover:underline delete-transaction" data-id="${t.id}">Delete</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        };
-
-        const renderCategories = () => {
-            const listEl = document.getElementById('categories-list');
-            listEl.innerHTML = categories.map(c => `
-                <div class="p-4 border rounded-lg text-center shadow-sm relative group">
-                    <i class="fas ${c.icon} text-3xl ${c.type === 'income' ? 'text-blue-500' : 'text-red-500'}"></i>
-                    <p class="mt-2 font-semibold">${c.name}</p>
-                    <p class="text-xs text-gray-500 capitalize">${c.type}</p>
-                    <div class="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button class="text-xs text-red-500 delete-category" data-id="${c.id}"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
-            `).join('');
-            
-            document.querySelectorAll('.delete-category').forEach(btn => btn.addEventListener('click', (e) => {
-                const id = e.currentTarget.dataset.id;
-                deleteCategory(id);
-            }));
-        };
-        
-        const renderBudgets = () => {
-            const listEl = document.getElementById('budget-list');
-            const expenseCategories = categories.filter(c => c.type === 'expense');
-
-            if (expenseCategories.length === 0) {
-                listEl.innerHTML = `<p class="text-gray-500 text-center">Please add expense categories first.</p>`;
-                return;
-            }
-
-            listEl.innerHTML = expenseCategories.map(cat => {
-                const budget = budgets.find(b => b.category === cat.name);
-                const amount = budget ? budget.amount : 0;
-                const spent = transactions
-                    .filter(t => t.category === cat.name && new Date(t.date).getMonth() === new Date().getMonth())
-                    .reduce((sum, t) => sum + t.amount, 0);
-                const percentage = amount > 0 ? Math.min((spent / amount) * 100, 100) : 0;
-                
-                return `
-                    <div class="p-4 border rounded-lg">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="font-bold">${cat.name}</span>
-                            <span class="text-sm">${formatCurrency(spent)} / ${formatCurrency(amount)}</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5">
-                            <div class="bg-indigo-600 h-2.5 rounded-full" style="width: ${percentage}%"></div>
-                        </div>
-                        <div class="text-right mt-2">
-                            <button class="text-sm text-indigo-600 hover:underline set-budget-btn" data-category="${cat.name}" data-amount="${amount}">Set Budget</button>
+                        <p class="font-bold ${amountColor}">${sign} ৳${parseFloat(tx.amount).toFixed(2)}</p>
+                        <div>
+                            <button class="edit-btn text-xs text-blue-500 hover:underline" data-id="${tx.id}">Edit</button>
+                            <button class="delete-btn text-xs text-red-500 hover:underline ml-2" data-id="${tx.id}">Delete</button>
                         </div>
                     </div>
                 `;
-            }).join('');
-            
-            document.querySelectorAll('.set-budget-btn').forEach(btn => {
-                btn.addEventListener('click', e => {
-                    const category = e.currentTarget.dataset.category;
-                    const currentAmount = e.currentTarget.dataset.amount;
-                    showBudgetModal(category, currentAmount);
-                });
+                listEl.appendChild(item);
             });
-        };
-        
-        const renderGoals = () => {
-            const listEl = document.getElementById('goals-list');
-            if (goals.length === 0) {
-                listEl.innerHTML = `<p class="text-gray-500 text-center py-8">No financial goals set yet. Set one to start saving!</p>`;
-                return;
+        }
+
+        document.getElementById('transaction-list').addEventListener('click', e => {
+            if (e.target.classList.contains('edit-btn')) {
+                const txId = e.target.dataset.id;
+                const transaction = allTransactions.find(tx => tx.id === txId);
+                showTransactionModal(transaction);
             }
-            listEl.innerHTML = goals.map(goal => {
-                const percentage = goal.targetAmount > 0 ? Math.min((goal.currentAmount / goal.targetAmount) * 100, 100) : 0;
-                return `
-                    <div class="p-4 border rounded-lg shadow-sm">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="font-bold text-lg">${goal.name}</p>
-                                <p class="text-sm text-gray-600">Target: ${formatCurrency(goal.targetAmount)}</p>
-                            </div>
-                            <div class="space-x-2">
-                                <button class="text-indigo-600 edit-goal" data-id="${goal.id}"><i class="fas fa-pencil-alt"></i></button>
-                                <button class="text-red-500 delete-goal" data-id="${goal.id}"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </div>
-                        <div class="mt-2">
-                             <div class="flex justify-between items-center mb-1">
-                                <span class="text-sm font-medium text-gray-700">Progress</span>
-                                <span class="text-sm font-medium text-indigo-700">${formatCurrency(goal.currentAmount)} (${percentage.toFixed(1)}%)</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-4">
-                                <div class="bg-green-500 h-4 rounded-full text-white text-xs flex items-center justify-center" style="width: ${percentage}%">
-                                    ${percentage.toFixed(0)}%
-                                </div>
-                            </div>
-                        </div>
-                        <div class="text-right mt-2">
-                            <button class="text-sm btn-secondary add-funds-goal" data-id="${goal.id}">Add Funds</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+            if (e.target.classList.contains('delete-btn')) {
+                const txId = e.target.dataset.id;
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        deleteDoc(doc(db, `users/${currentUser.uid}/transactions`, txId));
+                        Swal.fire('Deleted!', 'Your transaction has been deleted.', 'success');
+                    }
+                })
+            }
+        });
+
+        // --- DASHBOARD & CHARTS ---
+        function updateDashboard(transactions) {
+            const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + parseFloat(t.amount), 0);
+            const totalExpense = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + parseFloat(t.amount), 0);
+            const balance = totalIncome - totalExpense;
+
+            document.getElementById('total-income').textContent = `৳${totalIncome.toFixed(2)}`;
+            document.getElementById('total-expense').textContent = `৳${totalExpense.toFixed(2)}`;
+            document.getElementById('current-balance').textContent = `৳${balance.toFixed(2)}`;
+        }
+
+        function updateChart(transactions) {
+            const ctx = document.getElementById('expense-chart').getContext('2d');
+            const expenseData = transactions
+                .filter(tx => tx.type === 'expense')
+                .reduce((acc, tx) => {
+                    acc[tx.category] = (acc[tx.category] || 0) + parseFloat(tx.amount);
+                    return acc;
+                }, {});
+
+            const labels = Object.keys(expenseData);
+            const data = Object.values(expenseData);
             
-            document.querySelectorAll('.edit-goal').forEach(btn => btn.addEventListener('click', e => showGoalModal(goals.find(g => g.id === e.currentTarget.dataset.id))));
-            document.querySelectorAll('.delete-goal').forEach(btn => btn.addEventListener('click', e => deleteGoal(e.currentTarget.dataset.id)));
-            document.querySelectorAll('.add-funds-goal').forEach(btn => btn.addEventListener('click', e => showAddFundsModal(e.currentTarget.dataset.id)));
-        };
-
-        // --- Chart Rendering ---
-        const renderExpenseChart = (data) => {
-            const ctx = document.getElementById('expense-chart')?.getContext('2d');
-            if (!ctx) return;
-
-            const expenseData = data.filter(t => t.type === 'expense');
-            const spendingByCategory = expenseData.reduce((acc, t) => {
-                acc[t.category] = (acc[t.category] || 0) + t.amount;
-                return acc;
-            }, {});
-
-            const labels = Object.keys(spendingByCategory);
-            const values = Object.values(spendingByCategory);
-
             if (expenseChart) {
                 expenseChart.destroy();
             }
+
             if (labels.length === 0) {
-                 ctx.font = "16px Inter";
-                 ctx.fillStyle = "#9ca3af";
-                 ctx.textAlign = "center";
-                 ctx.fillText("No expense data for this month.", ctx.canvas.width / 2, ctx.canvas.height / 2);
+                 document.getElementById('expense-chart').style.display = 'none';
                  return;
             }
-            
+             document.getElementById('expense-chart').style.display = 'block';
+
             expenseChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Expense by Category',
-                        data: values,
+                        label: 'Expenses',
+                        data: data,
                         backgroundColor: [
-                            '#ef4444', '#f97316', '#f59e0b', '#eab308', '#84cc16', '#22c55e',
-                            '#10b981', '#14b8a6', '#06b6d4', '#0ea5e9', '#3b82f6', '#6366f1'
+                            '#4f46e5', '#ec4899', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ef4444'
                         ],
                         hoverOffset: 4
                     }]
@@ -917,268 +527,203 @@ const firebaseConfig = {
                     plugins: {
                         legend: {
                             position: 'bottom',
-                        },
-                    }
-                }
-            });
-        };
-        
-        const renderIncomeVsExpenseChart = () => {
-            const ctx = document.getElementById('income-expense-chart')?.getContext('2d');
-            if (!ctx) return;
-            
-            const labels = [];
-            const incomeData = [];
-            const expenseData = [];
-            
-            for (let i = 5; i >= 0; i--) {
-                const d = new Date();
-                d.setMonth(d.getMonth() - i);
-                labels.push(d.toLocaleString('default', { month: 'short' }));
-                
-                const monthTransactions = transactions.filter(t => {
-                    const tDate = new Date(t.date);
-                    return tDate.getMonth() === d.getMonth() && tDate.getFullYear() === d.getFullYear();
-                });
-                
-                incomeData.push(monthTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0));
-                expenseData.push(monthTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0));
-            }
-            
-            if (incomeVsExpenseChart) {
-                incomeVsExpenseChart.destroy();
-            }
-            
-            incomeVsExpenseChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Income',
-                            data: incomeData,
-                            backgroundColor: 'rgba(59, 130, 246, 0.5)',
-                            borderColor: 'rgba(59, 130, 246, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Expense',
-                            data: expenseData,
-                            backgroundColor: 'rgba(239, 68, 68, 0.5)',
-                            borderColor: 'rgba(239, 68, 68, 1)',
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
+                             labels: {
+                                color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#4b5563'
+                            }
                         }
                     }
                 }
             });
-        };
+        }
 
-        // --- Modals ---
-        const showTransactionModal = (transaction = null) => {
-            const isEdit = transaction !== null;
-            const incomeCategories = categories.filter(c => c.type === 'income').map(c => `<option value="${c.name}">${c.name}</option>`).join('');
-            const expenseCategories = categories.filter(c => c.type === 'expense').map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+        // --- ADD/EDIT TRANSACTION MODAL ---
+        let categories = [];
+        function listenForCategories(userId) {
+            const catCollection = collection(db, `users/${userId}/categories`);
+            categoriesUnsubscribe = onSnapshot(catCollection, (snapshot) => {
+                categories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderCategories(categories);
+            });
+        }
+
+        document.getElementById('add-transaction-fab').addEventListener('click', () => showTransactionModal());
+
+        async function showTransactionModal(transaction = null) {
+            const categoryOptions = categories.map(c => `<option value="${c.name}" ${transaction?.category === c.name ? 'selected' : ''}>${c.name}</option>`).join('');
             
-            Swal.fire({
-                title: isEdit ? 'Edit Transaction' : 'Add Transaction',
+            const { value: formValues, isConfirmed } = await Swal.fire({
+                title: transaction ? 'Edit Transaction' : 'Add New Transaction',
                 html: `
-                    <div class="text-left">
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Type</label>
+                    <div class="space-y-4 text-left">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Type</label>
                             <select id="swal-type" class="swal2-input">
-                                <option value="expense" ${!isEdit || transaction.type === 'expense' ? 'selected' : ''}>Expense</option>
-                                <option value="income" ${isEdit && transaction.type === 'income' ? 'selected' : ''}>Income</option>
+                                <option value="expense" ${transaction?.type === 'expense' ? 'selected' : ''}>Expense</option>
+                                <option value="income" ${transaction?.type === 'income' ? 'selected' : ''}>Income</option>
                             </select>
                         </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Description</label>
-                            <input id="swal-description" class="swal2-input" placeholder="e.g., Coffee" value="${isEdit ? transaction.description : ''}">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Amount (৳)</label>
+                            <input id="swal-amount" type="number" class="swal2-input" placeholder="0.00" value="${transaction?.amount || ''}">
                         </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Amount</label>
-                            <input id="swal-amount" type="number" class="swal2-input" placeholder="0.00" value="${isEdit ? transaction.amount : ''}">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Description</label>
+                            <input id="swal-description" class="swal2-input" placeholder="e.g., Coffee" value="${transaction?.description || ''}">
                         </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Category</label>
-                            <select id="swal-category" class="swal2-input">
-                                ${isEdit && transaction.type === 'income' ? incomeCategories : expenseCategories}
-                            </select>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Category</label>
+                            <select id="swal-category" class="swal2-input">${categoryOptions}</select>
                         </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Date</label>
-                            <input id="swal-date" type="date" class="swal2-input" value="${isEdit ? formatDate(transaction.date) : formatDate(new Date())}">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Date</label>
+                            <input id="swal-date" type="date" class="swal2-input" value="${transaction ? transaction.date.toDate().toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}">
                         </div>
                     </div>
                 `,
-                confirmButtonText: isEdit ? 'Save Changes' : 'Add',
+                focusConfirm: false,
                 showCancelButton: true,
-                didOpen: () => {
-                    const typeSelect = document.getElementById('swal-type');
-                    const categorySelect = document.getElementById('swal-category');
-                    if (isEdit) {
-                        categorySelect.value = transaction.category;
-                    }
-                    typeSelect.addEventListener('change', (e) => {
-                        categorySelect.innerHTML = e.target.value === 'income' ? incomeCategories : expenseCategories;
-                    });
-                },
+                confirmButtonText: transaction ? 'Save Changes' : 'Add Transaction',
                 preConfirm: () => {
-                    const type = document.getElementById('swal-type').value;
+                    const amount = document.getElementById('swal-amount').value;
                     const description = document.getElementById('swal-description').value;
-                    const amount = parseFloat(document.getElementById('swal-amount').value);
-                    const category = document.getElementById('swal-category').value;
-                    const date = document.getElementById('swal-date').value;
+                    if (!amount || !description || parseFloat(amount) <= 0) {
+                        Swal.showValidationMessage(`Please fill out all fields correctly`);
+                        return false;
+                    }
+                    return {
+                        type: document.getElementById('swal-type').value,
+                        amount: parseFloat(amount),
+                        description: description,
+                        category: document.getElementById('swal-category').value,
+                        date: new Date(document.getElementById('swal-date').value)
+                    }
+                }
+            });
 
-                    if (!description || !amount || !category || !date) {
-                        Swal.showValidationMessage(`Please fill out all fields`);
-                        return false;
-                    }
-                    if (amount <= 0) {
-                        Swal.showValidationMessage(`Amount must be positive`);
-                        return false;
-                    }
-
-                    const newTransaction = { type, description, amount, category, date };
-                    if (isEdit) {
-                        updateTransaction(transaction.id, newTransaction);
-                    } else {
-                        addTransaction(newTransaction);
-                    }
+            if (isConfirmed && formValues) {
+                if (transaction) {
+                    // Update existing
+                    const txRef = doc(db, `users/${currentUser.uid}/transactions`, transaction.id);
+                    await updateDoc(txRef, formValues);
+                    Swal.fire('Updated!', 'Transaction has been updated.', 'success');
+                } else {
+                    // Add new
+                    const txCollection = collection(db, `users/${currentUser.uid}/transactions`);
+                    await addDoc(txCollection, formValues);
+                    Swal.fire('Added!', 'New transaction has been added.', 'success');
                 }
-            });
-        };
-        
-        const showCategoryModal = () => {
-            Swal.fire({
-                title: 'Add New Category',
-                html: `
-                    <input id="swal-cat-name" class="swal2-input" placeholder="Category Name">
-                    <input id="swal-cat-icon" class="swal2-input" placeholder="Font Awesome Icon (e.g., fa-car)">
-                    <select id="swal-cat-type" class="swal2-input">
-                        <option value="expense">Expense</option>
-                        <option value="income">Income</option>
-                    </select>
-                `,
-                confirmButtonText: 'Add Category',
-                preConfirm: () => {
-                    const name = document.getElementById('swal-cat-name').value;
-                    const icon = document.getElementById('swal-cat-icon').value;
-                    const type = document.getElementById('swal-cat-type').value;
-                    if (!name || !icon) {
-                        Swal.showValidationMessage('Please provide a name and icon.');
-                        return false;
-                    }
-                    addCategory({ name, icon, type });
-                }
-            });
-        };
-        
-        const showBudgetModal = (category, currentAmount) => {
-            Swal.fire({
-                title: `Set Budget for ${category}`,
-                input: 'number',
-                inputValue: currentAmount,
-                inputLabel: 'Monthly Budget Amount',
-                inputPlaceholder: 'Enter budget amount',
-                showCancelButton: true,
-                confirmButtonText: 'Set Budget',
-                preConfirm: (amount) => {
-                    if (amount < 0) {
-                        Swal.showValidationMessage('Budget cannot be negative.');
-                        return false;
-                    }
-                    setBudget(category, parseFloat(amount));
-                }
-            });
-        };
-        
-        const showGoalModal = (goal = null) => {
-            const isEdit = goal !== null;
-            Swal.fire({
-                title: isEdit ? 'Edit Goal' : 'Set New Financial Goal',
-                html: `
-                    <input id="swal-goal-name" class="swal2-input" placeholder="Goal Name (e.g., New Laptop)" value="${isEdit ? goal.name : ''}">
-                    <input id="swal-goal-target" type="number" class="swal2-input" placeholder="Target Amount" value="${isEdit ? goal.targetAmount : ''}">
-                    ${!isEdit ? '<input id="swal-goal-initial" type="number" class="swal2-input" placeholder="Initial Saved Amount (optional)" value="0">' : ''}
-                `,
-                confirmButtonText: isEdit ? 'Save Changes' : 'Set Goal',
-                preConfirm: () => {
-                    const name = document.getElementById('swal-goal-name').value;
-                    const targetAmount = parseFloat(document.getElementById('swal-goal-target').value);
-                    const currentAmount = isEdit ? goal.currentAmount : parseFloat(document.getElementById('swal-goal-initial').value) || 0;
-                    
-                    if (!name || !targetAmount) {
-                        Swal.showValidationMessage('Please provide a name and target amount.');
-                        return false;
-                    }
-                    if (targetAmount <= 0) {
-                        Swal.showValidationMessage('Target amount must be positive.');
-                        return false;
-                    }
-                    
-                    const goalData = { name, targetAmount, currentAmount };
-                    if (isEdit) {
-                        updateGoal(goal.id, goalData);
-                    } else {
-                        addGoal(goalData);
-                    }
-                }
-            });
-        };
-        
-        const showAddFundsModal = (goalId) => {
-            const goal = goals.find(g => g.id === goalId);
-            Swal.fire({
-                title: `Add Funds to "${goal.name}"`,
-                input: 'number',
-                inputLabel: 'Amount to add',
-                inputPlaceholder: '0.00',
-                showCancelButton: true,
-                preConfirm: (amount) => {
-                    amount = parseFloat(amount);
-                    if (amount <= 0) {
-                        Swal.showValidationMessage('Amount must be positive.');
-                        return false;
-                    }
-                    const newAmount = goal.currentAmount + amount;
-                    updateGoal(goalId, { ...goal, currentAmount: newAmount });
-                }
-            });
-        };
-
-        // --- PDF Generation ---
-        const generatePDF = async () => {
-            const startDate = document.getElementById('start-date').value;
-            const endDate = document.getElementById('end-date').value;
-
-            if (!startDate || !endDate) {
-                Swal.fire('Error', 'Please select both a start and end date.', 'error');
-                return;
             }
+        }
 
-            const start = new Date(startDate);
-            const end = new Date(endDate);
-            end.setHours(23, 59, 59, 999); // Include the whole end day
+        // --- PROFILE MANAGEMENT ---
+        document.getElementById('upload-btn').addEventListener('click', () => document.getElementById('photo-upload').click());
+        
+        document.getElementById('photo-upload').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
 
-            const filteredTransactions = transactions.filter(t => {
-                const tDate = new Date(t.date);
-                return tDate >= start && tDate <= end;
-            }).sort((a,b) => new Date(a.date) - new Date(b.date));
-
-            if (filteredTransactions.length === 0) {
-                Swal.fire('No Data', 'No transactions found in the selected date range.', 'info');
-                return;
-            }
+            const storageRef = ref(storage, `users/${currentUser.uid}/profile.jpg`);
+            await uploadBytes(storageRef, file);
+            const photoURL = await getDownloadURL(storageRef);
             
+            const userRef = doc(db, `users/${currentUser.uid}`);
+            await updateDoc(userRef, { photoURL });
+            Swal.fire('Success', 'Profile photo updated!', 'success');
+        });
+
+        document.getElementById('save-profile-btn').addEventListener('click', async () => {
+            const newName = document.getElementById('profile-name-input').value;
+            if (newName) {
+                const userRef = doc(db, `users/${currentUser.uid}`);
+                await updateDoc(userRef, { name: newName });
+                Swal.fire('Success', 'Profile name updated!', 'success');
+            }
+        });
+
+        // --- SETTINGS: THEME & CATEGORIES ---
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const themeText = document.getElementById('theme-text');
+        
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+          themeToggleBtn.innerHTML = `<i class="fas fa-sun"></i><span id="theme-text"> Light Mode</span>`;
+        } else {
+          document.documentElement.classList.remove('dark');
+          themeToggleBtn.innerHTML = `<i class="fas fa-moon"></i><span id="theme-text"> Dark Mode</span>`;
+        }
+        
+        themeToggleBtn.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.theme = 'dark';
+                themeToggleBtn.innerHTML = `<i class="fas fa-sun"></i><span id="theme-text"> Light Mode</span>`;
+            } else {
+                localStorage.theme = 'light';
+                themeToggleBtn.innerHTML = `<i class="fas fa-moon"></i><span id="theme-text"> Dark Mode</span>`;
+            }
+            // Redraw chart with new theme colors
+            updateChart(allTransactions);
+        });
+        
+        function renderCategories(categories) {
+            const listEl = document.getElementById('category-list');
+            listEl.innerHTML = '';
+            categories.forEach(cat => {
+                const item = document.createElement('div');
+                item.className = 'flex items-center justify-between p-2 bg-gray-100 dark:bg-gray-700 rounded-lg';
+                item.innerHTML = `
+                    <span>${cat.name}</span>
+                    <button class="delete-category-btn text-red-500 hover:text-red-700" data-id="${cat.id}">&times;</button>
+                `;
+                listEl.appendChild(item);
+            });
+        }
+
+        document.getElementById('add-category-btn').addEventListener('click', async () => {
+            const input = document.getElementById('new-category-input');
+            const newCategoryName = input.value.trim();
+            if (newCategoryName) {
+                await addDoc(collection(db, `users/${currentUser.uid}/categories`), { name: newCategoryName });
+                input.value = '';
+            }
+        });
+
+        document.getElementById('category-list').addEventListener('click', e => {
+            if (e.target.classList.contains('delete-category-btn')) {
+                const catId = e.target.dataset.id;
+                deleteDoc(doc(db, `users/${currentUser.uid}/categories`, catId));
+            }
+        });
+
+        // --- PDF GENERATION ---
+        document.getElementById('generate-pdf-btn').addEventListener('click', async () => {
+            const { value: dateRange, isConfirmed } = await Swal.fire({
+                title: 'Select Date Range for Report',
+                html: `
+                    <div class="flex gap-4">
+                        <input type="date" id="start-date" class="swal2-input">
+                        <input type="date" id="end-date" class="swal2-input">
+                    </div>
+                `,
+                focusConfirm: false,
+                showCancelButton: true,
+                preConfirm: () => {
+                    const start = document.getElementById('start-date').value;
+                    const end = document.getElementById('end-date').value;
+                    if (!start || !end) {
+                        Swal.showValidationMessage('Please select both start and end dates');
+                        return false;
+                    }
+                    return { start: new Date(start), end: new Date(end) };
+                }
+            });
+
+            if (isConfirmed && dateRange) {
+                generatePdf(dateRange.start, dateRange.end);
+            }
+        });
+
+        async function generatePdf(startDate, endDate) {
             Swal.fire({
                 title: 'Generating PDF...',
                 text: 'Please wait a moment.',
@@ -1188,320 +733,57 @@ const firebaseConfig = {
                 }
             });
 
-            // Populate the hidden template
-            document.getElementById('pdf-report-range').textContent = `From ${formatDate(start)} to ${formatDate(end)}`;
-            document.getElementById('pdf-generation-date').textContent = new Date().toLocaleString();
+            const filteredTx = allTransactions.filter(tx => {
+                const txDate = tx.date.toDate();
+                return txDate >= startDate && txDate <= endDate;
+            });
             
-            const income = filteredTransactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
-            const expense = filteredTransactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
-            document.getElementById('pdf-report-summary').innerHTML = `
-                <div class="p-2 bg-blue-100 rounded">
-                    <p class="font-bold text-blue-600">Total Income</p>
-                    <p>${formatCurrency(income)}</p>
-                </div>
-                <div class="p-2 bg-red-100 rounded">
-                    <p class="font-bold text-red-600">Total Expense</p>
-                    <p>${formatCurrency(expense)}</p>
-                </div>
-                <div class="p-2 bg-green-100 rounded">
-                    <p class="font-bold text-green-600">Net Savings</p>
-                    <p>${formatCurrency(income - expense)}</p>
-                </div>
+            // Populate the hidden PDF template
+            document.getElementById('pdf-date-range').textContent = `Report for: ${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()}`;
+            
+            const pdfList = document.getElementById('pdf-transaction-list');
+            pdfList.innerHTML = '';
+            filteredTx.forEach(tx => {
+                const row = document.createElement('tr');
+                row.className = 'border-b';
+                row.innerHTML = `
+                    <td class="p-2">${tx.date.toDate().toLocaleDateString()}</td>
+                    <td class="p-2">${tx.description}</td>
+                    <td class="p-2">${tx.category}</td>
+                    <td class="p-2 text-right ${tx.type === 'income' ? 'text-green-600' : 'text-red-600'}">
+                        ${tx.type === 'income' ? '+' : '-'} ৳${parseFloat(tx.amount).toFixed(2)}
+                    </td>
+                `;
+                pdfList.appendChild(row);
+            });
+
+            const totalIncome = filteredTx.filter(t => t.type === 'income').reduce((sum, t) => sum + parseFloat(t.amount), 0);
+            const totalExpense = filteredTx.filter(t => t.type === 'expense').reduce((sum, t) => sum + parseFloat(t.amount), 0);
+            
+            document.getElementById('pdf-summary').innerHTML = `
+                <div class="text-center"><h4 class="font-bold text-green-600">Total Income</h4><p>৳${totalIncome.toFixed(2)}</p></div>
+                <div class="text-center"><h4 class="font-bold text-red-600">Total Expense</h4><p>৳${totalExpense.toFixed(2)}</p></div>
+                <div class="text-center"><h4 class="font-bold text-blue-600">Net Flow</h4><p>৳${(totalIncome - totalExpense).toFixed(2)}</p></div>
             `;
             
-            document.getElementById('pdf-report-table-body').innerHTML = filteredTransactions.map(t => `
-                <tr>
-                    <td class="p-2 border">${formatDate(t.date)}</td>
-                    <td class="p-2 border">${t.description}</td>
-                    <td class="p-2 border">${t.category}</td>
-                    <td class="p-2 border capitalize">${t.type}</td>
-                    <td class="p-2 border text-right ${t.type === 'income' ? 'text-blue-600' : 'text-red-600'}">${formatCurrency(t.amount)}</td>
-                </tr>
-            `).join('');
+            const pdfTemplate = document.getElementById('pdf-report-template');
+            pdfTemplate.style.display = 'block';
 
             const { jsPDF } = window.jspdf;
-            const pdfTemplate = document.getElementById('pdf-report-template');
-            pdfTemplate.classList.remove('hidden');
-
-            try {
-                const canvas = await html2canvas(pdfTemplate, { scale: 2 });
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pdfHeight = pdf.internal.pageSize.getHeight();
-                const imgWidth = canvas.width;
-                const imgHeight = canvas.height;
-                const ratio = imgWidth / imgHeight;
-                const canvasPdfWidth = pdfWidth - 20; // with margin
-                const canvasPdfHeight = canvasPdfWidth / ratio;
-                
-                pdf.addImage(imgData, 'PNG', 10, 10, canvasPdfWidth, canvasPdfHeight);
-                pdf.save(`I-Expanse-Report_${startDate}_to_${endDate}.pdf`);
-                Swal.close();
-                Swal.fire('Success!', 'Your PDF report has been generated.', 'success');
-            } catch (error) {
-                console.error("PDF generation error:", error);
-                Swal.fire('Error', 'Failed to generate PDF.', 'error');
-            } finally {
-                pdfTemplate.classList.add('hidden');
-            }
-        };
-
-        // --- Firestore CRUD Operations ---
-        const getCollectionRef = (collectionName) => collection(db, `artifacts/${appId}/users/${userId}/${collectionName}`);
-
-        // Transactions
-        const addTransaction = async (data) => {
-            try {
-                await addDoc(getCollectionRef('transactions'), data);
-                Swal.fire('Success', 'Transaction added!', 'success');
-            } catch (e) {
-                console.error("Error adding transaction: ", e);
-                Swal.fire('Error', 'Could not add transaction.', 'error');
-            }
-        };
-        const updateTransaction = async (id, data) => {
-            try {
-                const docRef = doc(db, `artifacts/${appId}/users/${userId}/transactions`, id);
-                await setDoc(docRef, data);
-                Swal.fire('Success', 'Transaction updated!', 'success');
-            } catch (e) {
-                console.error("Error updating transaction: ", e);
-                Swal.fire('Error', 'Could not update transaction.', 'error');
-            }
-        };
-        const deleteTransaction = (id) => {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    try {
-                        const docRef = doc(db, `artifacts/${appId}/users/${userId}/transactions`, id);
-                        await deleteDoc(docRef);
-                        Swal.fire('Deleted!', 'Your transaction has been deleted.', 'success');
-                    } catch (e) {
-                        console.error("Error deleting transaction: ", e);
-                        Swal.fire('Error', 'Could not delete transaction.', 'error');
-                    }
-                }
-            });
-        };
-
-        // Categories
-        const addCategory = async (data) => {
-            try {
-                await addDoc(getCollectionRef('categories'), data);
-                Swal.fire('Success', 'Category added!', 'success');
-            } catch (e) {
-                console.error("Error adding category: ", e);
-            }
-        };
-        const deleteCategory = (id) => {
-            const categoryToDelete = categories.find(c => c.id === id);
-            if (defaultCategories.some(dc => dc.name === categoryToDelete.name)) {
-                Swal.fire('Cannot Delete', 'This is a default category and cannot be deleted.', 'error');
-                return;
-            }
-            Swal.fire({
-                title: 'Are you sure?',
-                text: `Deleting "${categoryToDelete.name}" will also remove it from past transactions. This cannot be undone.`,
-                icon: 'warning',
-                showCancelButton: true,
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    try {
-                        const docRef = doc(db, `artifacts/${appId}/users/${userId}/categories`, id);
-                        await deleteDoc(docRef);
-                        Swal.fire('Deleted!', 'Category has been deleted.', 'success');
-                    } catch (e) {
-                        console.error("Error deleting category: ", e);
-                    }
-                }
-            });
-        };
-
-        // Budgets
-        const setBudget = async (category, amount) => {
-            try {
-                const budgetRef = doc(db, `artifacts/${appId}/users/${userId}/budgets`, category);
-                await setDoc(budgetRef, { category, amount });
-                Swal.fire('Success', `Budget for ${category} has been set.`, 'success');
-            } catch (e) {
-                console.error("Error setting budget: ", e);
-            }
-        };
-
-        // Goals
-        const addGoal = async (data) => {
-            try {
-                await addDoc(getCollectionRef('goals'), data);
-                Swal.fire('Success', 'New goal has been set!', 'success');
-            } catch (e) {
-                console.error("Error adding goal: ", e);
-            }
-        };
-        const updateGoal = async (id, data) => {
-            try {
-                const docRef = doc(db, `artifacts/${appId}/users/${userId}/goals`, id);
-                await setDoc(docRef, data, { merge: true });
-            } catch (e) {
-                console.error("Error updating goal: ", e);
-            }
-        };
-        const deleteGoal = (id) => {
-            Swal.fire({
-                title: 'Are you sure?', text: "Do you want to delete this goal?", icon: 'warning', showCancelButton: true,
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    try {
-                        const docRef = doc(db, `artifacts/${appId}/users/${userId}/goals`, id);
-                        await deleteDoc(docRef);
-                        Swal.fire('Deleted!', 'Goal has been deleted.', 'success');
-                    } catch (e) {
-                        console.error("Error deleting goal: ", e);
-                    }
-                }
-            });
-        };
-
-        // --- Data Listeners (Real-time updates) ---
-        const setupListeners = () => {
-            onSnapshot(getCollectionRef('transactions'), (snapshot) => {
-                transactions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                // Refresh current page if it needs transaction data
-                const currentPage = pageTitle.textContent.toLowerCase().replace(' ', '-');
-                if (['dashboard', 'transactions', 'ai-tools'].includes(currentPage)) {
-                    loadPage(currentPage);
-                }
-            }, (error) => {
-                console.error("Error listening to transactions:", error);
-            });
-
-            onSnapshot(getCollectionRef('categories'), (snapshot) => {
-                if (snapshot.empty) { // First time user
-                    const batch = writeBatch(db);
-                    defaultCategories.forEach(cat => {
-                        const newCatRef = doc(getCollectionRef('categories'));
-                        batch.set(newCatRef, cat);
-                    });
-                    batch.commit();
-                } else {
-                    categories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    if (pageTitle.textContent.toLowerCase() === 'categories') {
-                        renderCategories();
-                    }
-                }
-            }, (error) => {
-                console.error("Error listening to categories:", error);
-            });
+            const canvas = await html2canvas(pdfTemplate, { scale: 2 });
+            const imgData = canvas.toDataURL('image/png');
             
-            onSnapshot(getCollectionRef('budgets'), (snapshot) => {
-                budgets = snapshot.docs.map(doc => doc.data());
-                if (pageTitle.textContent.toLowerCase() === 'budget') {
-                    renderBudgets();
-                }
-            }, (error) => {
-                console.error("Error listening to budgets:", error);
-            });
-            
-            onSnapshot(getCollectionRef('goals'), (snapshot) => {
-                goals = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                if (pageTitle.textContent.toLowerCase() === 'goals' || pageTitle.textContent.toLowerCase() === 'ai tools') {
-                    const currentPage = pageTitle.textContent.toLowerCase().replace(' ', '-');
-                    loadPage(currentPage);
-                }
-            }, (error) => {
-                console.error("Error listening to goals:", error);
-            });
-        };
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save(`I-Expanse-Report-${new Date().toISOString().slice(0,10)}.pdf`);
 
-        // --- App Initialization ---
-        const initApp = () => {
-            // Splash screen logic
-            setTimeout(() => {
-                document.getElementById('splash-screen').style.display = 'none';
-                document.getElementById('app-wrapper').classList.remove('hidden');
-            }, 2500);
-
-            // Set current year in footer
-            document.getElementById('current-year').textContent = new Date().getFullYear();
-
-            // Setup event listeners
-            const sidebar = document.getElementById('sidebar');
-            const sidebarToggle = document.getElementById('sidebar-toggle');
-            const sidebarOverlay = document.getElementById('sidebar-overlay');
-            
-            const toggleSidebar = () => {
-                sidebar.classList.toggle('sidebar-hidden');
-                sidebarOverlay.classList.toggle('hidden');
-            };
-
-            sidebarToggle.addEventListener('click', toggleSidebar);
-            sidebarOverlay.addEventListener('click', toggleSidebar);
-
-            document.querySelectorAll('nav a').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const page = e.currentTarget.id.replace('nav-', '');
-                    loadPage(page);
-                    if (window.innerWidth < 768) { // Close sidebar on mobile after navigation
-                        toggleSidebar();
-                    }
-                });
-            });
-
-            document.getElementById('add-transaction-button-header').addEventListener('click', () => showTransactionModal());
-            
-            // Theme toggle
-            const themeToggle = document.getElementById('theme-toggle');
-            const html = document.documentElement;
-            themeToggle.addEventListener('change', () => {
-                if (themeToggle.checked) {
-                    html.classList.add('dark');
-                    // You would add dark mode specific styles here, e.g., using Tailwind's dark: prefix
-                    // This is a basic toggle, full dark mode requires more CSS.
-                } else {
-                    html.classList.remove('dark');
-                }
-            });
-
-            // Load initial page
-            loadPage('dashboard');
-        };
-
-        // --- Authentication ---
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                userId = user.uid;
-                console.log("User authenticated with UID:", userId);
-                setupListeners();
-                initApp();
-            } else {
-                console.log("No user signed in.");
-            }
-        });
-
-        // Sign in logic
-        (async () => {
-            try {
-                await setPersistence(auth, browserLocalPersistence);
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            } catch (error) {
-                console.error("Authentication failed:", error);
-                document.body.innerHTML = `<div class="p-8 text-center text-red-500">Authentication failed. The app cannot start.</div>`;
-            }
-        })();
+            pdfTemplate.style.display = 'none';
+            Swal.close();
+        }
 
     </script>
 </body>
 </html>
+
