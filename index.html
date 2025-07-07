@@ -246,15 +246,16 @@
         import { getFirestore, doc, getDoc, setDoc, addDoc, collection, onSnapshot, query, where, updateDoc, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- App Configuration ---
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'i-expanse-tracker-app';
+       // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBAjSI9qQz1ZQ0oNFP3qxSJPjocDFO1DnI",
+  authDomain: "i-expanse-tracker-5375b.firebaseapp.com",
+  projectId: "i-expanse-tracker-5375b",
+  storageBucket: "i-expanse-tracker-5375b.firebasestorage.app",
+  messagingSenderId: "442895718535",
+  appId: "1:442895718535:web:e09ef6e8fb555b7ebcc022",
+  measurementId: "G-C1644P9YXL"
+};       const appId = typeof __app_id !== 'undefined' ? __app_id : 'i-expanse-tracker-app';
         
         // --- Firebase Initialization ---
         let app, auth, db, userId;
