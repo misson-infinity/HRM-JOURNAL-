@@ -6,7 +6,6 @@
     <title>I Expanse Tracker</title>
     
     <!-- Favicon (App Icon) -->
-    <!-- User: Niche apnar "image (4).png" file-er link din -->
     <link rel="icon" href="https://i.ibb.co/9vXyCgS/image-4.png" type="image/png">
 
     <!-- Tailwind CSS -->
@@ -20,43 +19,100 @@
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- External Libraries for PDF and Charts -->
+    <!-- External Libraries for PDF, Charts, and Alerts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-        /* Custom styles */
-        body { font-family: 'Inter', sans-serif; }
-        .infinity-icon {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #4f46e5; /* Indigo */
+        /* Custom styles for a professional look */
+        body { 
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
+        /* Custom Infinity SVG Icon Style */
+        .infinity-svg-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            stroke: #4f46e5; /* Indigo */
+            stroke-width: 8;
+            transition: transform 0.3s ease;
+        }
+        .infinity-svg-icon:hover {
+            transform: rotate(15deg);
+        }
+        .dark .infinity-svg-icon {
+            stroke: #818cf8; /* Lighter Indigo for dark mode */
+        }
+
+        /* Navigation Menu Transitions */
         .nav-open { transform: translateX(0%); }
         .nav-closed { transform: translateX(-100%); }
-        .main-content-pushed { margin-left: 280px; }
-        .page { display: none; }
+        
+        /* Page Transitions */
+        .page { display: none; animation: fadeIn 0.5s ease; }
         .page.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        .dark ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .dark ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        /* SweetAlert Customization */
         .swal2-popup { border-radius: 1rem; }
+        .swal2-input, .swal2-select {
+             border-radius: 0.5rem !important;
+             border: 1px solid #d1d5db !important;
+        }
+        .dark .swal2-popup { background-color: #1f2937; color: #f3f4f6;}
+        .dark .swal2-input, .dark .swal2-select {
+            background-color: #374151 !important;
+            color: #f3f4f6 !important;
+            border: 1px solid #4b5563 !important;
+        }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
 
-    <!-- ===== LOGIN SCREEN ===== -->
-    <div id="login-view" class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-6">
-        <div class="w-full max-w-sm text-center bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-            <!-- App Logo -->
-            <div class="mx-auto mb-6 w-20 h-20 flex items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900">
-                <span class="text-4xl text-indigo-600 dark:text-indigo-400">♾️</span>
+    <!-- ===== LOADING SPINNER (Visible on initial load) ===== -->
+    <div id="loader-view" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div class="w-16 h-16 border-4 border-t-4 border-t-indigo-600 border-gray-200 rounded-full animate-spin"></div>
+        <p class="mt-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Loading Your Vision...</p>
+    </div>
+
+    <!-- ===== LOGIN SCREEN (Initially Hidden) ===== -->
+    <div id="login-view" class="hidden min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 p-6">
+        <div class="w-full max-w-sm text-center">
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl">
+                <!-- App Logo -->
+                <div class="mx-auto mb-4 w-20 h-20 flex items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900/50">
+                    <svg class="w-12 h-12 text-indigo-600 dark:text-indigo-400" fill="none" viewBox="0 0 100 50">
+                        <path d="M25 25C25 11.1929 36.1929 0 50 0C63.8071 0 75 11.1929 75 25C75 38.8071 63.8071 50 50 50C36.1929 50 25 38.8071 25 25ZM75 25C75 11.1929 86.1929 0 100 0" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
+                        <path d="M75 25C75 38.8071 63.8071 50 50 50C36.1929 50 25 38.8071 25 25C25 11.1929 13.8071 0 0 0" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-white">I Expanse Tracker</h1>
+                <p class="text-gray-500 dark:text-gray-400 mt-2 mb-8">Where Vision Becomes Infinite</p>
+                <button id="login-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-3 transition-transform transform hover:scale-105 shadow-lg shadow-indigo-500/30">
+                    <i class="fab fa-google"></i>
+                    Sign In with Google
+                </button>
             </div>
-            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">I Expanse Tracker</h1>
-            <p class="text-gray-500 dark:text-gray-400 mt-2 mb-8">Where Vision Becomes Infinite</p>
-            <button id="login-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-3 transition-transform transform hover:scale-105">
-                <i class="fab fa-google"></i>
-                Sign In with Google
-            </button>
+            <div class="mt-8 text-center text-gray-500 dark:text-gray-400">
+                <p class="text-sm">Developed by</p>
+                <p class="font-semibold">Md Habibur Rahman Mahi</p>
+                <p class="text-xs">Founder and CEO of Infinity Group</p>
+            </div>
         </div>
     </div>
 
@@ -66,7 +122,12 @@
         <nav id="side-nav" class="fixed top-0 left-0 h-full w-72 bg-white dark:bg-gray-800 shadow-lg z-50 transition-transform duration-300 ease-in-out nav-closed">
             <div class="p-6">
                 <div class="flex items-center gap-3 mb-8">
-                    <span class="text-3xl text-indigo-600 dark:text-indigo-400">♾️</span>
+                    <span class="text-3xl text-indigo-600 dark:text-indigo-400">
+                        <svg class="w-10 h-10" fill="none" viewBox="0 0 100 50">
+                           <path d="M25 25C25 11.1929 36.1929 0 50 0C63.8071 0 75 11.1929 75 25C75 38.8071 63.8071 50 50 50C36.1929 50 25 38.8071 25 25ZM75 25C75 11.1929 86.1929 0 100 0" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
+                           <path d="M75 25C75 38.8071 63.8071 50 50 50C36.1929 50 25 38.8071 25 25C25 11.1929 13.8071 0 0 0" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
+                        </svg>
+                    </span>
                     <h1 class="text-xl font-bold">I Expanse Tracker</h1>
                 </div>
                 <ul class="space-y-2">
@@ -77,7 +138,7 @@
                 </ul>
             </div>
             <div class="absolute bottom-0 w-full p-6">
-                 <button id="logout-btn" class="w-full flex items-center justify-center gap-2 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/50 p-3 rounded-lg">
+                 <button id="logout-btn" class="w-full flex items-center justify-center gap-2 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/50 p-3 rounded-lg font-semibold">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </button>
             </div>
@@ -87,55 +148,66 @@
         <div id="main-content" class="transition-all duration-300 ease-in-out">
             <!-- Header -->
             <header class="sticky top-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm z-40 shadow-sm">
-                <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <div class="container mx-auto px-6 py-3 flex justify-between items-center">
                     <!-- Infinity Menu Icon -->
-                    <button id="menu-toggle-btn" class="text-indigo-600 dark:text-indigo-400">
-                        <span class="infinity-icon">♾️</span>
+                    <button id="menu-toggle-btn" class="p-2 -ml-2">
+                        <svg class="infinity-svg-icon" fill="none" viewBox="0 0 100 50">
+                           <path d="M25 25C25 11.1929 36.1929 0 50 0C63.8071 0 75 11.1929 75 25C75 38.8071 63.8071 50 50 50C36.1929 50 25 38.8071 25 25ZM75 25C75 11.1929 86.1929 0 100 0" stroke="currentColor" stroke-linecap="round"/>
+                           <path d="M75 25C75 38.8071 63.8071 50 50 50C36.1929 50 25 38.8071 25 25C25 11.1929 13.8071 0 0 0" stroke="currentColor" stroke-linecap="round"/>
+                        </svg>
                     </button>
                     <div class="flex items-center gap-4">
-                        <img id="user-photo" src="https://placehold.co/40x40/E2E8F0/4A5568?text=U" alt="User Photo" class="w-10 h-10 rounded-full object-cover">
+                        <img id="user-photo" src="https://placehold.co/40x40/E2E8F0/4A5568?text=U" alt="User Photo" class="w-10 h-10 rounded-full object-cover border-2 border-indigo-300">
                         <span id="user-name" class="font-semibold hidden sm:block">User</span>
                     </div>
                 </div>
             </header>
 
             <!-- Page Container -->
-            <div class="p-6">
+            <main class="p-6">
                 <!-- DASHBOARD PAGE -->
                 <div id="dashboard-page" class="page active">
-                    <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
                     <!-- Summary Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md">
                             <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Income</h3>
-                            <p id="total-income" class="text-2xl font-bold text-green-500 mt-2">৳0.00</p>
+                            <p id="total-income" class="text-3xl font-bold text-green-500 mt-2">৳0.00</p>
                         </div>
-                        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md">
                             <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Expense</h3>
-                            <p id="total-expense" class="text-2xl font-bold text-red-500 mt-2">৳0.00</p>
+                            <p id="total-expense" class="text-3xl font-bold text-red-500 mt-2">৳0.00</p>
                         </div>
-                        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md">
                             <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Current Balance</h3>
-                            <p id="current-balance" class="text-2xl font-bold text-indigo-500 mt-2">৳0.00</p>
+                            <p id="current-balance" class="text-3xl font-bold text-indigo-500 mt-2">৳0.00</p>
                         </div>
                     </div>
                     
                     <!-- Charts and Recent Transactions -->
                     <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-6">
-                        <div class="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow">
-                            <h3 class="font-bold mb-4">Expense Categories</h3>
-                            <canvas id="expense-chart"></canvas>
+                        <div class="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md">
+                            <h3 class="font-bold mb-4">Expense by Category</h3>
+                            <div id="expense-chart-container" class="h-64 relative">
+                                <canvas id="expense-chart"></canvas>
+                                <div id="expense-chart-empty" class="hidden absolute inset-0 flex items-center justify-center text-center text-gray-500">
+                                    <p>No expense data available to display chart.</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="lg:col-span-3 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow">
+                        <div class="lg:col-span-3 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md">
                             <div class="flex justify-between items-center mb-4">
-                               <h3 class="font-bold">Recent Transactions</h3>
-                               <button id="generate-pdf-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700">
+                               <h3 class="font-bold text-lg">Recent Transactions</h3>
+                               <button id="generate-pdf-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700 transition-colors">
                                    <i class="fas fa-file-pdf mr-2"></i>Export PDF
                                </button>
                             </div>
-                            <div id="transaction-list" class="space-y-3 max-h-96 overflow-y-auto">
+                            <div id="transaction-list" class="space-y-3 max-h-[22rem] overflow-y-auto pr-2">
                                 <!-- Transaction items will be injected here -->
-                                <p class="text-center text-gray-500 dark:text-gray-400 p-4">No transactions yet.</p>
+                                <div id="transaction-list-empty" class="hidden text-center text-gray-500 dark:text-gray-400 p-8">
+                                    <i class="fas fa-receipt text-4xl mb-4 text-gray-300 dark:text-gray-600"></i>
+                                    <p class="font-semibold">No transactions yet.</p>
+                                    <p class="text-sm">Press the '+' button to add your first one!</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -144,16 +216,20 @@
                 <!-- PROFILE PAGE -->
                 <div id="profile-page" class="page">
                     <h2 class="text-2xl font-bold mb-6">My Profile</h2>
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow max-w-md mx-auto">
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md max-w-md mx-auto">
                         <div class="text-center">
-                            <img id="profile-page-photo" src="https://placehold.co/128x128/E2E8F0/4A5568?text=U" alt="Profile Photo" class="w-32 h-32 rounded-full object-cover mx-auto mb-4 border-4 border-indigo-500">
+                            <div class="relative w-32 h-32 mx-auto">
+                                <img id="profile-page-photo" src="https://placehold.co/128x128/E2E8F0/4A5568?text=U" alt="Profile Photo" class="w-32 h-32 rounded-full object-cover border-4 border-indigo-500">
+                                <button id="upload-btn" class="absolute bottom-0 right-0 bg-white dark:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center shadow-md hover:bg-gray-100 dark:hover:bg-gray-600">
+                                    <i class="fas fa-camera text-indigo-500"></i>
+                                </button>
+                            </div>
                             <input type="file" id="photo-upload" class="hidden" accept="image/*">
-                            <button id="upload-btn" class="text-sm text-indigo-600 hover:underline">Change Photo</button>
                         </div>
                         <div class="mt-8">
                             <label for="profile-name-input" class="block text-sm font-medium text-gray-500 dark:text-gray-400">Display Name</label>
-                            <input type="text" id="profile-name-input" class="mt-1 block w-full bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg p-3 focus:ring-indigo-500 focus:border-indigo-500">
-                            <button id="save-profile-btn" class="mt-6 w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700">Save Changes</button>
+                            <input type="text" id="profile-name-input" class="mt-1 block w-full bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <button id="save-profile-btn" class="mt-6 w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 transition-colors">Save Changes</button>
                         </div>
                     </div>
                 </div>
@@ -161,22 +237,21 @@
                 <!-- DEVELOPER PAGE -->
                 <div id="developer-page" class="page">
                     <h2 class="text-2xl font-bold mb-6">About the Developer</h2>
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow max-w-2xl mx-auto">
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md max-w-2xl mx-auto">
                         <div class="flex flex-col sm:flex-row items-center gap-8">
-                            <!-- User: Niche apnar "Picsart_24-12-22_22-58-18-749.png" file-er link din -->
-                            <img src="https://i.ibb.co/hL5YqjW/Picsart-24-12-22-22-58-18-749.png" alt="Developer Photo" class="w-32 h-32 rounded-full object-cover border-4 border-indigo-500">
+                            <img src="https://i.ibb.co/hL5YqjW/Picsart-24-12-22-22-58-18-749.png" alt="Developer Photo" class="w-32 h-32 rounded-full object-cover border-4 border-indigo-500 shadow-lg">
                             <div>
                                 <h3 class="text-2xl font-bold">Md Habibur Rahman Mahi</h3>
-                                <p class="text-indigo-500 dark:text-indigo-400">Founder and CEO of Infinity Group</p>
-                                <p class="mt-2 text-gray-600 dark:text-gray-300">A passionate developer dedicated to creating useful and beautiful applications. This expense tracker is built to help you manage your finances with ease.</p>
+                                <p class="text-indigo-500 dark:text-indigo-400 font-semibold">Founder and CEO of Infinity Group</p>
+                                <p class="mt-2 text-gray-600 dark:text-gray-300">A passionate developer dedicated to creating useful and beautiful applications. This expense tracker is built to help you manage your finances with ease and achieve your financial vision.</p>
                             </div>
                         </div>
                         <div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-6">
                             <h4 class="font-bold mb-4">Connect with me:</h4>
                             <div class="flex flex-wrap gap-4">
-                                <a href="https://wa.me/8801727722018" target="_blank" class="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"><i class="fab fa-whatsapp text-green-500"></i> WhatsApp/Telegram</a>
-                                <a href="https://www.instagram.com/h.r_mahi_?igsh=Z242dWFtcDZwdjF2" target="_blank" class="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"><i class="fab fa-instagram text-pink-500"></i> Instagram</a>
-                                <a href="https://www.facebook.com/share/1L8yaf25bk/" target="_blank" class="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"><i class="fab fa-facebook text-blue-500"></i> Facebook</a>
+                                <a href="https://wa.me/8801727722018" target="_blank" class="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"><i class="fab fa-whatsapp text-green-500"></i> WhatsApp/Telegram</a>
+                                <a href="https://www.instagram.com/h.r_mahi_?igsh=Z242dWFtcDZwdjF2" target="_blank" class="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"><i class="fab fa-instagram text-pink-500"></i> Instagram</a>
+                                <a href="https://www.facebook.com/share/1L8yaf25bk/" target="_blank" class="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"><i class="fab fa-facebook text-blue-500"></i> Facebook</a>
                             </div>
                         </div>
                     </div>
@@ -185,65 +260,72 @@
                 <!-- SETTINGS PAGE -->
                 <div id="settings-page" class="page">
                     <h2 class="text-2xl font-bold mb-6">Settings</h2>
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow max-w-md mx-auto">
-                        <!-- Theme Toggle -->
-                        <div class="flex items-center justify-between mb-6">
-                            <h4 class="font-semibold">Theme</h4>
-                            <button id="theme-toggle-btn" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700">
-                                <i class="fas fa-moon"></i><span id="theme-text"> Dark Mode</span>
-                            </button>
-                        </div>
-                        <!-- Manage Categories -->
-                        <div>
-                            <h4 class="font-semibold mb-4">Manage Categories</h4>
-                            <div class="flex gap-2 mb-4">
-                                <input type="text" id="new-category-input" placeholder="New category name" class="flex-grow bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg p-3 focus:ring-indigo-500 focus:border-indigo-500">
-                                <button id="add-category-btn" class="bg-indigo-600 text-white font-bold px-4 rounded-lg hover:bg-indigo-700">+</button>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md">
+                            <h3 class="font-semibold text-lg mb-4">Appearance</h3>
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-medium">Theme</h4>
+                                <button id="theme-toggle-btn" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 font-semibold flex items-center gap-2">
+                                    <i class="fas fa-moon"></i><span id="theme-text">Dark Mode</span>
+                                </button>
                             </div>
-                            <div id="category-list" class="space-y-2 max-h-60 overflow-y-auto">
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md">
+                            <h3 class="font-semibold text-lg mb-4">Manage Categories</h3>
+                            <div class="flex gap-2 mb-4">
+                                <input type="text" id="new-category-input" placeholder="New category name" class="flex-grow bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                <button id="add-category-btn" class="bg-indigo-600 text-white font-bold px-5 rounded-lg hover:bg-indigo-700 transition-colors">+</button>
+                            </div>
+                            <div id="category-list" class="space-y-2 max-h-60 overflow-y-auto pr-2">
                                 <!-- Category items will be injected here -->
+                                <div id="category-list-empty" class="hidden text-center text-gray-500 p-4">
+                                    <p>No custom categories yet.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </main>
         </div>
 
         <!-- Floating Action Button to Add Transaction -->
-        <button id="add-transaction-fab" class="fixed bottom-8 right-8 w-16 h-16 bg-indigo-600 text-white rounded-full shadow-lg flex items-center justify-center text-3xl hover:bg-indigo-700 transform hover:scale-110 transition-transform z-40">
+        <button id="add-transaction-fab" class="fixed bottom-8 right-8 w-16 h-16 bg-indigo-600 text-white rounded-full shadow-lg flex items-center justify-center text-3xl hover:bg-indigo-700 transform hover:scale-110 transition-all z-40">
             +
         </button>
     </div>
 
     <!-- PDF Report Template (Hidden) -->
     <div id="pdf-report-template" class="p-8" style="display: none; width: 800px;">
-        <div class="border-4 border-indigo-500 p-6">
+        <div class="border-4 border-indigo-500 p-6 bg-white text-black">
             <div class="flex justify-between items-center pb-6 border-b-2 border-gray-300">
                 <div class="flex items-center gap-4">
-                     <span class="text-5xl text-indigo-600">♾️</span>
+                     <svg class="w-16 h-16 text-indigo-600" fill="none" viewBox="0 0 100 50">
+                        <path d="M25 25C25 11.1929 36.1929 0 50 0C63.8071 0 75 11.1929 75 25C75 38.8071 63.8071 50 50 50C36.1929 50 25 38.8071 25 25ZM75 25C75 11.1929 86.1929 0 100 0" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
+                        <path d="M75 25C75 38.8071 63.8071 50 50 50C36.1929 50 25 38.8071 25 25C25 11.1929 13.8071 0 0 0" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
+                     </svg>
                      <div>
-                        <h1 class="text-3xl font-bold">I Expanse Tracker</h1>
+                        <h1 class="text-3xl font-bold text-gray-800">I Expanse Tracker</h1>
                         <p class="text-gray-500">Where Vision Becomes Infinite</p>
                      </div>
                 </div>
                 <div class="text-right">
-                    <img src="https://i.ibb.co/hL5YqjW/Picsart-24-12-22-22-58-18-749.png" alt="Developer" class="w-16 h-16 rounded-full inline-block">
-                    <p class="font-bold mt-2">Md Habibur Rahman Mahi</p>
+                    <img src="https://i.ibb.co/hL5YqjW/Picsart-24-12-22-22-58-18-749.png" alt="Developer" class="w-16 h-16 rounded-full inline-block object-cover border-2 border-indigo-500">
+                    <p class="font-bold mt-2 text-gray-800">Md Habibur Rahman Mahi</p>
                     <p class="text-sm text-gray-600">Founder & CEO, Infinity Group</p>
                 </div>
             </div>
             <div class="mt-6">
-                <h2 class="text-2xl font-bold text-center mb-2">Financial Report</h2>
+                <h2 class="text-2xl font-bold text-center mb-2 text-gray-800">Financial Report</h2>
                 <p id="pdf-date-range" class="text-center text-gray-500 mb-6"></p>
-                <div id="pdf-summary" class="flex justify-around mb-6"></div>
-                <h3 class="font-bold mb-4">All Transactions</h3>
-                <table class="w-full text-left">
+                <div id="pdf-summary" class="grid grid-cols-3 gap-4 mb-6 text-center"></div>
+                <h3 class="font-bold mb-4 text-gray-800">All Transactions</h3>
+                <table class="w-full text-left text-sm">
                     <thead>
                         <tr class="bg-gray-100">
-                            <th class="p-2">Date</th>
-                            <th class="p-2">Description</th>
-                            <th class="p-2">Category</th>
-                            <th class="p-2 text-right">Amount</th>
+                            <th class="p-2 font-semibold">Date</th>
+                            <th class="p-2 font-semibold">Description</th>
+                            <th class="p-2 font-semibold">Category</th>
+                            <th class="p-2 font-semibold text-right">Amount</th>
                         </tr>
                     </thead>
                     <tbody id="pdf-transaction-list">
@@ -281,104 +363,169 @@
         const storage = getStorage(app);
         const provider = new GoogleAuthProvider();
 
+        // Global State
         let currentUser = null;
         let transactionsUnsubscribe = null;
         let categoriesUnsubscribe = null;
         let expenseChart = null;
+        let allTransactions = [];
+        let allCategories = [];
 
         // DOM Elements
+        const loaderView = document.getElementById('loader-view');
         const loginView = document.getElementById('login-view');
         const appView = document.getElementById('app-view');
         const loginBtn = document.getElementById('login-btn');
         const logoutBtn = document.getElementById('logout-btn');
-        const userNameEl = document.getElementById('user-name');
-        const userPhotoEl = document.getElementById('user-photo');
         const sideNav = document.getElementById('side-nav');
-        const mainContent = document.getElementById('main-content');
         const menuToggleBtn = document.getElementById('menu-toggle-btn');
         const navLinks = document.querySelectorAll('.nav-link');
         const pages = document.querySelectorAll('.page');
 
-        // --- AUTHENTICATION ---
+        // --- AUTHENTICATION & APP INITIALIZATION ---
+
+        /**
+         * The main entry point of the app. It listens for authentication state changes.
+         */
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                // User is signed in
+                if (currentUser?.uid !== user.uid) {
+                    currentUser = user;
+                    initializeAppView(user);
+                }
+            } else {
+                // User is signed out
+                if (currentUser) {
+                    cleanupListeners();
+                    currentUser = null;
+                }
+                showLoginView();
+            }
+        });
+
+        /**
+         * Sets up the main application view after a user successfully logs in.
+         * @param {object} user - The Firebase user object.
+         */
+        async function initializeAppView(user) {
+            await setupUser(user);
+            loaderView.classList.add('hidden');
+            loginView.classList.add('hidden');
+            appView.classList.remove('hidden');
+        }
+
+        /**
+         * Shows the login view and hides the main app.
+         */
+        function showLoginView() {
+            loaderView.classList.add('hidden');
+            appView.classList.add('hidden');
+            loginView.classList.remove('hidden');
+        }
+
+        /**
+         * Cleans up Firestore listeners when the user logs out.
+         */
+        function cleanupListeners() {
+            if (transactionsUnsubscribe) transactionsUnsubscribe();
+            if (categoriesUnsubscribe) categoriesUnsubscribe();
+            transactionsUnsubscribe = null;
+            categoriesUnsubscribe = null;
+            allTransactions = [];
+            allCategories = [];
+        }
+
+        /**
+         * Handles the Google Sign-In button click.
+         */
         loginBtn.addEventListener('click', () => {
             signInWithPopup(auth, provider).catch(error => {
                 console.error("Authentication error:", error);
-                Swal.fire('Error', 'Could not sign in. Please try again.', 'error');
+                Swal.fire('Authentication Failed', `Error: ${error.message}`, 'error');
             });
         });
 
+        /**
+         * Handles the logout button click.
+         */
         logoutBtn.addEventListener('click', () => {
             signOut(auth);
         });
 
-        onAuthStateChanged(auth, user => {
-            if (user) {
-                // User is signed in
-                currentUser = user;
-                loginView.classList.add('hidden');
-                appView.classList.remove('hidden');
-                setupUser(user);
-            } else {
-                // User is signed out
-                currentUser = null;
-                loginView.classList.remove('hidden');
-                appView.classList.add('hidden');
-                if (transactionsUnsubscribe) transactionsUnsubscribe();
-                if (categoriesUnsubscribe) categoriesUnsubscribe();
-            }
-        });
-
+        /**
+         * Sets up a new user profile in Firestore or loads an existing one.
+         * @param {object} user - The Firebase user object.
+         */
         async function setupUser(user) {
             const userRef = doc(db, 'users', user.uid);
             const userDoc = await getDoc(userRef);
 
             if (!userDoc.exists()) {
-                // New user, create profile
+                // Create a profile for a new user
                 await setDoc(userRef, {
                     name: user.displayName,
                     email: user.email,
                     photoURL: user.photoURL,
                     createdAt: new Date()
                 });
-                // Add default categories for new user
+                // Add default categories for the new user
                 addDefaultCategories(user.uid);
             }
             
-            // Listen for user profile changes
+            // Listen for user profile changes and update the UI
             onSnapshot(userRef, (doc) => {
                 const userData = doc.data();
-                userNameEl.textContent = userData.name;
-                userPhotoEl.src = userData.photoURL;
-                document.getElementById('profile-page-photo').src = userData.photoURL;
-                document.getElementById('profile-name-input').value = userData.name;
+                if (userData) {
+                    document.getElementById('user-name').textContent = userData.name;
+                    document.getElementById('user-photo').src = userData.photoURL;
+                    document.getElementById('profile-page-photo').src = userData.photoURL;
+                    document.getElementById('profile-name-input').value = userData.name;
+                }
             });
 
-            // Attach listeners for data
+            // Attach listeners for user-specific data
             listenForTransactions(user.uid);
             listenForCategories(user.uid);
         }
 
+        /**
+         * Adds a set of default categories for a new user.
+         * @param {string} userId - The unique ID of the user.
+         */
         async function addDefaultCategories(userId) {
-            const categories = ['Food', 'Transport', 'Shopping', 'Bills', 'Entertainment', 'Salary', 'Investment'];
+            const categories = ['Food', 'Transport', 'Shopping', 'Bills', 'Entertainment', 'Health', 'Salary', 'Investment', 'Gifts'];
             const batch = writeBatch(db);
+            const categoriesCollection = collection(db, `users/${userId}/categories`);
             categories.forEach(categoryName => {
-                const newCatRef = doc(collection(db, `users/${userId}/categories`));
-                batch.set(newCatRef, { name: categoryName });
+                const newCatRef = doc(categoriesCollection);
+                batch.set(newCatRef, { name: categoryName, createdAt: new Date() });
             });
             await batch.commit();
         }
 
         // --- UI & NAVIGATION ---
-        menuToggleBtn.addEventListener('click', () => {
+
+        /**
+         * Toggles the side navigation menu.
+         */
+        menuToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             sideNav.classList.toggle('nav-closed');
         });
 
+        /**
+         * Closes the side navigation if a click occurs outside of it.
+         */
         document.body.addEventListener('click', (e) => {
             if (!sideNav.contains(e.target) && !menuToggleBtn.contains(e.target) && !sideNav.classList.contains('nav-closed')) {
                 sideNav.classList.add('nav-closed');
             }
         });
 
+        /**
+         * Handles navigation link clicks to switch between pages.
+         */
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -387,22 +534,28 @@
                 pages.forEach(p => p.classList.remove('active'));
                 document.getElementById(pageId).classList.add('active');
 
-                navLinks.forEach(l => l.classList.remove('active', 'bg-indigo-100', 'dark:bg-indigo-900', 'text-indigo-600'));
-                link.classList.add('active', 'bg-indigo-100', 'dark:bg-indigo-900', 'text-indigo-600');
+                navLinks.forEach(l => l.classList.remove('active', 'bg-indigo-100', 'dark:bg-indigo-900', 'text-indigo-600', 'font-semibold'));
+                link.classList.add('active', 'bg-indigo-100', 'dark:bg-indigo-900', 'text-indigo-600', 'font-semibold');
                 
-                sideNav.classList.add('nav-closed');
+                // Close nav on mobile after click
+                if (window.innerWidth < 768) {
+                    sideNav.classList.add('nav-closed');
+                }
             });
         });
         
-        // Add basic styling to nav links
+        // Add base styling to nav links
         navLinks.forEach(link => {
             link.classList.add('flex', 'items-center', 'gap-4', 'p-3', 'rounded-lg', 'hover:bg-gray-100', 'dark:hover:bg-gray-700', 'transition-colors');
         });
-        document.querySelector('.nav-link[data-page="dashboard-page"]').classList.add('active', 'bg-indigo-100', 'dark:bg-indigo-900', 'text-indigo-600');
+        document.querySelector('.nav-link[data-page="dashboard-page"]').classList.add('active', 'bg-indigo-100', 'dark:bg-indigo-900', 'text-indigo-600', 'font-semibold');
 
+        // --- TRANSACTIONS LOGIC ---
 
-        // --- TRANSACTIONS ---
-        let allTransactions = [];
+        /**
+         * Sets up a real-time listener for the user's transactions.
+         * @param {string} userId - The user's unique ID.
+         */
         function listenForTransactions(userId) {
             const txCollection = collection(db, `users/${userId}/transactions`);
             const q = query(txCollection, orderBy('date', 'desc'));
@@ -411,23 +564,34 @@
                 renderTransactions(allTransactions);
                 updateDashboard(allTransactions);
                 updateChart(allTransactions);
+            }, (error) => {
+                console.error("Error listening to transactions:", error);
+                Swal.fire('Error', 'Could not fetch your transactions.', 'error');
             });
         }
 
+        /**
+         * Renders the list of transactions on the dashboard.
+         * @param {Array<object>} transactions - An array of transaction objects.
+         */
         function renderTransactions(transactions) {
             const listEl = document.getElementById('transaction-list');
-            listEl.innerHTML = '';
+            const emptyEl = document.getElementById('transaction-list-empty');
+            listEl.innerHTML = ''; // Clear previous items
+            
             if (transactions.length === 0) {
-                listEl.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400 p-4">No transactions yet. Press the + button to add one!</p>';
+                emptyEl.classList.remove('hidden');
                 return;
             }
+            
+            emptyEl.classList.add('hidden');
             transactions.forEach(tx => {
-                const date = tx.date.toDate().toLocaleDateString('en-GB');
+                const date = tx.date.toDate().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
                 const amountColor = tx.type === 'income' ? 'text-green-500' : 'text-red-500';
                 const sign = tx.type === 'income' ? '+' : '-';
 
                 const item = document.createElement('div');
-                item.className = 'flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg';
+                item.className = 'flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors';
                 item.innerHTML = `
                     <div class="flex items-center gap-4">
                         <div class="w-10 h-10 rounded-lg flex items-center justify-center ${tx.type === 'income' ? 'bg-green-100 dark:bg-green-900' : 'bg-red-100 dark:bg-red-900'}">
@@ -435,12 +599,12 @@
                         </div>
                         <div>
                             <p class="font-semibold">${tx.description}</p>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">${date} - ${tx.category}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">${date} &bull; ${tx.category}</p>
                         </div>
                     </div>
                     <div class="text-right">
                         <p class="font-bold ${amountColor}">${sign} ৳${parseFloat(tx.amount).toFixed(2)}</p>
-                        <div>
+                        <div class="mt-1">
                             <button class="edit-btn text-xs text-blue-500 hover:underline" data-id="${tx.id}">Edit</button>
                             <button class="delete-btn text-xs text-red-500 hover:underline ml-2" data-id="${tx.id}">Delete</button>
                         </div>
@@ -449,33 +613,44 @@
                 listEl.appendChild(item);
             });
         }
-
+        
+        /**
+         * Event listener for edit/delete buttons on transactions.
+         */
         document.getElementById('transaction-list').addEventListener('click', e => {
-            if (e.target.classList.contains('edit-btn')) {
-                const txId = e.target.dataset.id;
+            const target = e.target;
+            if (target.classList.contains('edit-btn')) {
+                const txId = target.dataset.id;
                 const transaction = allTransactions.find(tx => tx.id === txId);
                 showTransactionModal(transaction);
             }
-            if (e.target.classList.contains('delete-btn')) {
-                const txId = e.target.dataset.id;
+            if (target.classList.contains('delete-btn')) {
+                const txId = target.dataset.id;
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
+                    confirmButtonColor: '#e53e3e', // Red
+                    cancelButtonColor: '#718096', // Gray
+                    confirmButtonText: 'Yes, delete it!',
+                    customClass: { popup: 'dark:bg-gray-800 dark:text-gray-200' }
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        deleteDoc(doc(db, `users/${currentUser.uid}/transactions`, txId));
-                        Swal.fire('Deleted!', 'Your transaction has been deleted.', 'success');
+                        deleteDoc(doc(db, `users/${currentUser.uid}/transactions`, txId))
+                            .then(() => Swal.fire({ title: 'Deleted!', text: 'Your transaction has been deleted.', icon: 'success', customClass: { popup: 'dark:bg-gray-800 dark:text-gray-200' } }))
+                            .catch(err => Swal.fire('Error', 'Could not delete transaction.', 'error'));
                     }
                 })
             }
         });
 
         // --- DASHBOARD & CHARTS ---
+
+        /**
+         * Updates the summary cards on the dashboard.
+         * @param {Array<object>} transactions - An array of transaction objects.
+         */
         function updateDashboard(transactions) {
             const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + parseFloat(t.amount), 0);
             const totalExpense = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + parseFloat(t.amount), 0);
@@ -486,8 +661,14 @@
             document.getElementById('current-balance').textContent = `৳${balance.toFixed(2)}`;
         }
 
+        /**
+         * Updates the expense distribution chart.
+         * @param {Array<object>} transactions - An array of transaction objects.
+         */
         function updateChart(transactions) {
             const ctx = document.getElementById('expense-chart').getContext('2d');
+            const emptyEl = document.getElementById('expense-chart-empty');
+            
             const expenseData = transactions
                 .filter(tx => tx.type === 'expense')
                 .reduce((acc, tx) => {
@@ -503,10 +684,10 @@
             }
 
             if (labels.length === 0) {
-                 document.getElementById('expense-chart').style.display = 'none';
-                 return;
+                emptyEl.classList.remove('hidden');
+                return;
             }
-             document.getElementById('expense-chart').style.display = 'block';
+            emptyEl.classList.add('hidden');
 
             expenseChart = new Chart(ctx, {
                 type: 'doughnut',
@@ -515,20 +696,25 @@
                     datasets: [{
                         label: 'Expenses',
                         data: data,
-                        backgroundColor: [
-                            '#4f46e5', '#ec4899', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ef4444'
-                        ],
-                        hoverOffset: 4
+                        backgroundColor: ['#4f46e5', '#ec4899', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ef4444', '#64748b', '#0ea5e9'],
+                        borderColor: document.documentElement.classList.contains('dark') ? '#1f2937' : '#ffffff',
+                        borderWidth: 2,
+                        hoverOffset: 8
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    cutout: '70%',
                     plugins: {
                         legend: {
                             position: 'bottom',
-                             labels: {
-                                color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#4b5563'
+                            labels: {
+                                padding: 20,
+                                color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#4b5563',
+                                font: {
+                                    family: "'Inter', sans-serif"
+                                }
                             }
                         }
                     }
@@ -537,81 +723,73 @@
         }
 
         // --- ADD/EDIT TRANSACTION MODAL ---
-        let categories = [];
-        function listenForCategories(userId) {
-            const catCollection = collection(db, `users/${userId}/categories`);
-            categoriesUnsubscribe = onSnapshot(catCollection, (snapshot) => {
-                categories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderCategories(categories);
-            });
-        }
 
+        /**
+         * Opens a modal to add a new transaction or edit an existing one.
+         * @param {object | null} transaction - The transaction object to edit, or null to add a new one.
+         */
         document.getElementById('add-transaction-fab').addEventListener('click', () => showTransactionModal());
 
         async function showTransactionModal(transaction = null) {
-            const categoryOptions = categories.map(c => `<option value="${c.name}" ${transaction?.category === c.name ? 'selected' : ''}>${c.name}</option>`).join('');
+            const categoryOptions = allCategories.map(c => `<option value="${c.name}" ${transaction?.category === c.name ? 'selected' : ''}>${c.name}</option>`).join('');
             
             const { value: formValues, isConfirmed } = await Swal.fire({
                 title: transaction ? 'Edit Transaction' : 'Add New Transaction',
                 html: `
-                    <div class="space-y-4 text-left">
+                    <div class="space-y-4 text-left p-2">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Type</label>
-                            <select id="swal-type" class="swal2-input">
-                                <option value="expense" ${transaction?.type === 'expense' ? 'selected' : ''}>Expense</option>
-                                <option value="income" ${transaction?.type === 'income' ? 'selected' : ''}>Income</option>
-                            </select>
+                            <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Type</label>
+                            <select id="swal-type" class="swal2-input w-full">${transaction?.type === 'income' ? '<option value="income" selected>Income</option><option value="expense">Expense</option>' : '<option value="expense" selected>Expense</option><option value="income">Income</option>'}</select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Amount (৳)</label>
-                            <input id="swal-amount" type="number" class="swal2-input" placeholder="0.00" value="${transaction?.amount || ''}">
+                            <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Amount (৳)</label>
+                            <input id="swal-amount" type="number" step="0.01" class="swal2-input w-full" placeholder="0.00" value="${transaction?.amount || ''}">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Description</label>
-                            <input id="swal-description" class="swal2-input" placeholder="e.g., Coffee" value="${transaction?.description || ''}">
+                            <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Description</label>
+                            <input id="swal-description" class="swal2-input w-full" placeholder="e.g., Coffee with friends" value="${transaction?.description || ''}">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Category</label>
-                            <select id="swal-category" class="swal2-input">${categoryOptions}</select>
+                            <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Category</label>
+                            <select id="swal-category" class="swal2-input w-full">${categoryOptions}</select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Date</label>
-                            <input id="swal-date" type="date" class="swal2-input" value="${transaction ? transaction.date.toDate().toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}">
+                            <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Date</label>
+                            <input id="swal-date" type="date" class="swal2-input w-full" value="${transaction ? transaction.date.toDate().toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}">
                         </div>
                     </div>
                 `,
                 focusConfirm: false,
                 showCancelButton: true,
                 confirmButtonText: transaction ? 'Save Changes' : 'Add Transaction',
+                confirmButtonColor: '#4f46e5',
+                customClass: { popup: 'dark:bg-gray-800 dark:text-gray-200' },
                 preConfirm: () => {
                     const amount = document.getElementById('swal-amount').value;
                     const description = document.getElementById('swal-description').value;
-                    if (!amount || !description || parseFloat(amount) <= 0) {
-                        Swal.showValidationMessage(`Please fill out all fields correctly`);
+                    const category = document.getElementById('swal-category').value;
+                    if (!amount || !description || parseFloat(amount) <= 0 || !category) {
+                        Swal.showValidationMessage(`Please fill out all fields correctly.`);
                         return false;
                     }
                     return {
                         type: document.getElementById('swal-type').value,
                         amount: parseFloat(amount),
                         description: description,
-                        category: document.getElementById('swal-category').value,
+                        category: category,
                         date: new Date(document.getElementById('swal-date').value)
                     }
                 }
             });
 
             if (isConfirmed && formValues) {
-                if (transaction) {
-                    // Update existing
-                    const txRef = doc(db, `users/${currentUser.uid}/transactions`, transaction.id);
-                    await updateDoc(txRef, formValues);
-                    Swal.fire('Updated!', 'Transaction has been updated.', 'success');
-                } else {
-                    // Add new
-                    const txCollection = collection(db, `users/${currentUser.uid}/transactions`);
-                    await addDoc(txCollection, formValues);
-                    Swal.fire('Added!', 'New transaction has been added.', 'success');
-                }
+                const actionPromise = transaction
+                    ? updateDoc(doc(db, `users/${currentUser.uid}/transactions`, transaction.id), formValues)
+                    : addDoc(collection(db, `users/${currentUser.uid}/transactions`), formValues);
+                
+                actionPromise
+                    .then(() => Swal.fire({ title: 'Success!', text: `Transaction successfully ${transaction ? 'updated' : 'added'}.`, icon: 'success', customClass: { popup: 'dark:bg-gray-800 dark:text-gray-200' } }))
+                    .catch(err => Swal.fire('Error', 'An error occurred while saving.', 'error'));
             }
         }
 
@@ -622,58 +800,94 @@
             const file = e.target.files[0];
             if (!file) return;
 
+            // Show loading state
+            const saveBtn = document.getElementById('save-profile-btn');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Uploading...';
+
             const storageRef = ref(storage, `users/${currentUser.uid}/profile.jpg`);
-            await uploadBytes(storageRef, file);
-            const photoURL = await getDownloadURL(storageRef);
-            
-            const userRef = doc(db, `users/${currentUser.uid}`);
-            await updateDoc(userRef, { photoURL });
-            Swal.fire('Success', 'Profile photo updated!', 'success');
+            try {
+                await uploadBytes(storageRef, file);
+                const photoURL = await getDownloadURL(storageRef);
+                await updateDoc(doc(db, `users/${currentUser.uid}`), { photoURL });
+                Swal.fire('Success', 'Profile photo updated!', 'success');
+            } catch (error) {
+                console.error("Photo upload error:", error);
+                Swal.fire('Error', 'Could not upload photo.', 'error');
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = 'Save Changes';
+            }
         });
 
         document.getElementById('save-profile-btn').addEventListener('click', async () => {
-            const newName = document.getElementById('profile-name-input').value;
+            const newName = document.getElementById('profile-name-input').value.trim();
             if (newName) {
-                const userRef = doc(db, `users/${currentUser.uid}`);
-                await updateDoc(userRef, { name: newName });
-                Swal.fire('Success', 'Profile name updated!', 'success');
+                const saveBtn = document.getElementById('save-profile-btn');
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+                try {
+                    await updateDoc(doc(db, `users/${currentUser.uid}`), { name: newName });
+                    Swal.fire('Success', 'Profile name updated!', 'success');
+                } catch (error) {
+                    Swal.fire('Error', 'Could not update name.', 'error');
+                } finally {
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = 'Save Changes';
+                }
             }
         });
 
         // --- SETTINGS: THEME & CATEGORIES ---
+
+        // Theme Toggle
         const themeToggleBtn = document.getElementById('theme-toggle-btn');
         const themeText = document.getElementById('theme-text');
         
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark');
-          themeToggleBtn.innerHTML = `<i class="fas fa-sun"></i><span id="theme-text"> Light Mode</span>`;
-        } else {
-          document.documentElement.classList.remove('dark');
-          themeToggleBtn.innerHTML = `<i class="fas fa-moon"></i><span id="theme-text"> Dark Mode</span>`;
-        }
+        const applyTheme = () => {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+              document.documentElement.classList.add('dark');
+              themeToggleBtn.innerHTML = `<i class="fas fa-sun"></i><span id="theme-text"> Light Mode</span>`;
+            } else {
+              document.documentElement.classList.remove('dark');
+              themeToggleBtn.innerHTML = `<i class="fas fa-moon"></i><span id="theme-text"> Dark Mode</span>`;
+            }
+        };
+        applyTheme();
         
         themeToggleBtn.addEventListener('click', () => {
             document.documentElement.classList.toggle('dark');
-            if (document.documentElement.classList.contains('dark')) {
-                localStorage.theme = 'dark';
-                themeToggleBtn.innerHTML = `<i class="fas fa-sun"></i><span id="theme-text"> Light Mode</span>`;
-            } else {
-                localStorage.theme = 'light';
-                themeToggleBtn.innerHTML = `<i class="fas fa-moon"></i><span id="theme-text"> Dark Mode</span>`;
-            }
+            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            applyTheme();
             // Redraw chart with new theme colors
             updateChart(allTransactions);
         });
         
+        // Category Management
+        function listenForCategories(userId) {
+            const catCollection = collection(db, `users/${userId}/categories`);
+            const q = query(catCollection, orderBy('name'));
+            categoriesUnsubscribe = onSnapshot(q, (snapshot) => {
+                allCategories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderCategories(allCategories);
+            });
+        }
+        
         function renderCategories(categories) {
             const listEl = document.getElementById('category-list');
+            const emptyEl = document.getElementById('category-list-empty');
             listEl.innerHTML = '';
+            if (categories.length === 0) {
+                emptyEl.classList.remove('hidden');
+                return;
+            }
+            emptyEl.classList.add('hidden');
             categories.forEach(cat => {
                 const item = document.createElement('div');
                 item.className = 'flex items-center justify-between p-2 bg-gray-100 dark:bg-gray-700 rounded-lg';
                 item.innerHTML = `
                     <span>${cat.name}</span>
-                    <button class="delete-category-btn text-red-500 hover:text-red-700" data-id="${cat.id}">&times;</button>
+                    <button class="delete-category-btn text-red-400 hover:text-red-600 transition-colors w-6 h-6 rounded-full flex items-center justify-center" data-id="${cat.id}" title="Delete Category">&times;</button>
                 `;
                 listEl.appendChild(item);
             });
@@ -683,7 +897,7 @@
             const input = document.getElementById('new-category-input');
             const newCategoryName = input.value.trim();
             if (newCategoryName) {
-                await addDoc(collection(db, `users/${currentUser.uid}/categories`), { name: newCategoryName });
+                await addDoc(collection(db, `users/${currentUser.uid}/categories`), { name: newCategoryName, createdAt: new Date() });
                 input.value = '';
             }
         });
@@ -700,13 +914,15 @@
             const { value: dateRange, isConfirmed } = await Swal.fire({
                 title: 'Select Date Range for Report',
                 html: `
-                    <div class="flex gap-4">
-                        <input type="date" id="start-date" class="swal2-input">
-                        <input type="date" id="end-date" class="swal2-input">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div><label class="block text-left text-sm mb-1">Start Date</label><input type="date" id="start-date" class="swal2-input w-full"></div>
+                        <div><label class="block text-left text-sm mb-1">End Date</label><input type="date" id="end-date" class="swal2-input w-full"></div>
                     </div>
                 `,
                 focusConfirm: false,
                 showCancelButton: true,
+                confirmButtonColor: '#4f46e5',
+                customClass: { popup: 'dark:bg-gray-800 dark:text-gray-200' },
                 preConfirm: () => {
                     const start = document.getElementById('start-date').value;
                     const end = document.getElementById('end-date').value;
@@ -726,12 +942,14 @@
         async function generatePdf(startDate, endDate) {
             Swal.fire({
                 title: 'Generating PDF...',
-                text: 'Please wait a moment.',
+                text: 'Please wait, this may take a moment.',
                 allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
+                didOpen: () => Swal.showLoading(),
+                customClass: { popup: 'dark:bg-gray-800 dark:text-gray-200' }
             });
+
+            // Ensure end date includes the whole day
+            endDate.setHours(23, 59, 59, 999);
 
             const filteredTx = allTransactions.filter(tx => {
                 const txDate = tx.date.toDate();
@@ -745,7 +963,7 @@
             pdfList.innerHTML = '';
             filteredTx.forEach(tx => {
                 const row = document.createElement('tr');
-                row.className = 'border-b';
+                row.className = 'border-b border-gray-200';
                 row.innerHTML = `
                     <td class="p-2">${tx.date.toDate().toLocaleDateString()}</td>
                     <td class="p-2">${tx.description}</td>
@@ -761,26 +979,31 @@
             const totalExpense = filteredTx.filter(t => t.type === 'expense').reduce((sum, t) => sum + parseFloat(t.amount), 0);
             
             document.getElementById('pdf-summary').innerHTML = `
-                <div class="text-center"><h4 class="font-bold text-green-600">Total Income</h4><p>৳${totalIncome.toFixed(2)}</p></div>
-                <div class="text-center"><h4 class="font-bold text-red-600">Total Expense</h4><p>৳${totalExpense.toFixed(2)}</p></div>
-                <div class="text-center"><h4 class="font-bold text-blue-600">Net Flow</h4><p>৳${(totalIncome - totalExpense).toFixed(2)}</p></div>
+                <div><h4 class="font-bold text-green-600">Total Income</h4><p class="text-lg">৳${totalIncome.toFixed(2)}</p></div>
+                <div><h4 class="font-bold text-red-600">Total Expense</h4><p class="text-lg">৳${totalExpense.toFixed(2)}</p></div>
+                <div><h4 class="font-bold text-blue-600">Net Flow</h4><p class="text-lg">৳${(totalIncome - totalExpense).toFixed(2)}</p></div>
             `;
             
             const pdfTemplate = document.getElementById('pdf-report-template');
             pdfTemplate.style.display = 'block';
 
-            const { jsPDF } = window.jspdf;
-            const canvas = await html2canvas(pdfTemplate, { scale: 2 });
-            const imgData = canvas.toDataURL('image/png');
-            
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-            pdf.save(`I-Expanse-Report-${new Date().toISOString().slice(0,10)}.pdf`);
-
-            pdfTemplate.style.display = 'none';
-            Swal.close();
+            try {
+                const { jsPDF } = window.jspdf;
+                const canvas = await html2canvas(pdfTemplate, { scale: 2, useCORS: true });
+                const imgData = canvas.toDataURL('image/png');
+                
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save(`I-Expanse-Report-${new Date().toISOString().slice(0,10)}.pdf`);
+            } catch (error) {
+                console.error("PDF generation error:", error);
+                Swal.fire('Error', 'Could not generate PDF.', 'error');
+            } finally {
+                pdfTemplate.style.display = 'none';
+                Swal.close();
+            }
         }
 
     </script>
