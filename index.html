@@ -4,1077 +4,954 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Infinity Mess Management</title>
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1f2937">
+
     <style>
         /* Custom Styles */
         body {
             font-family: 'Hind Siliguri', 'Inter', sans-serif;
-            background-color: #111827; /* bg-gray-900 */
+            background-color: #111827; /* Dark background as default */
+        }
+        .dark {
+            /* Styles for dark mode are applied by default via Tailwind classes */
+        }
+        /* Sidebar transition */
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
         }
         /* Custom scrollbar for better look */
         ::-webkit-scrollbar {
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #1f2937; /* bg-gray-800 */
+            background: #1f2937;
         }
         ::-webkit-scrollbar-thumb {
-            background: #4f46e5; /* bg-indigo-600 */
+            background: #4b5563;
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #4338ca; /* bg-indigo-700 */
-        }
-        /* Hide number input arrows */
-        input[type=number]::-webkit-inner-spin-button,
-        input[type=number]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type=number] {
-            -moz-appearance: textfield;
+            background: #6b7280;
         }
     </style>
 </head>
-<body class="text-white">
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
 
-    <!-- Global Loader -->
-    <div id="loader" class="fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex justify-center items-center">
-        <div class="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-indigo-500"></div>
-    </div>
+    <!-- App Container -->
+    <div id="app-container">
 
-    <!-- Auth Section -->
-    <div id="auth-section" class="min-h-screen flex-col items-center justify-center p-4 hidden">
-        <h1 class="text-5xl font-extrabold text-white mb-2">
-            <span class="text-indigo-400">Infinity</span> Mess
-        </h1>
-        <p class="text-gray-400 mb-8">আপনার মেস ম্যানেজমেন্টের সহজ সমাধান</p>
-        <div class="w-full max-w-md">
-            <div class="flex justify-center mb-4 rounded-lg bg-gray-800 p-1">
-                <button id="show-login-btn" class="w-full py-2 px-4 rounded-md transition bg-indigo-600 text-white">লগইন</button>
-                <button id="show-signup-btn" class="w-full py-2 px-4 rounded-md transition text-gray-300">অ্যাডমিন সাইনআপ</button>
-                <button id="show-join-btn" class="w-full py-2 px-4 rounded-md transition text-gray-300">যোগ দিন</button>
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="fixed inset-0 bg-gray-900 bg-opacity-80 flex justify-center items-center z-50">
+            <div class="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-blue-500"></div>
+        </div>
+
+        <!-- Login/Signup Pages -->
+        <div id="auth-section">
+            <!-- Login Page -->
+            <div id="login-page" class="min-h-screen flex items-center justify-center p-4 hidden">
+                <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+                    <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-2">স্বাগতম!</h2>
+                    <p class="text-center text-gray-500 dark:text-gray-400 mb-8">আপনার মেসে লগইন করুন</p>
+                    <form id="login-form">
+                        <div class="mb-4">
+                            <label for="login-email" class="block mb-2 text-sm font-medium">ইমেইল</label>
+                            <input type="email" id="login-email" class="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div class="mb-6">
+                            <label for="login-password" class="block mb-2 text-sm font-medium">পাসওয়ার্ড</label>
+                            <input type="password" id="login-password" class="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">লগইন করুন</button>
+                    </form>
+                    <p class="text-center mt-6 text-sm">
+                        অ্যাডমিন? <a href="#" id="show-signup-link" class="font-medium text-blue-500 hover:underline">নতুন অ্যাকাউন্ট তৈরি করুন</a>
+                    </p>
+                     <p class="text-center mt-2 text-sm">
+                        সদস্য? <a href="#" id="show-join-mess-link" class="font-medium text-blue-500 hover:underline">মেসে যোগ দিন</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Signup Page (Admin) -->
+            <div id="signup-page" class="min-h-screen flex items-center justify-center p-4 hidden">
+                 <div class="w-full max-w-lg bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+                    <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-6">অ্যাডমিন রেজিস্ট্রেশন</h2>
+                    <form id="signup-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" id="signup-name" placeholder="নাম" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <input type="text" id="signup-address" placeholder="ঠিকানা" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <input type="tel" id="signup-mobile" placeholder="মোবাইল নম্বর" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <select id="signup-gender" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <option value="">লিঙ্গ</option>
+                            <option value="male">পুরুষ</option>
+                            <option value="female">মহিলা</option>
+                        </select>
+                        <input type="text" id="signup-religion" placeholder="ধর্ম" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="signup-class" placeholder="ক্লাস/পেশা" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="signup-department" placeholder="বিভাগ/গ্রুপ" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="email" id="signup-email" placeholder="ইমেইল" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 md:col-span-2" required>
+                        <input type="password" id="signup-password" placeholder="পাসওয়ার্ড" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 md:col-span-2" required>
+                        <button type="submit" class="md:col-span-2 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors">সাইন আপ</button>
+                    </form>
+                    <p class="text-center mt-6 text-sm">
+                        ইতিমধ্যে অ্যাকাউন্ট আছে? <a href="#" id="show-login-link" class="font-medium text-blue-500 hover:underline">লগইন করুন</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Create Mess Page -->
+            <div id="create-mess-page" class="min-h-screen flex items-center justify-center p-4 hidden">
+                <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 text-center">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">আপনার মেস তৈরি করুন</h2>
+                    <p class="text-gray-500 dark:text-gray-400 mb-8">মেসের একটি নাম দিন। সিস্টেম একটি ইউনিক কোড তৈরি করবে।</p>
+                    <form id="create-mess-form">
+                        <input type="text" id="mess-name-input" placeholder="মেসের নাম" class="w-full px-4 py-2 mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-colors">মেস তৈরি করুন</button>
+                    </form>
+                </div>
             </div>
             
-            <p id="auth-error" class="text-red-500 text-center mb-4"></p>
-
-            <!-- Login Form -->
-            <form id="login-form" class="bg-gray-800 shadow-2xl rounded-lg px-8 pt-6 pb-8">
-                <h2 class="text-3xl font-bold text-center text-white mb-6">লগইন করুন</h2>
-                <div class="mb-4">
-                    <label class="block text-gray-400 text-sm font-bold mb-2" for="login-email">ইমেইল</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-indigo-500" id="login-email" type="email" required>
+            <!-- Join Mess Page -->
+            <div id="join-mess-page" class="min-h-screen flex items-center justify-center p-4 hidden">
+                 <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+                    <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-6">মেসে যোগদানের আবেদন</h2>
+                    <form id="join-mess-form">
+                        <input type="text" id="join-mess-code" placeholder="৫ অক্ষরের মেস কোড" class="w-full px-4 py-2 mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <input type="text" id="join-name" placeholder="আপনার নাম" class="w-full px-4 py-2 mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <input type="tel" id="join-mobile" placeholder="আপনার মোবাইল" class="w-full px-4 py-2 mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <input type="text" id="join-address" placeholder="আপনার ঠিকানা" class="w-full px-4 py-2 mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-lg transition-colors">আবেদন পাঠান</button>
+                    </form>
+                    <p class="text-center mt-6 text-sm">
+                        <a href="#" id="back-to-login-link" class="font-medium text-blue-500 hover:underline">লগইন পেজে ফিরে যান</a>
+                    </p>
                 </div>
-                <div class="mb-6">
-                    <label class="block text-gray-400 text-sm font-bold mb-2" for="login-password">পাসওয়ার্ড</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-indigo-500" id="login-password" type="password" required>
-                </div>
-                <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full" type="submit">লগইন</button>
-            </form>
-
-            <!-- Signup Form -->
-            <form id="signup-form" class="bg-gray-800 shadow-2xl rounded-lg px-8 pt-6 pb-8 hidden">
-                 <h2 class="text-3xl font-bold text-center text-white mb-6">অ্যাডমিন সাইনআপ</h2>
-                 <!-- Common Fields -->
-                 <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white mb-4" id="signup-name" type="text" placeholder="পুরো নাম" required>
-                 <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white mb-4" id="signup-email" type="email" placeholder="ইমেইল" required>
-                 <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white mb-4" id="signup-password" type="password" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" required>
-                 <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white mb-4" id="signup-mobile" type="tel" placeholder="মোবাইল নম্বর">
-                 <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white mb-4" id="signup-address" type="text" placeholder="ঠিকানা">
-                 <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white mb-4" id="signup-mess-name" type="text" placeholder="আপনার মেসের নাম" required>
-                 <button class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full" type="submit">মেস তৈরি করুন</button>
-            </form>
-
-            <!-- Join Form -->
-            <form id="join-form" class="bg-gray-800 shadow-2xl rounded-lg px-8 pt-6 pb-8 hidden">
-                <h2 class="text-3xl font-bold text-center text-white mb-6">মেসে যোগ দিন</h2>
-                <!-- Common Fields -->
-                 <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white mb-4" id="join-name" type="text" placeholder="পুরো নাম" required>
-                 <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white mb-4" id="join-email" type="email" placeholder="ইমেইল" required>
-                 <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white mb-4" id="join-password" type="password" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" required>
-                 <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white mb-4" id="join-mobile" type="tel" placeholder="মোবাইল নম্বর">
-                 <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white mb-4" id="join-address" type="text" placeholder="ঠিকানা">
-                 <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white mb-4" id="join-code" type="text" placeholder="মেস কোড (৫ অক্ষরের)" maxlength="5" required>
-                 <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full" type="submit">আবেদন করুন</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Approval Pending Screen -->
-    <div id="approval-pending-section" class="min-h-screen bg-gray-900 flex-col items-center justify-center text-white p-4 text-center hidden">
-        <h1 class="text-3xl font-bold mb-4">অনুমোদনের জন্য ধন্যবাদ!</h1>
-        <p class="text-gray-400 mb-8">আপনার আবেদনটি অ্যাডমিনের কাছে পাঠানো হয়েছে। অনুমোদন পেলে আপনি ড্যাশবোর্ড দেখতে পারবেন।</p>
-        <button id="logout-btn-pending" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">লগ আউট</button>
-    </div>
-
-    <!-- Main App Section -->
-    <div id="app-section" class="min-h-screen flex hidden">
-        <!-- Sidebar -->
-        <div id="sidebar" class="fixed top-0 left-0 h-full bg-gray-900 text-white w-64 transform -translate-x-full md:relative md:translate-x-0 transition-transform z-40 flex flex-col">
-            <div class="p-5 text-2xl font-bold border-b border-gray-700 flex justify-between items-center">
-                <span id="sidebar-mess-name">Infinity Mess</span>
-                <button id="close-sidebar-btn" class="md:hidden text-gray-400 hover:text-white">&times;</button>
             </div>
-            <nav class="mt-5 flex-1">
-                <ul>
-                    <li class="px-4"><a href="#" data-page="dashboard" class="nav-link flex items-center p-3 rounded-lg hover:bg-indigo-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg><span class="ml-4">হোম</span></a></li>
-                    <li class="px-4"><a href="#" data-page="bazar" class="nav-link flex items-center p-3 rounded-lg hover:bg-indigo-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg><span class="ml-4">বাজার তালিকা</span></a></li>
-                    <li class="px-4"><a href="#" data-page="meals" class="nav-link flex items-center p-3 rounded-lg hover:bg-indigo-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" /></svg><span class="ml-4">মিল সংখ্যা</span></a></li>
-                    <li class="px-4"><a href="#" data-page="members" class="nav-link flex items-center p-3 rounded-lg hover:bg-indigo-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.28-1.25-.743-1.674M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 0c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z" /></svg><span class="ml-4">সদস্য তালিকা</span></a></li>
-                    <li class="px-4"><a href="#" data-page="report" class="nav-link flex items-center p-3 rounded-lg hover:bg-indigo-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg><span class="ml-4">মাসিক হিসাব</span></a></li>
-                    <li class="px-4"><a href="#" data-page="developer" class="nav-link flex items-center p-3 rounded-lg hover:bg-indigo-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg><span class="ml-4">ডেভেলপার</span></a></li>
-                </ul>
-            </nav>
-            <div class="p-4">
-                 <a href="#" id="logout-btn-main" class="flex items-center p-3 rounded-lg hover:bg-red-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg><span class="ml-4">লগ আউট</span></a>
-            </div>
-            <footer class="text-center p-4 text-xs text-gray-500">© <span id="footer-year"></span> Infinity Nest | Developed by Md Habibur Rahman Mahi</footer>
         </div>
 
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col">
-            <header class="bg-gray-800 text-white p-4 flex justify-between items-center md:hidden">
-                <h1 id="header-mess-name" class="text-xl font-bold">Infinity Mess</h1>
-                <button id="open-sidebar-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
-                </button>
+        <!-- Main Application -->
+        <div id="main-app" class="hidden">
+            <!-- Header -->
+            <header class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-30">
+                <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+                    <h1 id="mess-name-header" class="text-xl md:text-2xl font-bold text-blue-600 dark:text-blue-400">Infinity Mess</h1>
+                    <div>
+                        <button id="dark-mode-toggle" class="mr-4 text-gray-600 dark:text-gray-300 hover:text-blue-500">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <button id="sidebar-toggle" class="text-gray-600 dark:text-gray-300 text-2xl">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
             </header>
-            <main id="main-content" class="flex-1 overflow-y-auto bg-gray-900 p-4 md:p-8">
-                <!-- Pages will be injected here -->
-                <div id="dashboard-page" class="page"></div>
-                <div id="bazar-page" class="page hidden"></div>
-                <div id="meals-page" class="page hidden"></div>
-                <div id="members-page" class="page hidden"></div>
-                <div id="report-page" class="page hidden"></div>
-                <div id="developer-page" class="page hidden"></div>
+
+            <!-- Sidebar -->
+            <aside id="sidebar" class="fixed top-0 right-0 h-full w-72 bg-gray-800 dark:bg-gray-900 shadow-lg transform translate-x-full z-40 p-6">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-xl font-bold text-white">মেনু</h2>
+                    <button id="close-sidebar" class="text-gray-300 hover:text-white text-2xl">&times;</button>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#home" class="nav-link block text-lg text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg px-4 py-3 mb-2"><i class="fas fa-home w-6 mr-3"></i>হোম</a></li>
+                        <li><a href="#bazar-list" class="nav-link block text-lg text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg px-4 py-3 mb-2"><i class="fas fa-shopping-cart w-6 mr-3"></i>বাজার তালিকা</a></li>
+                        <li><a href="#meal-count" class="nav-link block text-lg text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg px-4 py-3 mb-2"><i class="fas fa-chart-bar w-6 mr-3"></i>মিল সংখ্যা</a></li>
+                        <li><a href="#member-list" class="nav-link block text-lg text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg px-4 py-3 mb-2"><i class="fas fa-users w-6 mr-3"></i>সদস্য তালিকা</a></li>
+                        <li><a href="#expense-report" class="nav-link block text-lg text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg px-4 py-3 mb-2"><i class="fas fa-file-invoice-dollar w-6 mr-3"></i>খরচ ও হিসাব</a></li>
+                        <li id="admin-panel-link" class="hidden"><a href="#admin-panel" class="nav-link block text-lg text-yellow-300 hover:bg-gray-700 hover:text-yellow-200 rounded-lg px-4 py-3 mb-2"><i class="fas fa-user-shield w-6 mr-3"></i>অ্যাডমিন প্যানেল</a></li>
+                        <li><a href="#developer-profile" class="nav-link block text-lg text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg px-4 py-3 mb-2"><i class="fas fa-code w-6 mr-3"></i>ডেভেলপার</a></li>
+                    </ul>
+                </nav>
+                <button id="logout-button" class="w-full mt-8 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition-colors"><i class="fas fa-sign-out-alt mr-2"></i>লগ আউট</button>
+            </aside>
+            <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden"></div>
+
+
+            <!-- Main Content -->
+            <main id="content-area" class="container mx-auto p-4 md:p-6">
+                <!-- Home Section -->
+                <section id="home-section" class="content-section">
+                    <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl shadow-lg mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold" id="current-month">জুলাই ২০২৪</h3>
+                                <p class="text-gray-500 dark:text-gray-400" id="current-date">আজ, ২২ জুলাই</p>
+                            </div>
+                            <div id="mess-code-display" class="text-right">
+                                <span class="text-sm text-gray-500">মেস কোড</span>
+                                <p class="font-mono text-lg font-bold bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-md"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Bazar Duty -->
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                            <h4 class="text-lg font-bold mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">আজকের বাজার</h4>
+                            <div id="bazar-duty-list" class="text-center py-4">
+                                <p class="text-gray-500">লোড হচ্ছে...</p>
+                            </div>
+                        </div>
+
+                        <!-- Today's Meal -->
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                            <h4 class="text-lg font-bold mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">আজকের মিল</h4>
+                            <div id="todays-meal-section" class="space-y-3 pt-2">
+                                <label class="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                    <span class="font-medium">সকাল</span>
+                                    <input type="checkbox" data-meal="breakfast" class="meal-checkbox h-6 w-6 rounded text-blue-600 focus:ring-blue-500">
+                                </label>
+                                <label class="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                    <span class="font-medium">দুপুর</span>
+                                    <input type="checkbox" data-meal="lunch" class="meal-checkbox h-6 w-6 rounded text-blue-600 focus:ring-blue-500">
+                                </label>
+                                <label class="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                    <span class="font-medium">রাত</span>
+                                    <input type="checkbox" data-meal="dinner" class="meal-checkbox h-6 w-6 rounded text-blue-600 focus:ring-blue-500">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notice Board -->
+                    <div class="mt-6 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                        <h4 class="text-lg font-bold mb-4">নোটিশ বোর্ড</h4>
+                        <div id="notice-post-area" class="hidden">
+                             <textarea id="notice-input" class="w-full p-2 mb-2 bg-gray-100 dark:bg-gray-700 rounded-lg" rows="3" placeholder="নতুন নোটিশ লিখুন..."></textarea>
+                             <button id="post-notice-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg">পোস্ট করুন</button>
+                        </div>
+                        <div id="notice-list" class="mt-4 space-y-4">
+                            <!-- Notices will be dynamically inserted here -->
+                            <p class="text-gray-500">কোনো নোটিশ নেই।</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Other sections will be hidden by default -->
+                <section id="bazar-list-section" class="content-section hidden"></section>
+                <section id="meal-count-section" class="content-section hidden"></section>
+                <section id="member-list-section" class="content-section hidden"></section>
+                <section id="expense-report-section" class="content-section hidden"></section>
+                <section id="admin-panel-section" class="content-section hidden"></section>
+                <section id="developer-profile-section" class="content-section hidden"></section>
             </main>
+
+            <!-- Footer -->
+            <footer class="text-center py-6 mt-8 border-t border-gray-200 dark:border-gray-700">
+                <p class="text-sm text-gray-500 dark:text-gray-400">&copy; 2025 Infinity Group | Website Developed by Md Habibur Rahman Mahi</p>
+            </footer>
         </div>
+
     </div>
-    
-    <!-- Sidebar Overlay for mobile -->
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
 
     <!-- Modal -->
-    <div id="modal" class="fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4 hidden">
-        <div class="bg-gray-800 rounded-lg shadow-xl w-full max-w-md m-4">
-            <div class="p-4 border-b border-gray-700 flex justify-between items-center">
-                <h3 id="modal-title" class="text-xl font-semibold text-white">Modal Title</h3>
-                <button id="modal-close-btn" class="text-gray-400 hover:text-white">&times;</button>
-            </div>
-            <div id="modal-body" class="p-6 text-gray-300"></div>
+    <div id="custom-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm text-center">
+            <h3 id="modal-title" class="text-xl font-bold mb-4"></h3>
+            <p id="modal-message" class="text-gray-600 dark:text-gray-300 mb-6"></p>
+            <button id="modal-close-btn" class="bg-blue-600 text-white px-6 py-2 rounded-lg">ঠিক আছে</button>
         </div>
     </div>
 
 
     <!-- Firebase SDK -->
     <script type="module">
-        // Firebase SDK থেকে প্রয়োজনীয় মডিউল ইম্পোর্ট করুন
+        // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { 
-            getAuth, 
-            onAuthStateChanged, 
-            createUserWithEmailAndPassword, 
-            signInWithEmailAndPassword, 
-            signOut,
-            signInAnonymously,
-            signInWithCustomToken
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { 
-            getFirestore, 
-            doc, 
-            setDoc, 
-            getDoc, 
-            collection, 
-            addDoc, 
-            query, 
-            where, 
-            getDocs, 
-            onSnapshot, 
-            updateDoc, 
-            deleteDoc, 
-            serverTimestamp,
-            setLogLevel
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, where, getDocs, onSnapshot, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- START: CONFIGURATION ---
-        // আপনার Firebase প্রজেক্টের কনফিগারেশন এখানে যোগ করুন।
-        // গ্লোবাল ভেরিয়েবল থেকে ফায়ারবেস কনফিগারেশন নিন
-       // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCvars41WY81WmVy1Tueo_rrSO90aIv_Gw",
-  authDomain: "try-382fa.firebaseapp.com",
-  projectId: "try-382fa",
-  storageBucket: "try-382fa.firebasestorage.app",
-  messagingSenderId: "952752280975",
-  appId: "1:952752280975:web:9025fc4a4efe34f78be7fa",
-  measurementId: "G-73PLMXERXX"
-}; 
-        // অ্যাপ আইডি নিন
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'infinity-mess-management-html';
-        // --- END: CONFIGURATION ---
+        // Your web app's Firebase configuration from user
+        const firebaseConfig = {
+            apiKey: "AIzaSyCvars41WY81WmVy1Tueo_rrSO90aIv_Gw",
+            authDomain: "try-382fa.firebaseapp.com",
+            projectId: "try-382fa",
+            storageBucket: "try-382fa.appspot.com", // Corrected from firebasestorage.app
+            messagingSenderId: "952752280975",
+            appId: "1:952752280975:web:9025fc4a4efe34f78be7fa",
+            measurementId: "G-73PLMXERXX"
+        };
 
 
-        // --- GLOBAL VARIABLES & STATE ---
-        let auth, db;
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Global State
         let currentUser = null;
-        let userData = null;
+        let userProfile = null;
+        let messId = null;
         let messData = null;
-        let members = [];
-        let bazarList = [];
-        let meals = {};
-        let notices = [];
-        let unsubscribeListeners = [];
+        let userRole = 'member'; // Default role
 
-        // --- DOM ELEMENTS ---
-        const loader = document.getElementById('loader');
+        // DOM Elements
+        const loadingSpinner = document.getElementById('loading-spinner');
         const authSection = document.getElementById('auth-section');
-        const appSection = document.getElementById('app-section');
-        const approvalPendingSection = document.getElementById('approval-pending-section');
-        const mainContent = document.getElementById('main-content');
-        
-        // --- INITIALIZATION ---
-        function initialize() {
-            try {
-                const app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
-                setLogLevel('debug');
-                
-                setupEventListeners();
-                
-                onAuthStateChanged(auth, handleAuthStateChange);
-            } catch (e) {
-                console.error("Firebase initialization failed:", e);
-                showError("অ্যাপ্লিকেশন শুরু করা যায়নি।");
-                hideLoader();
-            }
-        }
+        const mainApp = document.getElementById('main-app');
+        const loginPage = document.getElementById('login-page');
+        const signupPage = document.getElementById('signup-page');
+        const createMessPage = document.getElementById('create-mess-page');
+        const joinMessPage = document.getElementById('join-mess-page');
+        const contentArea = document.getElementById('content-area');
+        const allSections = document.querySelectorAll('.content-section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
 
+        // --- UTILITY FUNCTIONS ---
+        const showModal = (title, message) => {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        };
+        
+        document.getElementById('modal-close-btn').addEventListener('click', () => {
+            document.getElementById('custom-modal').classList.add('hidden');
+        });
+
+        const showPage = (pageId) => {
+            [loginPage, signupPage, createMessPage, joinMessPage].forEach(p => p.classList.add('hidden'));
+            if (pageId) document.getElementById(pageId).classList.remove('hidden');
+        };
+        
+        const showSection = (sectionId) => {
+            allSections.forEach(s => s.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+            sidebar.classList.add('translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        };
+        
         // --- AUTHENTICATION ---
-        async function handleAuthStateChange(user) {
-            resetState();
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    try {
-                        await signInWithCustomToken(auth, __initial_auth_token);
-                        currentUser = auth.currentUser;
-                    } catch (e) {
-                        console.error("Custom token sign-in failed, falling back:", e);
-                        await signInAnonymously(auth);
-                        currentUser = auth.currentUser;
+                currentUser = user;
+                const userDocRef = doc(db, "users", user.uid);
+                const userDocSnap = await getDoc(userDocRef);
+
+                if (userDocSnap.exists()) {
+                    userProfile = userDocSnap.data();
+                    messId = userProfile.messId;
+                    userRole = userProfile.role;
+
+                    if (messId) {
+                        await loadMessData();
+                        authSection.classList.add('hidden');
+                        mainApp.classList.remove('hidden');
+                        setupUIForUser();
+                        showSection('home-section');
+                    } else if (userRole === 'admin') {
+                        // Admin signed up but hasn't created a mess yet
+                        authSection.classList.remove('hidden');
+                        mainApp.classList.add('hidden');
+                        showPage('create-mess-page');
+                    } else {
+                        // This case should ideally not happen for a member
+                        showModal("ত্রুটি", "আপনার কোনো মেস পাওয়া যায়নি।");
+                        await signOut(auth);
                     }
                 } else {
-                    currentUser = user;
-                }
-                await fetchUserData();
-            } else {
-                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                     try {
-                        await signInWithCustomToken(auth, __initial_auth_token);
-                        currentUser = auth.currentUser;
-                        await fetchUserData();
-                     } catch(e) {
-                        console.error("Custom token sign-in failed, falling back:", e);
-                        await signInAnonymously(auth);
-                        currentUser = auth.currentUser;
-                        await fetchUserData();
-                     }
-                 } else {
-                    showAuthView();
-                 }
-            }
-        }
-
-        async function fetchUserData() {
-            showLoader();
-            const userDocRef = doc(db, `artifacts/${appId}/public/data/users`, currentUser.uid);
-            const docSnap = await getDoc(userDocRef);
-
-            if (docSnap.exists()) {
-                userData = docSnap.data();
-                if (userData.isApproved) {
-                    showAppView();
-                    await setupRealtimeListeners(userData.messId);
-                } else {
-                    showApprovalPendingView();
+                    // This could be a user who applied to join but isn't a full user yet
+                    // Or a fresh signup before user doc is created
+                    // For now, we assume they need to login or sign up properly
                 }
             } else {
-                // This case might happen if user exists in Auth but not in Firestore DB.
-                // For this app, it implies they haven't signed up or joined a mess.
-                showAuthView();
+                currentUser = null;
+                userProfile = null;
+                messId = null;
+                mainApp.classList.add('hidden');
+                authSection.classList.remove('hidden');
+                showPage('login-page');
             }
-            hideLoader();
-        }
-
-        // --- VIEW MANAGEMENT ---
-        function showLoader() { loader.style.display = 'flex'; }
-        function hideLoader() { loader.style.display = 'none'; }
+            loadingSpinner.classList.add('hidden');
+        });
         
-        function showAuthView() {
-            authSection.style.display = 'flex';
-            appSection.style.display = 'none';
-            approvalPendingSection.style.display = 'none';
-            hideLoader();
+        // --- EVENT LISTENERS (AUTH) ---
+        document.getElementById('show-signup-link').addEventListener('click', (e) => { e.preventDefault(); showPage('signup-page'); });
+        document.getElementById('show-login-link').addEventListener('click', (e) => { e.preventDefault(); showPage('login-page'); });
+        document.getElementById('show-join-mess-link').addEventListener('click', (e) => { e.preventDefault(); showPage('join-mess-page'); });
+        document.getElementById('back-to-login-link').addEventListener('click', (e) => { e.preventDefault(); showPage('login-page'); });
+
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                // Create user profile in Firestore
+                await setDoc(doc(db, "users", user.uid), {
+                    uid: user.uid,
+                    name: document.getElementById('signup-name').value,
+                    address: document.getElementById('signup-address').value,
+                    mobile: document.getElementById('signup-mobile').value,
+                    gender: document.getElementById('signup-gender').value,
+                    religion: document.getElementById('signup-religion').value,
+                    class: document.getElementById('signup-class').value,
+                    department: document.getElementById('signup-department').value,
+                    email: email,
+                    role: 'admin', // First user is always admin
+                    messId: null,
+                    createdAt: serverTimestamp()
+                });
+                // onAuthStateChanged will handle redirection to create-mess-page
+            } catch (error) {
+                console.error("Signup Error:", error);
+                showModal("সাইন আপ ব্যর্থ", error.message);
+            }
+        });
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                // onAuthStateChanged will handle the rest
+            } catch (error) {
+                console.error("Login Error:", error);
+                showModal("লগইন ব্যর্থ", "ভুল ইমেইল অথবা পাসওয়ার্ড।");
+            }
+        });
+        
+        document.getElementById('create-mess-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messName = document.getElementById('mess-name-input').value;
+            if (!currentUser) return showModal("ত্রুটি", "অনুগ্রহ করে আবার লগইন করুন।");
+
+            try {
+                const messCode = Math.random().toString(36).substring(2, 7).toUpperCase();
+                const messDocRef = await addDoc(collection(db, "messes"), {
+                    name: messName,
+                    adminId: currentUser.uid,
+                    code: messCode,
+                    createdAt: serverTimestamp()
+                });
+
+                // Update user's profile with messId
+                await updateDoc(doc(db, "users", currentUser.uid), {
+                    messId: messDocRef.id
+                });
+                
+                showModal("সফল!", `আপনার মেস তৈরি হয়েছে। জয়েন কোড: ${messCode}`);
+                // onAuthStateChanged will reload the user data and show the main app
+            } catch (error) {
+                console.error("Mess Creation Error:", error);
+                showModal("ত্রুটি", "মেস তৈরি করা যায়নি।");
+            }
+        });
+        
+        document.getElementById('join-mess-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const code = document.getElementById('join-mess-code').value.toUpperCase();
+            const name = document.getElementById('join-name').value;
+            const mobile = document.getElementById('join-mobile').value;
+            const address = document.getElementById('join-address').value;
+
+            try {
+                const q = query(collection(db, "messes"), where("code", "==", code));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    return showModal("ত্রুটি", "এই কোড দিয়ে কোনো মেস পাওয়া যায়নি।");
+                }
+
+                const messDoc = querySnapshot.docs[0];
+                const targetMessId = messDoc.id;
+
+                // Add a join request
+                await addDoc(collection(db, "messes", targetMessId, "joinRequests"), {
+                    name,
+                    mobile,
+                    address,
+                    status: 'pending',
+                    requestedAt: serverTimestamp()
+                });
+
+                showModal("সফল!", "আপনার আবেদন পাঠানো হয়েছে। অ্যাডমিন অনুমোদন করলে আপনি যোগ দিতে পারবেন।");
+                e.target.reset();
+                showPage('login-page');
+
+            } catch (error) {
+                console.error("Join Request Error:", error);
+                showModal("ত্রুটি", "আবেদন পাঠানো যায়নি।");
+            }
+        });
+
+        document.getElementById('logout-button').addEventListener('click', async () => {
+            await signOut(auth);
+            // onAuthStateChanged will handle UI changes
+        });
+
+        // --- MAIN APP LOGIC ---
+        async function loadMessData() {
+            if (!messId) return;
+            const messDocRef = doc(db, "messes", messId);
+            const messDocSnap = await getDoc(messDocRef);
+            if (messDocSnap.exists()) {
+                messData = messDocSnap.data();
+            } else {
+                showModal("গুরুতর ত্রুটি", "মেস ডাটা পাওয়া যায়নি।");
+                await signOut(auth);
+            }
         }
 
-        function showAppView() {
-            authSection.style.display = 'none';
-            appSection.style.display = 'flex';
-            approvalPendingSection.style.display = 'none';
+        function setupUIForUser() {
+            // Set Mess Name in Header
+            document.getElementById('mess-name-header').innerText = messData.name;
+            document.querySelector('#mess-code-display p').innerText = messData.code;
+
+            // Show/Hide Admin specific UI
+            const adminPanelLink = document.getElementById('admin-panel-link');
+            const noticePostArea = document.getElementById('notice-post-area');
+            if (userRole === 'admin') {
+                adminPanelLink.classList.remove('hidden');
+                noticePostArea.classList.remove('hidden');
+            } else {
+                adminPanelLink.classList.add('hidden');
+                noticePostArea.classList.add('hidden');
+            }
+            
+            // Setup listeners for main app
+            setupHomeSectionListeners();
+            setupSidebarListeners();
+            setupNavigation();
         }
         
-        function showApprovalPendingView() {
-            authSection.style.display = 'none';
-            appSection.style.display = 'none';
-            approvalPendingSection.style.display = 'flex';
-            hideLoader();
-        }
+        function setupHomeSectionListeners() {
+            // Date display
+            const now = new Date();
+            const monthNames = ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"];
+            document.getElementById('current-month').innerText = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+            document.getElementById('current-date').innerText = `আজ, ${now.getDate()} ${monthNames[now.getMonth()]}`;
 
-        function switchAuthForm(formId) {
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('signup-form').style.display = 'none';
-            document.getElementById('join-form').style.display = 'none';
-            document.getElementById(formId).style.display = 'block';
-
-            document.querySelectorAll('#auth-section button[id^="show-"]').forEach(btn => {
-                btn.classList.remove('bg-indigo-600', 'text-white');
-                btn.classList.add('text-gray-300');
+            // Load home page data
+            loadBazarDuty();
+            loadTodaysMealStatus();
+            loadNotices();
+            
+            // Meal checkbox listener
+            document.querySelectorAll('.meal-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', async (e) => {
+                    const mealType = e.target.dataset.meal;
+                    const isChecked = e.target.checked;
+                    
+                    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+                    const mealDocRef = doc(db, "messes", messId, "meals", today, "records", currentUser.uid);
+                    
+                    try {
+                        const mealDoc = await getDoc(mealDocRef);
+                        if(mealDoc.exists()){
+                             await updateDoc(mealDocRef, { [mealType]: isChecked });
+                        } else {
+                             await setDoc(mealDocRef, { 
+                                 [mealType]: isChecked,
+                                 breakfast: mealType === 'breakfast' ? isChecked : false,
+                                 lunch: mealType === 'lunch' ? isChecked : false,
+                                 dinner: mealType === 'dinner' ? isChecked : false,
+                                 userId: currentUser.uid,
+                                 name: userProfile.name
+                            });
+                        }
+                    } catch (error) {
+                        console.error("Meal update error:", error);
+                        showModal("ত্রুটি", "মিল আপডেট করা যায়নি।");
+                        e.target.checked = !isChecked; // Revert checkbox on error
+                    }
+                });
             });
             
-            if(formId === 'login-form') document.getElementById('show-login-btn').classList.add('bg-indigo-600', 'text-white');
-            if(formId === 'signup-form') document.getElementById('show-signup-btn').classList.add('bg-indigo-600', 'text-white');
-            if(formId === 'join-form') document.getElementById('show-join-btn').classList.add('bg-indigo-600', 'text-white');
-            
-            clearError();
-        }
-        
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
-            document.getElementById(`${pageId}-page`).classList.remove('hidden');
-            
-            // Highlight active link
-            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('bg-indigo-600'));
-            document.querySelector(`.nav-link[data-page="${pageId}"]`).classList.add('bg-indigo-600');
-            
-            // Close sidebar on mobile
-            document.getElementById('sidebar').classList.add('-translate-x-full');
-            document.getElementById('sidebar-overlay').classList.add('hidden');
-            
-            // Render the page content
-            switch(pageId) {
-                case 'dashboard': renderDashboard(); break;
-                case 'bazar': renderBazarPage(); break;
-                case 'meals': renderMealsPage(); break;
-                case 'members': renderMembersPage(); break;
-                case 'report': renderReportPage(); break;
-                case 'developer': renderDeveloperPage(); break;
-            }
-        }
-
-        // --- STATE MANAGEMENT ---
-        function resetState() {
-            // Unsubscribe from all previous listeners
-            unsubscribeListeners.forEach(unsub => unsub());
-            unsubscribeListeners = [];
-
-            currentUser = null;
-            userData = null;
-            messData = null;
-            members = [];
-            bazarList = [];
-            meals = {};
-            notices = [];
-        }
-
-        // --- REALTIME LISTENERS ---
-        async function setupRealtimeListeners(messId) {
-            showLoader();
-            // Mess Data Listener
-            const messDocRef = doc(db, `artifacts/${appId}/public/data/mess`, messId);
-            const unsubMess = onSnapshot(messDocRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    messData = { messId: docSnap.id, ...docSnap.data() };
-                    updateUIWithMessData();
+            // Notice post listener
+            document.getElementById('post-notice-btn').addEventListener('click', async () => {
+                const content = document.getElementById('notice-input').value;
+                if(!content.trim()) return;
+                
+                try {
+                    await addDoc(collection(db, "messes", messId, "notices"), {
+                        content: content,
+                        authorId: currentUser.uid,
+                        authorName: userProfile.name,
+                        createdAt: serverTimestamp()
+                    });
+                    document.getElementById('notice-input').value = '';
+                } catch(error) {
+                    console.error("Notice post error:", error);
+                    showModal("ত্রুটি", "নোটিশ পোস্ট করা যায়নি।");
                 }
             });
-            unsubscribeListeners.push(unsubMess);
-
-            // Members Listener
-            const membersQuery = query(collection(db, `artifacts/${appId}/public/data/users`), where("messId", "==", messId));
-            const unsubMembers = onSnapshot(membersQuery, (snapshot) => {
-                members = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                // Re-render current page if it depends on members list
-                const currentPage = document.querySelector('.page:not(.hidden)').id.replace('-page', '');
-                showPage(currentPage);
-            });
-            unsubscribeListeners.push(unsubMembers);
-            
-            // Bazar Listener
-            const currentMonthBazar = new Date().toISOString().slice(0, 7);
-            const bazarQuery = query(collection(db, `artifacts/${appId}/public/data/mess/${messId}/bazar`), where("date", ">=", `${currentMonthBazar}-01`));
-            const unsubBazar = onSnapshot(bazarQuery, (snapshot) => {
-                bazarList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a,b) => new Date(b.date) - new Date(a.date));
-                if(document.getElementById('bazar-page').style.display !== 'none') renderBazarPage();
-            });
-            unsubscribeListeners.push(unsubBazar);
-            
-            // Meals Listener
-            const currentMonthStr = new Date().toISOString().slice(0, 7);
-            const mealDocRef = doc(db, `artifacts/${appId}/public/data/mess/${messId}/meals/${currentMonthStr}`);
-            const unsubMeals = onSnapshot(mealDocRef, (docSnap) => {
-                meals = docSnap.exists() ? docSnap.data() : {};
-                if(document.getElementById('dashboard-page').style.display !== 'none') renderDashboard();
-                if(document.getElementById('meals-page').style.display !== 'none') renderMealsPage();
-            });
-            unsubscribeListeners.push(unsubMeals);
-
-            // Notices Listener
-            const noticesQuery = query(collection(db, `artifacts/${appId}/public/data/mess/${messId}/notices`));
-            const unsubNotices = onSnapshot(noticesQuery, (snapshot) => {
-                notices = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a, b) => (b.createdAt?.toDate() || 0) - (a.createdAt?.toDate() || 0));
-                if(document.getElementById('dashboard-page').style.display !== 'none') renderDashboard();
-            });
-            unsubscribeListeners.push(unsubNotices);
-
-            hideLoader();
         }
+        
+        function setupSidebarListeners() {
+            document.getElementById('sidebar-toggle').addEventListener('click', () => {
+                sidebar.classList.remove('translate-x-full');
+                sidebarOverlay.classList.remove('hidden');
+            });
+            document.getElementById('close-sidebar').addEventListener('click', () => {
+                sidebar.classList.add('translate-x-full');
+                sidebarOverlay.classList.add('hidden');
+            });
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.add('translate-x-full');
+                sidebarOverlay.classList.add('hidden');
+            });
+        }
+        
+        function setupNavigation() {
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const sectionId = e.currentTarget.getAttribute('href').substring(1) + '-section';
+                    showSection(sectionId);
+                    
+                    // Load content for the section
+                    switch(sectionId) {
+                        case 'home-section': 
+                            loadBazarDuty();
+                            loadTodaysMealStatus();
+                            loadNotices();
+                            break;
+                        case 'bazar-list-section': renderBazarList(); break;
+                        case 'meal-count-section': renderMealCount(); break;
+                        case 'member-list-section': renderMemberList(); break;
+                        case 'expense-report-section': renderExpenseReport(); break;
+                        case 'admin-panel-section': renderAdminPanel(); break;
+                        case 'developer-profile-section': renderDeveloperProfile(); break;
+                    }
+                });
+            });
+        }
+        
+        // --- DATA LOADING & RENDERING FUNCTIONS ---
+        
+        function loadBazarDuty() {
+            // This is a placeholder. Admin should set this.
+            const dutyListDiv = document.getElementById('bazar-duty-list');
+            dutyListDiv.innerHTML = `<p class="text-lg font-semibold">হাবিবুর রহমান</p>
+                                     <p class="text-sm text-gray-500">ডিউটি অ্যাডমিন দ্বারা নির্ধারিত হবে</p>`;
+        }
+        
+        async function loadTodaysMealStatus() {
+            const today = new Date().toISOString().slice(0, 10);
+            const mealDocRef = doc(db, "messes", messId, "meals", today, "records", currentUser.uid);
+            const mealDocSnap = await getDoc(mealDocRef);
+            
+            const mealCheckboxes = {
+                breakfast: document.querySelector('.meal-checkbox[data-meal="breakfast"]'),
+                lunch: document.querySelector('.meal-checkbox[data-meal="lunch"]'),
+                dinner: document.querySelector('.meal-checkbox[data-meal="dinner"]'),
+            };
 
-        // --- UI RENDERING FUNCTIONS ---
-        function updateUIWithMessData() {
-            if (messData) {
-                document.getElementById('sidebar-mess-name').textContent = messData.name;
-                document.getElementById('header-mess-name').textContent = messData.name;
-                showPage('dashboard');
+            if (mealDocSnap.exists()) {
+                const data = mealDocSnap.data();
+                mealCheckboxes.breakfast.checked = data.breakfast || false;
+                mealCheckboxes.lunch.checked = data.lunch || false;
+                mealCheckboxes.dinner.checked = data.dinner || false;
+            } else {
+                mealCheckboxes.breakfast.checked = false;
+                mealCheckboxes.lunch.checked = false;
+                mealCheckboxes.dinner.checked = false;
             }
         }
         
-        function renderDashboard() {
-            const page = document.getElementById('dashboard-page');
-            const today = new Date();
-            const todayStr = today.toISOString().split('T')[0];
-            const currentUserMeal = meals?.[currentUser.uid]?.[todayStr] || { morning: false, lunch: false, night: false };
-            const isAdmin = userData?.isAdmin;
-            
-            let noticesHTML = notices.length > 0 ? notices.map(notice => `
-                <div class="bg-gray-700 p-4 rounded-lg">
-                    <p class="text-gray-300">${notice.text}</p>
-                    <p class="text-xs text-gray-500 mt-2">-- ${notice.authorName} (${new Date(notice.createdAt?.toDate()).toLocaleString('bn-BD')})</p>
-                    <div class="mt-3 border-t border-gray-600 pt-2">
-                        ${(notice.comments || []).map(comment => `
-                            <div class="text-sm bg-gray-600 p-2 rounded mt-1">
-                                <p class="text-gray-300">${comment.text}</p>
-                                <p class="text-xs text-gray-500 mt-1">- ${comment.authorName}</p>
-                            </div>
-                        `).join('')}
-                        <div class="mt-2">
-                            <input type="text" class="w-full bg-gray-600 rounded p-1 text-sm text-white focus:ring-1 focus:ring-indigo-500" placeholder="কমেন্ট করুন..." data-comment-input-for="${notice.id}">
-                            <button class="mt-1 text-xs bg-indigo-500 hover:bg-indigo-600 text-white py-1 px-2 rounded" data-comment-btn-for="${notice.id}">পাঠান</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('') : '<p class="text-gray-500">কোনো নোটিশ নেই।</p>';
-
-            page.innerHTML = `
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
-                    <h1 class="text-4xl font-bold text-indigo-400">${messData.name}</h1>
-                    <p class="text-gray-400">${today.toLocaleDateString('bn-BD', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                    <p class="text-sm text-gray-500 mt-2">মেস কোড: <span class="font-bold text-yellow-400 tracking-widest">${messData.joinCode}</span> (নতুন সদস্য যোগদানের জন্য)</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                        <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">আজকের বাজার</h2>
-                        <p class="text-lg">আজ <span class="font-bold text-green-400">অ্যাডমিন</span> বাজার করবেন।</p>
-                        <p class="text-sm text-gray-500 mt-2">(বাজার ডিউটি সিস্টেম পরবর্তী আপডেটে আসছে)</p>
-                    </div>
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                        <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">আজকের মিল</h2>
-                        <div class="space-y-3">
-                            <label class="flex items-center justify-between cursor-pointer">
-                                <span class="text-lg">সকাল (0.5)</span>
-                                <input type="checkbox" class="meal-checkbox form-checkbox h-6 w-6 text-indigo-500 bg-gray-700 border-gray-600 rounded focus:ring-indigo-500" data-meal-type="morning" ${currentUserMeal.morning ? 'checked' : ''}>
-                            </label>
-                            <label class="flex items-center justify-between cursor-pointer">
-                                <span class="text-lg">দুপুর (1)</span>
-                                <input type="checkbox" class="meal-checkbox form-checkbox h-6 w-6 text-indigo-500 bg-gray-700 border-gray-600 rounded focus:ring-indigo-500" data-meal-type="lunch" ${currentUserMeal.lunch ? 'checked' : ''}>
-                            </label>
-                            <label class="flex items-center justify-between cursor-pointer">
-                                <span class="text-lg">রাত (1)</span>
-                                <input type="checkbox" class="meal-checkbox form-checkbox h-6 w-6 text-indigo-500 bg-gray-700 border-gray-600 rounded focus:ring-indigo-500" data-meal-type="night" ${currentUserMeal.night ? 'checked' : ''}>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-lg md:col-span-2 lg:col-span-1">
-                        <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">নোটিশ বোর্ড</h2>
-                        <div class="space-y-4 max-h-96 overflow-y-auto pr-2">
-                           ${isAdmin ? `
-                            <div class="mb-4">
-                                <textarea id="notice-text" class="w-full bg-gray-700 rounded p-2 text-white focus:ring-2 focus:ring-indigo-500" rows="3" placeholder="নতুন নোটিশ লিখুন..."></textarea>
-                                <button id="post-notice-btn" class="mt-2 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">পোস্ট করুন</button>
-                            </div>
-                           ` : ''}
-                           ${noticesHTML}
-                        </div>
-                    </div>
+        function loadNotices() {
+            const q = query(collection(db, "messes", messId, "notices"));
+            onSnapshot(q, (querySnapshot) => {
+                const noticeListDiv = document.getElementById('notice-list');
+                if (querySnapshot.empty) {
+                    noticeListDiv.innerHTML = `<p class="text-gray-500">কোনো নোটিশ নেই।</p>`;
+                    return;
+                }
+                noticeListDiv.innerHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const notice = doc.data();
+                    const noticeEl = document.createElement('div');
+                    noticeEl.className = 'border-t border-gray-200 dark:border-gray-700 pt-4';
+                    noticeEl.innerHTML = `
+                        <p class="mb-2">${notice.content}</p>
+                        <small class="text-gray-500 dark:text-gray-400">পোস্ট করেছেন: ${notice.authorName} - ${new Date(notice.createdAt?.toDate()).toLocaleString('bn-BD')}</small>
+                        <!-- Comment feature to be added -->
+                    `;
+                    noticeListDiv.appendChild(noticeEl);
+                });
+            });
+        }
+        
+        function renderBazarList() {
+            contentArea.querySelector('#bazar-list-section').innerHTML = `
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4">বাজার তালিকা</h2>
+                    <p class="text-gray-500">এই ফিচারটি শীঘ্রই আসছে...</p>
                 </div>
             `;
         }
         
-        function renderBazarPage() {
-            const page = document.getElementById('bazar-page');
-            const totalBazar = bazarList.reduce((sum, item) => sum + item.amount, 0);
-            const dokanerBaki = parseFloat(messData.bazarBaki || 0);
-            const isAdmin = userData?.isAdmin;
-            
-            page.innerHTML = `
-                <h1 class="text-3xl font-bold mb-6">বাজার তালিকা ও খরচ</h1>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                        <h2 class="text-2xl font-semibold mb-4">আপনার বাজার যোগ করুন</h2>
-                        <form id="add-bazar-form">
-                            <div class="mb-4">
-                                <label class="block text-gray-400 mb-2">টাকার পরিমাণ</label>
-                                <input type="number" id="bazar-amount" class="w-full bg-gray-700 rounded p-2 focus:ring-2 focus:ring-indigo-500" required />
-                            </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-400 mb-2">দোকানের নাম (ঐচ্ছিক)</label>
-                                <input type="text" id="bazar-store" class="w-full bg-gray-700 rounded p-2 focus:ring-2 focus:ring-indigo-500" />
-                            </div>
-                            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">যোগ করুন</button>
-                        </form>
-                    </div>
-                    ${isAdmin ? `
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                        <h2 class="text-2xl font-semibold mb-4">দোকানের বাকি আপডেট করুন</h2>
-                        <div class="mb-4">
-                            <label class="block text-gray-400 mb-2">বাকি টাকার পরিমাণ</label>
-                            <input type="number" id="baki-amount" value="${dokanerBaki}" class="w-full bg-gray-700 rounded p-2 focus:ring-2 focus:ring-indigo-500" />
-                        </div>
-                        <button id="update-baki-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">আপডেট করুন</button>
-                    </div>` : ''}
-                </div>
-                <div class="mt-8 bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <h2 class="text-2xl font-semibold mb-4">এই মাসের বাজার তালিকা</h2>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead>
-                                <tr class="border-b border-gray-700">
-                                    <th class="p-3">তারিখ</th><th class="p-3">নাম</th><th class="p-3">দোকান</th><th class="p-3 text-right">পরিমাণ (৳)</th>
+        function renderMealCount() {
+             contentArea.querySelector('#meal-count-section').innerHTML = `
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4">মিল সংখ্যা (স্প্রেডশিট)</h2>
+                    <p class="text-gray-500">এই ফিচারটি শীঘ্রই আসছে...</p>
+                    <div class="overflow-x-auto mt-4">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">সদস্য</th>
+                                    <th scope="col" class="px-6 py-3">১ জুলাই</th>
+                                    <th scope="col" class="px-6 py-3">২ জুলাই</th>
+                                    <th scope="col" class="px-6 py-3">...</th>
+                                    <th scope="col" class="px-6 py-3">মোট মিল</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                ${bazarList.length > 0 ? bazarList.map(item => `
-                                <tr class="border-b border-gray-600 hover:bg-gray-700">
-                                    <td class="p-3">${new Date(item.date).toLocaleDateString('bn-BD')}</td>
-                                    <td class="p-3">${item.userName}</td>
-                                    <td class="p-3">${item.storeName || '-'}</td>
-                                    <td class="p-3 text-right font-mono">${item.amount.toFixed(2)}</td>
-                                </tr>`).join('') : `<tr><td colspan="4" class="p-4 text-center text-gray-500">এই মাসে কোনো বাজার যোগ করা হয়নি।</td></tr>`}
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <td class="px-6 py-4">উদাহরণ সদস্য</td>
+                                    <td class="px-6 py-4">2</td>
+                                    <td class="px-6 py-4">1.5</td>
+                                    <td class="px-6 py-4">...</td>
+                                    <td class="px-6 py-4 font-bold">55.5</td>
+                                </tr>
                             </tbody>
-                            <tfoot>
-                                <tr class="font-bold"><td colspan="3" class="p-3 text-right">মোট বাজার:</td><td class="p-3 text-right font-mono">${totalBazar.toFixed(2)}</td></tr>
-                                <tr class="font-bold text-yellow-400"><td colspan="3" class="p-3 text-right">দোকানের বাকি:</td><td class="p-3 text-right font-mono">${dokanerBaki.toFixed(2)}</td></tr>
-                                <tr class="font-bold text-green-400 text-lg"><td colspan="3" class="p-3 text-right">সর্বমোট খরচ:</td><td class="p-3 text-right font-mono">${(totalBazar + dokanerBaki).toFixed(2)}</td></tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>
             `;
         }
         
-        function renderMealsPage() {
-            const page = document.getElementById('meals-page');
-            const today = new Date();
-            const currentMonth = today.getMonth();
-            const currentYear = today.getFullYear();
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            const dates = Array.from({ length: daysInMonth }, (_, i) => new Date(currentYear, currentMonth, i + 1).toISOString().split('T')[0]);
-            
-            const approvedMembers = members.filter(m => m.isApproved);
-
-            const calculateDailyMeal = (mealObj) => {
-                if (!mealObj) return 0;
-                return (mealObj.morning ? 0.5 : 0) + (mealObj.lunch ? 1 : 0) + (mealObj.night ? 1 : 0);
-            };
-
-            const memberTotals = approvedMembers.reduce((acc, member) => {
-                let total = 0;
-                if (meals && meals[member.id]) {
-                    Object.values(meals[member.id]).forEach(mealObj => total += calculateDailyMeal(mealObj));
-                }
-                acc[member.id] = total;
-                return acc;
-            }, {});
-
-            const dailyTotals = dates.reduce((acc, date) => {
-                let total = 0;
-                approvedMembers.forEach(member => {
-                    if (meals && meals[member.id] && meals[member.id][date]) {
-                        total += calculateDailyMeal(meals[member.id][date]);
-                    }
-                });
-                acc[date] = total;
-                return acc;
-            }, {});
-
-            page.innerHTML = `
-                <h1 class="text-3xl font-bold mb-6">মিল সংখ্যা - ${today.toLocaleString('bn-BD', { month: 'long', year: 'numeric' })}</h1>
-                <div class="bg-gray-800 p-2 md:p-4 rounded-lg shadow-lg overflow-x-auto">
-                    <table class="w-full min-w-[800px] border-collapse">
-                        <thead>
-                            <tr class="bg-gray-700">
-                                <th class="p-3 border border-gray-600 sticky left-0 bg-gray-700 z-10">তারিখ</th>
-                                ${approvedMembers.map(member => `<th class="p-3 border border-gray-600 whitespace-nowrap">${member.name}</th>`).join('')}
-                                <th class="p-3 border border-gray-600">দৈনিক মোট</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${dates.map(date => `
-                                <tr class="hover:bg-gray-700">
-                                    <td class="p-2 border border-gray-600 font-mono sticky left-0 bg-gray-800 z-10">${new Date(date).toLocaleDateString('bn-BD', { day: '2-digit', month: 'short' })}</td>
-                                    ${approvedMembers.map(member => `<td class="p-2 border border-gray-600 text-center font-mono">${meals?.[member.id]?.[date] ? calculateDailyMeal(meals[member.id][date]) : 0}</td>`).join('')}
-                                    <td class="p-2 border border-gray-600 text-center font-bold font-mono bg-gray-700">${dailyTotals[date] || 0}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                        <tfoot>
-                            <tr class="bg-gray-700 font-bold">
-                                <td class="p-3 border border-gray-600 sticky left-0 bg-gray-700 z-10">সদস্যের মোট</td>
-                                ${approvedMembers.map(member => `<td class="p-3 border border-gray-600 text-center font-mono">${memberTotals[member.id] || 0}</td>`).join('')}
-                                <td class="p-3 border border-gray-600 text-center font-mono text-lg text-green-400">${Object.values(dailyTotals).reduce((sum, val) => sum + val, 0)}</td>
-                            </tr>
-                        </tfoot>
-                    </table>
+        function renderMemberList() {
+            const memberListSection = contentArea.querySelector('#member-list-section');
+            memberListSection.innerHTML = `<div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-bold mb-4">সদস্য তালিকা</h2>
+                <div id="members-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <p class="text-gray-500">সদস্যদের তালিকা লোড হচ্ছে...</p>
                 </div>
-            `;
-        }
-        
-        function renderMembersPage() {
-            const page = document.getElementById('members-page');
-            const isAdmin = userData?.isAdmin;
-            const pendingMembers = members.filter(m => !m.isApproved);
-            const approvedMembers = members.filter(m => m.isApproved);
+            </div>`;
             
-            page.innerHTML = `
-                <h1 class="text-3xl font-bold mb-6">সদস্য তালিকা</h1>
-                ${isAdmin && pendingMembers.length > 0 ? `
-                <div class="mb-8">
-                    <h2 class="text-2xl font-semibold mb-4 text-yellow-400">অনুমোদনের অপেক্ষায়</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        ${pendingMembers.map(member => `
-                            <div class="bg-gray-800 p-5 rounded-lg shadow-lg">
-                                <h3 class="text-xl font-bold">${member.name}</h3>
-                                <p class="text-gray-400">${member.email}</p>
-                                <p class="text-gray-400">${member.mobile}</p>
-                                <button data-approve-id="${member.id}" class="approve-btn mt-4 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">অনুমোদন করুন</button>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>` : ''}
-                <div>
-                    <h2 class="text-2xl font-semibold mb-4 text-green-400">অনুমোদিত সদস্য</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        ${approvedMembers.map(member => `
-                            <div class="bg-gray-800 p-5 rounded-lg shadow-lg flex flex-col justify-between">
-                                <div>
-                                    <h3 class="text-xl font-bold">${member.name} ${member.isAdmin ? '<span class="text-xs bg-indigo-500 text-white px-2 py-1 rounded-full ml-2">অ্যাডমিন</span>' : ''}</h3>
-                                    <p class="text-gray-400">${member.email}</p>
-                                    <p class="text-gray-400">${member.mobile}</p>
-                                    <p class="text-gray-300 mt-2">মাসিক ভাড়া: <span class="font-bold text-lg text-indigo-400">${(member.rent || 0).toFixed(2)} ৳</span></p>
-                                </div>
-                                ${isAdmin ? `
-                                <div class="mt-4 flex space-x-2">
-                                    <button data-edit-rent-id="${member.id}" data-rent="${member.rent}" data-name="${member.name}" class="edit-rent-btn flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">ভাড়া ঠিক করুন</button>
-                                    <button data-delete-id="${member.id}" class="delete-member-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">মুছুন</button>
-                                </div>` : ''}
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-        
-        function renderReportPage() {
-            const page = document.getElementById('report-page');
-            const { memberReports, totalMealCost, totalMeals, mealRate, otherBills, perPersonOtherBill } = calculateReport();
-
-            page.innerHTML = `
-                <h1 class="text-3xl font-bold mb-6">মাসিক হিসাব রিপোর্ট</h1>
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
-                    <h2 class="text-2xl font-semibold mb-4">মাসের সারাংশ</h2>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                        <div class="bg-gray-700 p-4 rounded-lg"><p class="text-gray-400">মোট মিল খরচ</p><p class="text-2xl font-bold text-green-400">${totalMealCost.toFixed(2)} ৳</p></div>
-                        <div class="bg-gray-700 p-4 rounded-lg"><p class="text-gray-400">মোট মিল</p><p class="text-2xl font-bold">${totalMeals.toFixed(2)}</p></div>
-                        <div class="bg-gray-700 p-4 rounded-lg"><p class="text-gray-400">মিল রেট</p><p class="text-2xl font-bold text-yellow-400">${mealRate.toFixed(2)} ৳</p></div>
-                        <div class="bg-gray-700 p-4 rounded-lg"><p class="text-gray-400">অন্যান্য বিল</p><p class="text-2xl font-bold">${otherBills.toFixed(2)} ৳</p></div>
-                    </div>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-semibold mb-4">সদস্যদের রিপোর্ট</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        ${memberReports.map(member => `
-                            <div class="bg-gray-800 p-5 rounded-lg shadow-lg">
-                                <h3 class="text-xl font-bold text-indigo-400">${member.name}</h3>
-                                <div class="mt-4 space-y-2 text-sm">
-                                    <p class="flex justify-between"><span>খাবার খরচ:</span> <span>${member.foodCost.toFixed(2)} ৳</span></p>
-                                    <p class="flex justify-between"><span>বাসা ভাড়া:</span> <span>${member.rent.toFixed(2)} ৳</span></p>
-                                    <p class="flex justify-between"><span>অন্যান্য বিল:</span> <span>${perPersonOtherBill.toFixed(2)} ৳</span></p>
-                                    <hr class="border-gray-600 my-2" />
-                                    <p class="flex justify-between font-bold"><span>মোট বিল:</span> <span>${member.totalBill.toFixed(2)} ৳</span></p>
-                                    <p class="flex justify-between"><span>আপনার বাজার:</span> <span>- ${member.personalBazar.toFixed(2)} ৳</span></p>
-                                    <hr class="border-gray-600 my-2" />
-                                    <div class="text-lg font-bold p-2 rounded text-center ${member.finalDue >= 0 ? 'bg-red-900 text-red-300' : 'bg-green-900 text-green-300'}">
-                                        ${member.finalDue >= 0 ? `দিতে হবে: ${member.finalDue.toFixed(2)} ৳` : `ফেরত পাবেন: ${Math.abs(member.finalDue).toFixed(2)} ৳`}
-                                    </div>
-                                </div>
-                                <button data-report-for="${member.id}" class="send-report-btn mt-4 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">WhatsApp-এ পাঠান</button>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderDeveloperPage() {
-            document.getElementById('developer-page').innerHTML = `
-                <div class="flex items-center justify-center min-h-full">
-                    <div class="bg-gray-800 p-8 rounded-lg shadow-2xl max-w-2xl text-center">
-                        <img src="https://placehold.co/150x150/1e293b/9ca3af?text=Mahi" alt="Developer" class="w-40 h-40 rounded-full mx-auto mb-6 border-4 border-indigo-500">
-                        <h1 class="text-4xl font-bold text-indigo-400">Md Habibur Rahman Mahi</h1>
-                        <p class="text-xl text-gray-400 mt-2">Web Developer & Project Creator</p>
-                        <hr class="border-gray-700 my-6" />
-                        <h2 class="text-2xl font-semibold mb-4">Project: Infinity Mess Management</h2>
-                        <p class="text-gray-300">This application is designed to simplify mess management for students and bachelors. Developed with passion by "Created by Mahi".</p>
-                        <div class="mt-8 flex justify-center space-x-6">
-                            <a href="#" class="text-indigo-400 hover:text-indigo-300">GitHub</a>
-                            <a href="#" class="text-indigo-400 hover:text-indigo-300">Portfolio</a>
-                            <a href="#" class="text-indigo-400 hover:text-indigo-300">Email</a>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // --- HELPER & LOGIC FUNCTIONS ---
-        function showError(message) { document.getElementById('auth-error').textContent = message; }
-        function clearError() { document.getElementById('auth-error').textContent = ''; }
-        
-        function generateMessCode() { return Math.random().toString(36).substring(2, 7).toUpperCase(); }
-        
-        function calculateReport() {
-            const approvedMembers = members.filter(m => m.isApproved);
-            const numMembers = approvedMembers.length > 0 ? approvedMembers.length : 1;
-            const totalBazarCost = bazarList.reduce((sum, item) => sum + item.amount, 0);
-            const dokanerBaki = parseFloat(messData.bazarBaki || 0);
-            const otherBills = Object.values(messData.bills || {}).reduce((sum, bill) => sum + parseFloat(bill || 0), 0);
-            const totalMealCost = totalBazarCost + dokanerBaki;
-            
-            let totalMeals = 0;
-            const memberMeals = {};
-            const memberBazar = {};
-
-            approvedMembers.forEach(member => {
-                let mMeals = 0;
-                if (meals && meals[member.id]) {
-                    Object.values(meals[member.id]).forEach(dayMeal => {
-                        if (dayMeal.morning) mMeals += 0.5;
-                        if (dayMeal.lunch) mMeals += 1;
-                        if (dayMeal.night) mMeals += 1;
-                    });
-                }
-                memberMeals[member.id] = mMeals;
-                totalMeals += mMeals;
-                memberBazar[member.id] = bazarList.filter(b => b.userId === member.id).reduce((sum, b) => sum + b.amount, 0);
-            });
-
-            const mealRate = totalMeals > 0 ? totalMealCost / totalMeals : 0;
-            const perPersonOtherBill = otherBills / numMembers;
-
-            const memberReports = approvedMembers.map(member => {
-                const foodCost = mealRate * (memberMeals[member.id] || 0);
-                const totalBill = foodCost + (member.rent || 0) + perPersonOtherBill;
-                const finalDue = totalBill - (memberBazar[member.id] || 0);
-                return {
-                    ...member, foodCost, totalBill, finalDue,
-                    personalMeals: memberMeals[member.id] || 0,
-                    personalBazar: memberBazar[member.id] || 0,
-                };
-            });
-            return { memberReports, totalMealCost, totalMeals, mealRate, otherBills, perPersonOtherBill };
-        }
-
-        // --- EVENT LISTENERS SETUP ---
-        function setupEventListeners() {
-            document.getElementById('footer-year').textContent = new Date().getFullYear();
-
-            // Auth form switching
-            document.getElementById('show-login-btn').addEventListener('click', () => switchAuthForm('login-form'));
-            document.getElementById('show-signup-btn').addEventListener('click', () => switchAuthForm('signup-form'));
-            document.getElementById('show-join-btn').addEventListener('click', () => switchAuthForm('join-form'));
-
-            // Auth form submissions
-            document.getElementById('login-form').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                showLoader();
-                clearError();
-                try {
-                    const email = document.getElementById('login-email').value;
-                    const password = document.getElementById('login-password').value;
-                    await signInWithEmailAndPassword(auth, email, password);
-                } catch (err) {
-                    showError("ইমেইল বা পাসওয়ার্ড সঠিক নয়।");
-                    hideLoader();
-                }
-            });
-
-            document.getElementById('signup-form').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                showLoader();
-                clearError();
-                const password = document.getElementById('signup-password').value;
-                if (password.length < 6) {
-                    showError("পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।");
-                    hideLoader();
-                    return;
-                }
-                try {
-                    const email = document.getElementById('signup-email').value;
-                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                    const user = userCredential.user;
-
-                    const newMessRef = doc(collection(db, `artifacts/${appId}/public/data/mess`));
-                    const messCode = generateMessCode();
-                    const messDataToSave = {
-                        messId: newMessRef.id,
-                        name: document.getElementById('signup-mess-name').value,
-                        adminId: user.uid,
-                        joinCode: messCode,
-                        createdAt: serverTimestamp(),
-                        bills: { maid: 0, current: 0, wifi: 0, others: 0 },
-                        bazarBaki: 0
-                    };
-                    await setDoc(newMessRef, messDataToSave);
-
-                    const memberData = {
-                        uid: user.uid,
-                        name: document.getElementById('signup-name').value,
-                        email: email,
-                        address: document.getElementById('signup-address').value,
-                        mobile: document.getElementById('signup-mobile').value,
-                        messId: newMessRef.id,
-                        isApproved: true,
-                        isAdmin: true,
-                        rent: 0,
-                        joinDate: serverTimestamp()
-                    };
-                    await setDoc(doc(db, `artifacts/${appId}/public/data/users`, user.uid), memberData);
-                } catch (err) {
-                    showError("অ্যাকাউন্ট তৈরি করা যায়নি। ইমেইলটি সম্ভবত ব্যবহৃত হয়েছে।");
-                    hideLoader();
-                }
-            });
-            
-            document.getElementById('join-form').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                showLoader();
-                clearError();
-                const password = document.getElementById('join-password').value;
-                if (password.length < 6) {
-                    showError("পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।");
-                    hideLoader();
-                    return;
-                }
-                try {
-                    const joinCode = document.getElementById('join-code').value.toUpperCase();
-                    const q = query(collection(db, `artifacts/${appId}/public/data/mess`), where("joinCode", "==", joinCode));
-                    const querySnapshot = await getDocs(q);
-
-                    if (querySnapshot.empty) {
-                        showError("এই কোড দিয়ে কোনো মেস খুঁজে পাওয়া যায়নি।");
-                        hideLoader();
-                        return;
-                    }
-                    const messId = querySnapshot.docs[0].id;
-                    const email = document.getElementById('join-email').value;
-                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                    const user = userCredential.user;
-
-                    const applicantData = {
-                        uid: user.uid,
-                        name: document.getElementById('join-name').value,
-                        email: email,
-                        address: document.getElementById('join-address').value,
-                        mobile: document.getElementById('join-mobile').value,
-                        messId: messId,
-                        isApproved: false,
-                        isAdmin: false,
-                        rent: 0,
-                        joinDate: serverTimestamp()
-                    };
-                    await setDoc(doc(db, `artifacts/${appId}/public/data/users`, user.uid), applicantData);
-                } catch (err) {
-                    showError("আবেদন করা যায়নি। ইমেইলটি সম্ভবত ব্যবহৃত হয়েছে।");
-                    hideLoader();
-                }
-            });
-
-            // Logout buttons
-            document.getElementById('logout-btn-main').addEventListener('click', () => signOut(auth));
-            document.getElementById('logout-btn-pending').addEventListener('click', () => signOut(auth));
-
-            // Sidebar toggle
-            document.getElementById('open-sidebar-btn').addEventListener('click', () => {
-                document.getElementById('sidebar').classList.remove('-translate-x-full');
-                document.getElementById('sidebar-overlay').classList.remove('hidden');
-            });
-            document.getElementById('close-sidebar-btn').addEventListener('click', () => {
-                document.getElementById('sidebar').classList.add('-translate-x-full');
-                document.getElementById('sidebar-overlay').classList.add('hidden');
-            });
-            document.getElementById('sidebar-overlay').addEventListener('click', () => {
-                document.getElementById('sidebar').classList.add('-translate-x-full');
-                document.getElementById('sidebar-overlay').classList.add('hidden');
-            });
-
-            // Navigation links
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showPage(e.currentTarget.dataset.page);
-                });
-            });
-            
-            // Modal close
-            document.getElementById('modal-close-btn').addEventListener('click', () => document.getElementById('modal').classList.add('hidden'));
-
-            // Dynamic event listeners on main content
-            mainContent.addEventListener('click', async (e) => {
-                // Meal checkbox
-                if (e.target.classList.contains('meal-checkbox')) {
-                    const mealType = e.target.dataset.mealType;
-                    const isChecked = e.target.checked;
-                    const todayStr = new Date().toISOString().split('T')[0];
-                    const currentMonthStr = new Date().toISOString().slice(0, 7);
-                    const mealDocRef = doc(db, `artifacts/${appId}/public/data/mess/${messData.messId}/meals/${currentMonthStr}`);
-                    const path = `${currentUser.uid}.${todayStr}.${mealType}`;
-                    await setDoc(mealDocRef, { [path]: isChecked }, { merge: true });
-                }
-                
-                // Post notice
-                if(e.target.id === 'post-notice-btn') {
-                    const text = document.getElementById('notice-text').value;
-                    if(!text.trim()) return;
-                    await addDoc(collection(db, `artifacts/${appId}/public/data/mess/${messData.messId}/notices`), {
-                        text: text,
-                        authorId: currentUser.uid,
-                        authorName: userData.name,
-                        createdAt: serverTimestamp(),
-                        comments: []
-                    });
-                    document.getElementById('notice-text').value = '';
-                }
-                
-                // Post comment
-                if(e.target.matches('[data-comment-btn-for]')) {
-                    const noticeId = e.target.dataset.commentBtnFor;
-                    const input = document.querySelector(`[data-comment-input-for="${noticeId}"]`);
-                    const text = input.value;
-                    if(!text.trim()) return;
-                    
-                    const noticeRef = doc(db, `artifacts/${appId}/public/data/mess/${messData.messId}/notices`, noticeId);
-                    const noticeToUpdate = notices.find(n => n.id === noticeId);
-                    const updatedComments = [...(noticeToUpdate.comments || []), {
-                        text: text,
-                        authorId: currentUser.uid,
-                        authorName: userData.name,
-                        createdAt: serverTimestamp()
-                    }];
-                    await updateDoc(noticeRef, { comments: updatedComments });
-                    input.value = '';
-                }
-
-                // Update Baki
-                if(e.target.id === 'update-baki-btn') {
-                    const amount = parseFloat(document.getElementById('baki-amount').value);
-                    if(isNaN(amount)) return;
-                    await updateDoc(doc(db, `artifacts/${appId}/public/data/mess`, messData.messId), { bazarBaki: amount });
-                }
-                
-                // Approve member
-                if(e.target.classList.contains('approve-btn')) {
-                    const memberId = e.target.dataset.approveId;
-                    await updateDoc(doc(db, `artifacts/${appId}/public/data/users`, memberId), { isApproved: true });
-                }
-                
-                // Edit rent
-                if(e.target.classList.contains('edit-rent-btn')) {
-                    const memberId = e.target.dataset.editRentId;
-                    const currentRent = e.target.dataset.rent;
-                    const memberName = e.target.dataset.name;
-                    document.getElementById('modal-title').textContent = `ভাড়া আপডেট করুন - ${memberName}`;
-                    document.getElementById('modal-body').innerHTML = `
-                        <label class="block text-gray-400 mb-2">নতুন ভাড়ার পরিমাণ</label>
-                        <input type="number" id="new-rent-input" value="${currentRent}" class="w-full bg-gray-700 rounded p-2 text-white focus:ring-2 focus:ring-indigo-500" />
-                        <button id="confirm-rent-update" data-member-id="${memberId}" class="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">আপডেট</button>
+            const q = query(collection(db, "users"), where("messId", "==", messId));
+            onSnapshot(q, (querySnapshot) => {
+                const container = document.getElementById('members-container');
+                container.innerHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const member = doc.data();
+                    const memberCard = document.createElement('div');
+                    memberCard.className = 'bg-gray-100 dark:bg-gray-700 p-4 rounded-lg';
+                    memberCard.innerHTML = `
+                        <h3 class="font-bold text-lg">${member.name} ${member.role === 'admin' ? '<span class="text-xs bg-yellow-500 text-white px-2 py-1 rounded-full ml-2">অ্যাডমিন</span>' : ''}</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">${member.mobile}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">${member.email}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">ভাড়া: ${member.rent || 'N/A'} টাকা</p>
                     `;
-                    document.getElementById('modal').classList.remove('hidden');
-                }
-                
-                // Confirm rent update (inside modal)
-                if(e.target.id === 'confirm-rent-update') {
-                    const memberId = e.target.dataset.memberId;
-                    const newRent = parseFloat(document.getElementById('new-rent-input').value);
-                    if(isNaN(newRent)) return;
-                    await updateDoc(doc(db, `artifacts/${appId}/public/data/users`, memberId), { rent: newRent });
-                    document.getElementById('modal').classList.add('hidden');
-                }
-                
-                // Delete member
-                if(e.target.classList.contains('delete-member-btn')) {
-                    if(confirm("আপনি কি নিশ্চিতভাবে এই সদস্যকে মুছে ফেলতে চান?")) {
-                        const memberId = e.target.dataset.deleteId;
-                        await deleteDoc(doc(db, `artifacts/${appId}/public/data/users`, memberId));
-                    }
-                }
-                
-                // Send report via WhatsApp
-                if(e.target.classList.contains('send-report-btn')) {
-                    const memberId = e.target.dataset.reportFor;
-                    const { memberReports, mealRate, perPersonOtherBill } = calculateReport();
-                    const member = memberReports.find(m => m.id === memberId);
-                    if(!member) return;
-                    const reportText = `*Infinity Mess - মাসিক রিপোর্ট*\n---------------------------------\nসদস্য: *${member.name}*\n\n*আপনার হিসাব:*\n- মোট মিল: ${member.personalMeals.toFixed(2)}\n- মিল রেট: ${mealRate.toFixed(2)} ৳\n- খাবার খরচ: ${member.foodCost.toFixed(2)} ৳\n- বাসা ভাড়া: ${member.rent.toFixed(2)} ৳\n- অন্যান্য বিল: ${perPersonOtherBill.toFixed(2)} ৳\n---------------------------------\n*মোট বিল: ${member.totalBill.toFixed(2)} ৳*\n- আপনার বাজার: ${member.personalBazar.toFixed(2)} ৳\n---------------------------------\n*পাওনা/দেনা: ${member.finalDue.toFixed(2)} ৳*\n${member.finalDue >= 0 ? `(আপনাকে ${member.finalDue.toFixed(2)} টাকা দিতে হবে)` : `(আপনি ${Math.abs(member.finalDue).toFixed(2)} টাকা ফেরত পাবেন)`}`;
-                    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(reportText)}`;
-                    window.open(whatsappUrl, '_blank');
-                }
-            });
-            
-            mainContent.addEventListener('submit', async (e) => {
-                // Add bazar
-                if(e.target.id === 'add-bazar-form') {
-                    e.preventDefault();
-                    const amount = parseFloat(document.getElementById('bazar-amount').value);
-                    if(isNaN(amount)) return;
-                    await addDoc(collection(db, `artifacts/${appId}/public/data/mess/${messData.messId}/bazar`), {
-                        userId: currentUser.uid,
-                        userName: userData.name,
-                        amount: amount,
-                        storeName: document.getElementById('bazar-store').value,
-                        date: new Date().toISOString().split('T')[0],
-                        createdAt: serverTimestamp()
-                    });
-                    e.target.reset();
-                }
+                    container.appendChild(memberCard);
+                });
             });
         }
+        
+        function renderExpenseReport() {
+            contentArea.querySelector('#expense-report-section').innerHTML = `
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4">মাসিক হিসাব ও রিপোর্ট</h2>
+                    <p class="text-gray-500">এই ফিচারটি শীঘ্রই আসছে...</p>
+                </div>
+            `;
+        }
+        
+        function renderAdminPanel() {
+            const adminPanelSection = contentArea.querySelector('#admin-panel-section');
+            adminPanelSection.innerHTML = `<div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-bold mb-4">অ্যাডমিন প্যানেল</h2>
+                <h3 class="text-xl font-semibold mb-2">যোগদানের আবেদনসমূহ</h3>
+                <div id="join-requests-container">
+                    <p class="text-gray-500">আবেদন লোড হচ্ছে...</p>
+                </div>
+            </div>`;
 
-        // --- START THE APP ---
-        initialize();
+            const q = query(collection(db, "messes", messId, "joinRequests"), where("status", "==", "pending"));
+            onSnapshot(q, (querySnapshot) => {
+                const container = document.getElementById('join-requests-container');
+                if(querySnapshot.empty) {
+                    container.innerHTML = '<p class="text-gray-500">কোনো নতুন আবেদন নেই।</p>';
+                    return;
+                }
+                container.innerHTML = '';
+                querySnapshot.forEach((docSnap) => {
+                    const request = docSnap.data();
+                    const reqId = docSnap.id;
+                    const reqCard = document.createElement('div');
+                    reqCard.className = 'bg-gray-100 dark:bg-gray-700 p-4 rounded-lg mb-3 flex justify-between items-center';
+                    reqCard.innerHTML = `
+                        <div>
+                            <p class="font-bold">${request.name}</p>
+                            <p class="text-sm">${request.mobile}</p>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="number" id="rent-${reqId}" class="w-24 px-2 py-1 mr-2 bg-gray-200 dark:bg-gray-600 rounded" placeholder="ভাড়া">
+                            <button data-id="${reqId}" class="approve-btn bg-green-500 text-white px-3 py-1 rounded-lg mr-2">Approve</button>
+                            <button data-id="${reqId}" class="reject-btn bg-red-500 text-white px-3 py-1 rounded-lg">Reject</button>
+                        </div>
+                    `;
+                    container.appendChild(reqCard);
+                });
 
+                // Add event listeners after creating the buttons
+                document.querySelectorAll('.approve-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const reqId = e.target.dataset.id;
+                        const rent = document.getElementById(`rent-${reqId}`).value;
+                        if(!rent) return showModal("ত্রুটি", "অনুগ্রহ করে বাসা ভাড়া নির্ধারণ করুন।");
+                        
+                        // This is a complex operation. It requires creating a new user account,
+                        // which can't be done directly by the admin for security reasons.
+                        // A better flow would be for the applicant to sign up first, then request to join.
+                        // For now, we'll just update the request status as a placeholder.
+                        
+                        const reqRef = doc(db, "messes", messId, "joinRequests", reqId);
+                        const reqDoc = await getDoc(reqRef);
+                        const reqData = reqDoc.data();
+
+                        // Placeholder logic: create a user doc (in a real app, this needs auth)
+                        // This is NOT secure but demonstrates the flow.
+                        const newUserId = "user_" + Date.now(); // Dummy ID
+                        await setDoc(doc(db, "users", newUserId), {
+                            name: reqData.name,
+                            mobile: reqData.mobile,
+                            address: reqData.address,
+                            messId: messId,
+                            role: 'member',
+                            rent: Number(rent),
+                            // In a real app, you would need email/password from the user.
+                        });
+
+                        await updateDoc(reqRef, { status: 'approved' });
+                        showModal("সফল", `${reqData.name} এখন মেসের সদস্য।`);
+                    });
+                });
+            });
+        }
+        
+        function renderDeveloperProfile() {
+            contentArea.querySelector('#developer-profile-section').innerHTML = `
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg text-center">
+                    <img src="https://placehold.co/150x150/4299e1/ffffff?text=MAHI" alt="Developer" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-500">
+                    <h2 class="text-3xl font-bold">Md Habibur Rahman Mahi</h2>
+                    <p class="text-lg text-blue-400 mb-4">Project: Infinity Mess Management</p>
+                    <p class="text-gray-500 dark:text-gray-400">Organization/Brand: Created by Mahi</p>
+                    <div class="flex justify-center space-x-6 mt-6 text-2xl">
+                        <a href="#" class="text-gray-500 hover:text-blue-500"><i class="fab fa-github"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-blue-500"><i class="fas fa-briefcase"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-blue-500"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // --- DARK MODE TOGGLE ---
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const html = document.documentElement;
+        
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          html.classList.add('dark');
+          darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        } else {
+          html.classList.remove('dark');
+          darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+        });
+        
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js').then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+        
     </script>
+    
+    <!-- You would create these files separately: manifest.json and service-worker.js -->
+    <!--
+    // manifest.json
+    {
+      "name": "Infinity Mess Management",
+      "short_name": "InfinityMess",
+      "start_url": "/",
+      "display": "standalone",
+      "background_color": "#111827",
+      "theme_color": "#1f2937",
+      "icons": [
+        {
+          "src": "https://placehold.co/192x192/4299e1/ffffff?text=IM",
+          "sizes": "192x192",
+          "type": "image/png"
+        },
+        {
+          "src": "https://placehold.co/512x512/4299e1/ffffff?text=IM",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ]
+    }
+
+    // service-worker.js
+    const CACHE_NAME = 'infinity-mess-v1';
+    const urlsToCache = [
+      '/',
+      '/index.html',
+      // Add other assets like CSS, JS, images here
+    ];
+
+    self.addEventListener('install', event => {
+      event.waitUntil(
+        caches.open(CACHE_NAME)
+          .then(cache => {
+            console.log('Opened cache');
+            return cache.addAll(urlsToCache);
+          })
+      );
+    });
+
+    self.addEventListener('fetch', event => {
+      event.respondWith(
+        caches.match(event.request)
+          .then(response => {
+            // Cache hit - return response
+            if (response) {
+              return response;
+            }
+            return fetch(event.request);
+          }
+        )
+      );
+    });
+    -->
+
 </body>
 </html>
