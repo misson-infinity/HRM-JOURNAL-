@@ -1,957 +1,621 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Infinity Mess Management</title>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1f2937">
-
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
     <style>
-        /* Custom Styles */
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #858796;
+            --success-color: #1cc88a;
+            --info-color: #36b9cc;
+            --warning-color: #f6c23e;
+            --danger-color: #e74a3b;
+            --light-color: #f8f9fc;
+            --dark-color: #5a5c69;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
         body {
-            font-family: 'Hind Siliguri', 'Inter', sans-serif;
-            background-color: #111827; /* Dark background as default */
+            background-color: #f8f9fc;
+            color: #5a5c69;
         }
-        .dark {
-            /* Styles for dark mode are applied by default via Tailwind classes */
+
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
         }
-        /* Sidebar transition */
-        #sidebar {
-            transition: transform 0.3s ease-in-out;
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.3rem;
         }
-        /* Custom scrollbar for better look */
-        ::-webkit-scrollbar {
-            width: 8px;
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 250px;
+            background-color: var(--primary-color);
+            transition: all 0.3s;
+            z-index: 1000;
+            overflow-y: auto;
+            transform: translateX(-100%);
         }
-        ::-webkit-scrollbar-track {
-            background: #1f2937;
+
+        .sidebar.active {
+            transform: translateX(0);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #4b5563;
-            border-radius: 10px;
+
+        .sidebar .sidebar-brand {
+            height: 4.375rem;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 800;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+            z-index: 1;
+            color: white;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #6b7280;
+
+        .sidebar hr.sidebar-divider {
+            margin: 0 1rem 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .sidebar .nav-item {
+            position: relative;
+        }
+
+        .sidebar .nav-item .nav-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+        }
+
+        .sidebar .nav-item .nav-link:hover {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar .nav-item .nav-link.active {
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .sidebar .nav-item .nav-link i {
+            margin-right: 0.5rem;
+            width: 1.25rem;
+            text-align: center;
+        }
+
+        .sidebar .sidebar-heading {
+            padding: 0 1rem;
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .content {
+            width: 100%;
+            padding: 1rem;
+            margin-top: 56px;
+        }
+
+        .card {
+            position: relative;
+            margin-bottom: 1.5rem;
+            border: none;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+
+        .card-header {
+            background-color: #f8f9fc;
+            border-bottom: 1px solid #e3e6f0;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #2e59d9;
+            border-color: #2653d4;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+
+        .btn-info {
+            background-color: var(--info-color);
+            border-color: var(--info-color);
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            border-color: var(--warning-color);
+        }
+
+        .topbar {
+            height: 56px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            background-color: #fff;
+        }
+
+        .topbar .navbar-nav .nav-item .nav-link {
+            color: #d1d3e2;
+            padding: 0.75rem;
+        }
+
+        .topbar .navbar-nav .nav-item .nav-link:hover {
+            color: #4e73df;
+        }
+
+        .topbar .navbar-nav .nav-item .nav-link i {
+            font-size: 1.2rem;
+        }
+
+        .meal-counter {
+            display: flex;
+            justify-content: space-around;
+            margin: 1rem 0;
+        }
+
+        .meal-item {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 0.35rem;
+            background-color: #f8f9fc;
+            border: 1px solid #e3e6f0;
+        }
+
+        .meal-item input[type="checkbox"] {
+            transform: scale(1.5);
+            margin: 0.5rem 0;
+        }
+
+        .notice-board {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .notice-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.35rem;
+            background-color: #f8f9fc;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .notice-item .notice-date {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+        }
+
+        .table-responsive {
+            border-radius: 0.35rem;
+        }
+
+        .table th, .table td {
+            padding: 0.75rem;
+            vertical-align: middle;
+        }
+
+        .table thead th {
+            background-color: #f8f9fc;
+            border-bottom: 2px solid #e3e6f0;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .member-card {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.35rem;
+            background-color: #f8f9fc;
+            border: 1px solid #e3e6f0;
+        }
+
+        .member-card .member-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .member-card .member-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .expense-summary {
+            padding: 1rem;
+            border-radius: 0.35rem;
+            background-color: #f8f9fc;
+            border: 1px solid #e3e6f0;
+            margin-bottom: 1rem;
+        }
+
+        .expense-summary h5 {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .expense-summary .amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .footer {
+            padding: 1rem;
+            background-color: #f8f9fc;
+            text-align: center;
+            border-top: 1px solid #e3e6f0;
+        }
+
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-content i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            animation: spin 2s infinite linear;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .developer-profile {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .developer-profile .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .dark-mode {
+            background-color: #1a1a2e;
+            color: #eee;
+        }
+
+        .dark-mode .card {
+            background-color: #16213e;
+            color: #eee;
+        }
+
+        .dark-mode .card-header {
+            background-color: #0f3460;
+            color: #eee;
+        }
+
+        .dark-mode .table thead th {
+            background-color: #0f3460;
+            color: #eee;
+        }
+
+        .dark-mode .meal-item, .dark-mode .notice-item, .dark-mode .member-card, .dark-mode .expense-summary {
+            background-color: #16213e;
+            border-color: #0f3460;
+        }
+
+        .dark-mode .footer {
+            background-color: #0f3460;
+            border-color: #16213e;
+        }
+
+        .dark-mode .topbar {
+            background-color: #16213e;
+        }
+
+        .dark-mode .sidebar {
+            background-color: #0f3460;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+            }
+            
+            .content {
+                padding: 0.5rem;
+            }
+            
+            .card {
+                margin-bottom: 1rem;
+            }
+            
+            .meal-counter {
+                flex-direction: column;
+            }
+            
+            .meal-item {
+                margin-bottom: 0.5rem;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
-
-    <!-- App Container -->
-    <div id="app-container">
-
-        <!-- Loading Spinner -->
-        <div id="loading-spinner" class="fixed inset-0 bg-gray-900 bg-opacity-80 flex justify-center items-center z-50">
-            <div class="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-blue-500"></div>
-        </div>
-
-        <!-- Login/Signup Pages -->
-        <div id="auth-section">
-            <!-- Login Page -->
-            <div id="login-page" class="min-h-screen flex items-center justify-center p-4 hidden">
-                <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-                    <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-2">স্বাগতম!</h2>
-                    <p class="text-center text-gray-500 dark:text-gray-400 mb-8">আপনার মেসে লগইন করুন</p>
-                    <form id="login-form">
-                        <div class="mb-4">
-                            <label for="login-email" class="block mb-2 text-sm font-medium">ইমেইল</label>
-                            <input type="email" id="login-email" class="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        </div>
-                        <div class="mb-6">
-                            <label for="login-password" class="block mb-2 text-sm font-medium">পাসওয়ার্ড</label>
-                            <input type="password" id="login-password" class="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        </div>
-                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">লগইন করুন</button>
-                    </form>
-                    <p class="text-center mt-6 text-sm">
-                        অ্যাডমিন? <a href="#" id="show-signup-link" class="font-medium text-blue-500 hover:underline">নতুন অ্যাকাউন্ট তৈরি করুন</a>
-                    </p>
-                     <p class="text-center mt-2 text-sm">
-                        সদস্য? <a href="#" id="show-join-mess-link" class="font-medium text-blue-500 hover:underline">মেসে যোগ দিন</a>
-                    </p>
-                </div>
-            </div>
-
-            <!-- Signup Page (Admin) -->
-            <div id="signup-page" class="min-h-screen flex items-center justify-center p-4 hidden">
-                 <div class="w-full max-w-lg bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-                    <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-6">অ্যাডমিন রেজিস্ট্রেশন</h2>
-                    <form id="signup-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="text" id="signup-name" placeholder="নাম" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <input type="text" id="signup-address" placeholder="ঠিকানা" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <input type="tel" id="signup-mobile" placeholder="মোবাইল নম্বর" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <select id="signup-gender" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                            <option value="">লিঙ্গ</option>
-                            <option value="male">পুরুষ</option>
-                            <option value="female">মহিলা</option>
-                        </select>
-                        <input type="text" id="signup-religion" placeholder="ধর্ম" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <input type="text" id="signup-class" placeholder="ক্লাস/পেশা" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <input type="text" id="signup-department" placeholder="বিভাগ/গ্রুপ" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <input type="email" id="signup-email" placeholder="ইমেইল" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 md:col-span-2" required>
-                        <input type="password" id="signup-password" placeholder="পাসওয়ার্ড" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 md:col-span-2" required>
-                        <button type="submit" class="md:col-span-2 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors">সাইন আপ</button>
-                    </form>
-                    <p class="text-center mt-6 text-sm">
-                        ইতিমধ্যে অ্যাকাউন্ট আছে? <a href="#" id="show-login-link" class="font-medium text-blue-500 hover:underline">লগইন করুন</a>
-                    </p>
-                </div>
-            </div>
-
-            <!-- Create Mess Page -->
-            <div id="create-mess-page" class="min-h-screen flex items-center justify-center p-4 hidden">
-                <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 text-center">
-                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">আপনার মেস তৈরি করুন</h2>
-                    <p class="text-gray-500 dark:text-gray-400 mb-8">মেসের একটি নাম দিন। সিস্টেম একটি ইউনিক কোড তৈরি করবে।</p>
-                    <form id="create-mess-form">
-                        <input type="text" id="mess-name-input" placeholder="মেসের নাম" class="w-full px-4 py-2 mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-colors">মেস তৈরি করুন</button>
-                    </form>
-                </div>
-            </div>
-            
-            <!-- Join Mess Page -->
-            <div id="join-mess-page" class="min-h-screen flex items-center justify-center p-4 hidden">
-                 <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-                    <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-6">মেসে যোগদানের আবেদন</h2>
-                    <form id="join-mess-form">
-                        <input type="text" id="join-mess-code" placeholder="৫ অক্ষরের মেস কোড" class="w-full px-4 py-2 mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <input type="text" id="join-name" placeholder="আপনার নাম" class="w-full px-4 py-2 mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <input type="tel" id="join-mobile" placeholder="আপনার মোবাইল" class="w-full px-4 py-2 mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <input type="text" id="join-address" placeholder="আপনার ঠিকানা" class="w-full px-4 py-2 mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-lg transition-colors">আবেদন পাঠান</button>
-                    </form>
-                    <p class="text-center mt-6 text-sm">
-                        <a href="#" id="back-to-login-link" class="font-medium text-blue-500 hover:underline">লগইন পেজে ফিরে যান</a>
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Application -->
-        <div id="main-app" class="hidden">
-            <!-- Header -->
-            <header class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-30">
-                <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-                    <h1 id="mess-name-header" class="text-xl md:text-2xl font-bold text-blue-600 dark:text-blue-400">Infinity Mess</h1>
-                    <div>
-                        <button id="dark-mode-toggle" class="mr-4 text-gray-600 dark:text-gray-300 hover:text-blue-500">
-                            <i class="fas fa-moon"></i>
-                        </button>
-                        <button id="sidebar-toggle" class="text-gray-600 dark:text-gray-300 text-2xl">
-                            <i class="fas fa-bars"></i>
-                        </button>
-                    </div>
-                </div>
-            </header>
-
-            <!-- Sidebar -->
-            <aside id="sidebar" class="fixed top-0 right-0 h-full w-72 bg-gray-800 dark:bg-gray-900 shadow-lg transform translate-x-full z-40 p-6">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-xl font-bold text-white">মেনু</h2>
-                    <button id="close-sidebar" class="text-gray-300 hover:text-white text-2xl">&times;</button>
-                </div>
-                <nav>
-                    <ul>
-                        <li><a href="#home" class="nav-link block text-lg text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg px-4 py-3 mb-2"><i class="fas fa-home w-6 mr-3"></i>হোম</a></li>
-                        <li><a href="#bazar-list" class="nav-link block text-lg text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg px-4 py-3 mb-2"><i class="fas fa-shopping-cart w-6 mr-3"></i>বাজার তালিকা</a></li>
-                        <li><a href="#meal-count" class="nav-link block text-lg text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg px-4 py-3 mb-2"><i class="fas fa-chart-bar w-6 mr-3"></i>মিল সংখ্যা</a></li>
-                        <li><a href="#member-list" class="nav-link block text-lg text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg px-4 py-3 mb-2"><i class="fas fa-users w-6 mr-3"></i>সদস্য তালিকা</a></li>
-                        <li><a href="#expense-report" class="nav-link block text-lg text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg px-4 py-3 mb-2"><i class="fas fa-file-invoice-dollar w-6 mr-3"></i>খরচ ও হিসাব</a></li>
-                        <li id="admin-panel-link" class="hidden"><a href="#admin-panel" class="nav-link block text-lg text-yellow-300 hover:bg-gray-700 hover:text-yellow-200 rounded-lg px-4 py-3 mb-2"><i class="fas fa-user-shield w-6 mr-3"></i>অ্যাডমিন প্যানেল</a></li>
-                        <li><a href="#developer-profile" class="nav-link block text-lg text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg px-4 py-3 mb-2"><i class="fas fa-code w-6 mr-3"></i>ডেভেলপার</a></li>
-                    </ul>
-                </nav>
-                <button id="logout-button" class="w-full mt-8 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition-colors"><i class="fas fa-sign-out-alt mr-2"></i>লগ আউট</button>
-            </aside>
-            <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden"></div>
-
-
-            <!-- Main Content -->
-            <main id="content-area" class="container mx-auto p-4 md:p-6">
-                <!-- Home Section -->
-                <section id="home-section" class="content-section">
-                    <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl shadow-lg mb-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <div>
-                                <h3 class="text-xl font-bold" id="current-month">জুলাই ২০২৪</h3>
-                                <p class="text-gray-500 dark:text-gray-400" id="current-date">আজ, ২২ জুলাই</p>
-                            </div>
-                            <div id="mess-code-display" class="text-right">
-                                <span class="text-sm text-gray-500">মেস কোড</span>
-                                <p class="font-mono text-lg font-bold bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-md"></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Bazar Duty -->
-                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-                            <h4 class="text-lg font-bold mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">আজকের বাজার</h4>
-                            <div id="bazar-duty-list" class="text-center py-4">
-                                <p class="text-gray-500">লোড হচ্ছে...</p>
-                            </div>
-                        </div>
-
-                        <!-- Today's Meal -->
-                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-                            <h4 class="text-lg font-bold mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">আজকের মিল</h4>
-                            <div id="todays-meal-section" class="space-y-3 pt-2">
-                                <label class="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
-                                    <span class="font-medium">সকাল</span>
-                                    <input type="checkbox" data-meal="breakfast" class="meal-checkbox h-6 w-6 rounded text-blue-600 focus:ring-blue-500">
-                                </label>
-                                <label class="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
-                                    <span class="font-medium">দুপুর</span>
-                                    <input type="checkbox" data-meal="lunch" class="meal-checkbox h-6 w-6 rounded text-blue-600 focus:ring-blue-500">
-                                </label>
-                                <label class="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
-                                    <span class="font-medium">রাত</span>
-                                    <input type="checkbox" data-meal="dinner" class="meal-checkbox h-6 w-6 rounded text-blue-600 focus:ring-blue-500">
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Notice Board -->
-                    <div class="mt-6 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-                        <h4 class="text-lg font-bold mb-4">নোটিশ বোর্ড</h4>
-                        <div id="notice-post-area" class="hidden">
-                             <textarea id="notice-input" class="w-full p-2 mb-2 bg-gray-100 dark:bg-gray-700 rounded-lg" rows="3" placeholder="নতুন নোটিশ লিখুন..."></textarea>
-                             <button id="post-notice-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg">পোস্ট করুন</button>
-                        </div>
-                        <div id="notice-list" class="mt-4 space-y-4">
-                            <!-- Notices will be dynamically inserted here -->
-                            <p class="text-gray-500">কোনো নোটিশ নেই।</p>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Other sections will be hidden by default -->
-                <section id="bazar-list-section" class="content-section hidden"></section>
-                <section id="meal-count-section" class="content-section hidden"></section>
-                <section id="member-list-section" class="content-section hidden"></section>
-                <section id="expense-report-section" class="content-section hidden"></section>
-                <section id="admin-panel-section" class="content-section hidden"></section>
-                <section id="developer-profile-section" class="content-section hidden"></section>
-            </main>
-
-            <!-- Footer -->
-            <footer class="text-center py-6 mt-8 border-t border-gray-200 dark:border-gray-700">
-                <p class="text-sm text-gray-500 dark:text-gray-400">&copy; 2025 Infinity Group | Website Developed by Md Habibur Rahman Mahi</p>
-            </footer>
-        </div>
-
-    </div>
-
-    <!-- Modal -->
-    <div id="custom-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm text-center">
-            <h3 id="modal-title" class="text-xl font-bold mb-4"></h3>
-            <p id="modal-message" class="text-gray-600 dark:text-gray-300 mb-6"></p>
-            <button id="modal-close-btn" class="bg-blue-600 text-white px-6 py-2 rounded-lg">ঠিক আছে</button>
+<body>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <i class="fas fa-spinner"></i>
+            <p>Loading...</p>
         </div>
     </div>
 
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <a href="#" class="sidebar-brand">
+            Infinity Mess
+        </a>
+        <hr class="sidebar-divider">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link active" href="#" data-page="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-page="bazar-list">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Bazar List</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-page="meal-count">
+                    <i class="fas fa-utensils"></i>
+                    <span>Meal Count</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-page="members">
+                    <i class="fas fa-users"></i>
+                    <span>Members</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-page="expenses">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Expenses</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-page="developer">
+                    <i class="fas fa-code"></i>
+                    <span>Developer</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" id="dark-mode-toggle">
+                    <i class="fas fa-moon"></i>
+                    <span>Dark Mode</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, where, getDocs, onSnapshot, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Your web app's Firebase configuration from user
-        const firebaseConfig = {
-            apiKey: "AIzaSyCvars41WY81WmVy1Tueo_rrSO90aIv_Gw",
-            authDomain: "try-382fa.firebaseapp.com",
-            projectId: "try-382fa",
-            storageBucket: "try-382fa.appspot.com", // Corrected from firebasestorage.app
-            messagingSenderId: "952752280975",
-            appId: "1:952752280975:web:9025fc4a4efe34f78be7fa",
-            measurementId: "G-73PLMXERXX"
-        };
-
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        // Global State
-        let currentUser = null;
-        let userProfile = null;
-        let messId = null;
-        let messData = null;
-        let userRole = 'member'; // Default role
-
-        // DOM Elements
-        const loadingSpinner = document.getElementById('loading-spinner');
-        const authSection = document.getElementById('auth-section');
-        const mainApp = document.getElementById('main-app');
-        const loginPage = document.getElementById('login-page');
-        const signupPage = document.getElementById('signup-page');
-        const createMessPage = document.getElementById('create-mess-page');
-        const joinMessPage = document.getElementById('join-mess-page');
-        const contentArea = document.getElementById('content-area');
-        const allSections = document.querySelectorAll('.content-section');
-        const navLinks = document.querySelectorAll('.nav-link');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebar-overlay');
-
-        // --- UTILITY FUNCTIONS ---
-        const showModal = (title, message) => {
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-message').innerText = message;
-            document.getElementById('custom-modal').classList.remove('hidden');
-        };
+    <!-- Topbar -->
+    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+        <button id="sidebarToggle" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+        </button>
         
-        document.getElementById('modal-close-btn').addEventListener('click', () => {
-            document.getElementById('custom-modal').classList.add('hidden');
-        });
-
-        const showPage = (pageId) => {
-            [loginPage, signupPage, createMessPage, joinMessPage].forEach(p => p.classList.add('hidden'));
-            if (pageId) document.getElementById(pageId).classList.remove('hidden');
-        };
-        
-        const showSection = (sectionId) => {
-            allSections.forEach(s => s.classList.add('hidden'));
-            document.getElementById(sectionId).classList.remove('hidden');
-            sidebar.classList.add('translate-x-full');
-            sidebarOverlay.classList.add('hidden');
-        };
-        
-        // --- AUTHENTICATION ---
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUser = user;
-                const userDocRef = doc(db, "users", user.uid);
-                const userDocSnap = await getDoc(userDocRef);
-
-                if (userDocSnap.exists()) {
-                    userProfile = userDocSnap.data();
-                    messId = userProfile.messId;
-                    userRole = userProfile.role;
-
-                    if (messId) {
-                        await loadMessData();
-                        authSection.classList.add('hidden');
-                        mainApp.classList.remove('hidden');
-                        setupUIForUser();
-                        showSection('home-section');
-                    } else if (userRole === 'admin') {
-                        // Admin signed up but hasn't created a mess yet
-                        authSection.classList.remove('hidden');
-                        mainApp.classList.add('hidden');
-                        showPage('create-mess-page');
-                    } else {
-                        // This case should ideally not happen for a member
-                        showModal("ত্রুটি", "আপনার কোনো মেস পাওয়া যায়নি।");
-                        await signOut(auth);
-                    }
-                } else {
-                    // This could be a user who applied to join but isn't a full user yet
-                    // Or a fresh signup before user doc is created
-                    // For now, we assume they need to login or sign up properly
-                }
-            } else {
-                currentUser = null;
-                userProfile = null;
-                messId = null;
-                mainApp.classList.add('hidden');
-                authSection.classList.remove('hidden');
-                showPage('login-page');
-            }
-            loadingSpinner.classList.add('hidden');
-        });
-        
-        // --- EVENT LISTENERS (AUTH) ---
-        document.getElementById('show-signup-link').addEventListener('click', (e) => { e.preventDefault(); showPage('signup-page'); });
-        document.getElementById('show-login-link').addEventListener('click', (e) => { e.preventDefault(); showPage('login-page'); });
-        document.getElementById('show-join-mess-link').addEventListener('click', (e) => { e.preventDefault(); showPage('join-mess-page'); });
-        document.getElementById('back-to-login-link').addEventListener('click', (e) => { e.preventDefault(); showPage('login-page'); });
-
-        document.getElementById('signup-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-            
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-                
-                // Create user profile in Firestore
-                await setDoc(doc(db, "users", user.uid), {
-                    uid: user.uid,
-                    name: document.getElementById('signup-name').value,
-                    address: document.getElementById('signup-address').value,
-                    mobile: document.getElementById('signup-mobile').value,
-                    gender: document.getElementById('signup-gender').value,
-                    religion: document.getElementById('signup-religion').value,
-                    class: document.getElementById('signup-class').value,
-                    department: document.getElementById('signup-department').value,
-                    email: email,
-                    role: 'admin', // First user is always admin
-                    messId: null,
-                    createdAt: serverTimestamp()
-                });
-                // onAuthStateChanged will handle redirection to create-mess-page
-            } catch (error) {
-                console.error("Signup Error:", error);
-                showModal("সাইন আপ ব্যর্থ", error.message);
-            }
-        });
-
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                // onAuthStateChanged will handle the rest
-            } catch (error) {
-                console.error("Login Error:", error);
-                showModal("লগইন ব্যর্থ", "ভুল ইমেইল অথবা পাসওয়ার্ড।");
-            }
-        });
-        
-        document.getElementById('create-mess-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const messName = document.getElementById('mess-name-input').value;
-            if (!currentUser) return showModal("ত্রুটি", "অনুগ্রহ করে আবার লগইন করুন।");
-
-            try {
-                const messCode = Math.random().toString(36).substring(2, 7).toUpperCase();
-                const messDocRef = await addDoc(collection(db, "messes"), {
-                    name: messName,
-                    adminId: currentUser.uid,
-                    code: messCode,
-                    createdAt: serverTimestamp()
-                });
-
-                // Update user's profile with messId
-                await updateDoc(doc(db, "users", currentUser.uid), {
-                    messId: messDocRef.id
-                });
-                
-                showModal("সফল!", `আপনার মেস তৈরি হয়েছে। জয়েন কোড: ${messCode}`);
-                // onAuthStateChanged will reload the user data and show the main app
-            } catch (error) {
-                console.error("Mess Creation Error:", error);
-                showModal("ত্রুটি", "মেস তৈরি করা যায়নি।");
-            }
-        });
-        
-        document.getElementById('join-mess-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const code = document.getElementById('join-mess-code').value.toUpperCase();
-            const name = document.getElementById('join-name').value;
-            const mobile = document.getElementById('join-mobile').value;
-            const address = document.getElementById('join-address').value;
-
-            try {
-                const q = query(collection(db, "messes"), where("code", "==", code));
-                const querySnapshot = await getDocs(q);
-
-                if (querySnapshot.empty) {
-                    return showModal("ত্রুটি", "এই কোড দিয়ে কোনো মেস পাওয়া যায়নি।");
-                }
-
-                const messDoc = querySnapshot.docs[0];
-                const targetMessId = messDoc.id;
-
-                // Add a join request
-                await addDoc(collection(db, "messes", targetMessId, "joinRequests"), {
-                    name,
-                    mobile,
-                    address,
-                    status: 'pending',
-                    requestedAt: serverTimestamp()
-                });
-
-                showModal("সফল!", "আপনার আবেদন পাঠানো হয়েছে। অ্যাডমিন অনুমোদন করলে আপনি যোগ দিতে পারবেন।");
-                e.target.reset();
-                showPage('login-page');
-
-            } catch (error) {
-                console.error("Join Request Error:", error);
-                showModal("ত্রুটি", "আবেদন পাঠানো যায়নি।");
-            }
-        });
-
-        document.getElementById('logout-button').addEventListener('click', async () => {
-            await signOut(auth);
-            // onAuthStateChanged will handle UI changes
-        });
-
-        // --- MAIN APP LOGIC ---
-        async function loadMessData() {
-            if (!messId) return;
-            const messDocRef = doc(db, "messes", messId);
-            const messDocSnap = await getDoc(messDocRef);
-            if (messDocSnap.exists()) {
-                messData = messDocSnap.data();
-            } else {
-                showModal("গুরুতর ত্রুটি", "মেস ডাটা পাওয়া যায়নি।");
-                await signOut(auth);
-            }
-        }
-
-        function setupUIForUser() {
-            // Set Mess Name in Header
-            document.getElementById('mess-name-header').innerText = messData.name;
-            document.querySelector('#mess-code-display p').innerText = messData.code;
-
-            // Show/Hide Admin specific UI
-            const adminPanelLink = document.getElementById('admin-panel-link');
-            const noticePostArea = document.getElementById('notice-post-area');
-            if (userRole === 'admin') {
-                adminPanelLink.classList.remove('hidden');
-                noticePostArea.classList.remove('hidden');
-            } else {
-                adminPanelLink.classList.add('hidden');
-                noticePostArea.classList.add('hidden');
-            }
-            
-            // Setup listeners for main app
-            setupHomeSectionListeners();
-            setupSidebarListeners();
-            setupNavigation();
-        }
-        
-        function setupHomeSectionListeners() {
-            // Date display
-            const now = new Date();
-            const monthNames = ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"];
-            document.getElementById('current-month').innerText = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
-            document.getElementById('current-date').innerText = `আজ, ${now.getDate()} ${monthNames[now.getMonth()]}`;
-
-            // Load home page data
-            loadBazarDuty();
-            loadTodaysMealStatus();
-            loadNotices();
-            
-            // Meal checkbox listener
-            document.querySelectorAll('.meal-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', async (e) => {
-                    const mealType = e.target.dataset.meal;
-                    const isChecked = e.target.checked;
-                    
-                    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-                    const mealDocRef = doc(db, "messes", messId, "meals", today, "records", currentUser.uid);
-                    
-                    try {
-                        const mealDoc = await getDoc(mealDocRef);
-                        if(mealDoc.exists()){
-                             await updateDoc(mealDocRef, { [mealType]: isChecked });
-                        } else {
-                             await setDoc(mealDocRef, { 
-                                 [mealType]: isChecked,
-                                 breakfast: mealType === 'breakfast' ? isChecked : false,
-                                 lunch: mealType === 'lunch' ? isChecked : false,
-                                 dinner: mealType === 'dinner' ? isChecked : false,
-                                 userId: currentUser.uid,
-                                 name: userProfile.name
-                            });
-                        }
-                    } catch (error) {
-                        console.error("Meal update error:", error);
-                        showModal("ত্রুটি", "মিল আপডেট করা যায়নি।");
-                        e.target.checked = !isChecked; // Revert checkbox on error
-                    }
-                });
-            });
-            
-            // Notice post listener
-            document.getElementById('post-notice-btn').addEventListener('click', async () => {
-                const content = document.getElementById('notice-input').value;
-                if(!content.trim()) return;
-                
-                try {
-                    await addDoc(collection(db, "messes", messId, "notices"), {
-                        content: content,
-                        authorId: currentUser.uid,
-                        authorName: userProfile.name,
-                        createdAt: serverTimestamp()
-                    });
-                    document.getElementById('notice-input').value = '';
-                } catch(error) {
-                    console.error("Notice post error:", error);
-                    showModal("ত্রুটি", "নোটিশ পোস্ট করা যায়নি।");
-                }
-            });
-        }
-        
-        function setupSidebarListeners() {
-            document.getElementById('sidebar-toggle').addEventListener('click', () => {
-                sidebar.classList.remove('translate-x-full');
-                sidebarOverlay.classList.remove('hidden');
-            });
-            document.getElementById('close-sidebar').addEventListener('click', () => {
-                sidebar.classList.add('translate-x-full');
-                sidebarOverlay.classList.add('hidden');
-            });
-            sidebarOverlay.addEventListener('click', () => {
-                sidebar.classList.add('translate-x-full');
-                sidebarOverlay.classList.add('hidden');
-            });
-        }
-        
-        function setupNavigation() {
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const sectionId = e.currentTarget.getAttribute('href').substring(1) + '-section';
-                    showSection(sectionId);
-                    
-                    // Load content for the section
-                    switch(sectionId) {
-                        case 'home-section': 
-                            loadBazarDuty();
-                            loadTodaysMealStatus();
-                            loadNotices();
-                            break;
-                        case 'bazar-list-section': renderBazarList(); break;
-                        case 'meal-count-section': renderMealCount(); break;
-                        case 'member-list-section': renderMemberList(); break;
-                        case 'expense-report-section': renderExpenseReport(); break;
-                        case 'admin-panel-section': renderAdminPanel(); break;
-                        case 'developer-profile-section': renderDeveloperProfile(); break;
-                    }
-                });
-            });
-        }
-        
-        // --- DATA LOADING & RENDERING FUNCTIONS ---
-        
-        function loadBazarDuty() {
-            // This is a placeholder. Admin should set this.
-            const dutyListDiv = document.getElementById('bazar-duty-list');
-            dutyListDiv.innerHTML = `<p class="text-lg font-semibold">হাবিবুর রহমান</p>
-                                     <p class="text-sm text-gray-500">ডিউটি অ্যাডমিন দ্বারা নির্ধারিত হবে</p>`;
-        }
-        
-        async function loadTodaysMealStatus() {
-            const today = new Date().toISOString().slice(0, 10);
-            const mealDocRef = doc(db, "messes", messId, "meals", today, "records", currentUser.uid);
-            const mealDocSnap = await getDoc(mealDocRef);
-            
-            const mealCheckboxes = {
-                breakfast: document.querySelector('.meal-checkbox[data-meal="breakfast"]'),
-                lunch: document.querySelector('.meal-checkbox[data-meal="lunch"]'),
-                dinner: document.querySelector('.meal-checkbox[data-meal="dinner"]'),
-            };
-
-            if (mealDocSnap.exists()) {
-                const data = mealDocSnap.data();
-                mealCheckboxes.breakfast.checked = data.breakfast || false;
-                mealCheckboxes.lunch.checked = data.lunch || false;
-                mealCheckboxes.dinner.checked = data.dinner || false;
-            } else {
-                mealCheckboxes.breakfast.checked = false;
-                mealCheckboxes.lunch.checked = false;
-                mealCheckboxes.dinner.checked = false;
-            }
-        }
-        
-        function loadNotices() {
-            const q = query(collection(db, "messes", messId, "notices"));
-            onSnapshot(q, (querySnapshot) => {
-                const noticeListDiv = document.getElementById('notice-list');
-                if (querySnapshot.empty) {
-                    noticeListDiv.innerHTML = `<p class="text-gray-500">কোনো নোটিশ নেই।</p>`;
-                    return;
-                }
-                noticeListDiv.innerHTML = '';
-                querySnapshot.forEach((doc) => {
-                    const notice = doc.data();
-                    const noticeEl = document.createElement('div');
-                    noticeEl.className = 'border-t border-gray-200 dark:border-gray-700 pt-4';
-                    noticeEl.innerHTML = `
-                        <p class="mb-2">${notice.content}</p>
-                        <small class="text-gray-500 dark:text-gray-400">পোস্ট করেছেন: ${notice.authorName} - ${new Date(notice.createdAt?.toDate()).toLocaleString('bn-BD')}</small>
-                        <!-- Comment feature to be added -->
-                    `;
-                    noticeListDiv.appendChild(noticeEl);
-                });
-            });
-        }
-        
-        function renderBazarList() {
-            contentArea.querySelector('#bazar-list-section').innerHTML = `
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-                    <h2 class="text-2xl font-bold mb-4">বাজার তালিকা</h2>
-                    <p class="text-gray-500">এই ফিচারটি শীঘ্রই আসছে...</p>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="user-name">User</span>
+                    <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                </a>
+                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="#" data-page="profile">
+                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Profile
+                    </a>
+                    <a class="dropdown-item" href="#" data-page="settings">
+                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Settings
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#" id="logout-btn">
+                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Logout
+                    </a>
                 </div>
-            `;
-        }
-        
-        function renderMealCount() {
-             contentArea.querySelector('#meal-count-section').innerHTML = `
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-                    <h2 class="text-2xl font-bold mb-4">মিল সংখ্যা (স্প্রেডশিট)</h2>
-                    <p class="text-gray-500">এই ফিচারটি শীঘ্রই আসছে...</p>
-                    <div class="overflow-x-auto mt-4">
-                        <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content" id="content">
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            </div>
+
+            <!-- Mess Info -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Mess Information</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4 id="mess-name-display">Mess Name</h4>
+                            <p id="current-date">Date: </p>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <p>Mess Code: <span id="mess-code-display" class="fw-bold">CODE</span></p>
+                            <button class="btn btn-primary btn-sm" id="copy-code-btn">
+                                <i class="fas fa-copy"></i> Copy Code
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's Bazar -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Today's Bazar</h6>
+                </div>
+                <div class="card-body">
+                    <div id="today-bazar-info">
+                        <p>No bazar scheduled for today</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's Meal -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Today's Meal</h6>
+                </div>
+                <div class="card-body">
+                    <div class="meal-counter">
+                        <div class="meal-item">
+                            <h6>Morning</h6>
+                            <input type="checkbox" id="morning-meal" class="form-check-input">
+                            <p>0.5 Meal</p>
+                        </div>
+                        <div class="meal-item">
+                            <h6>Noon</h6>
+                            <input type="checkbox" id="noon-meal" class="form-check-input">
+                            <p>1 Meal</p>
+                        </div>
+                        <div class="meal-item">
+                            <h6>Night</h6>
+                            <input type="checkbox" id="night-meal" class="form-check-input">
+                            <p>1 Meal</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-primary" id="save-meal-btn">Save Meal</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notice Board -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Notice Board</h6>
+                    <button class="btn btn-primary btn-sm" id="add-notice-btn" style="display: none;">
+                        <i class="fas fa-plus"></i> Add Notice
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="notice-board" id="notice-board">
+                        <div class="notice-item">
+                            <div class="notice-date">Jan 1, 2023</div>
+                            <div class="notice-content">Welcome to Infinity Mess Management System</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bazar List Page -->
+        <div id="bazar-list-page" class="page" style="display: none;">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Bazar List</h1>
+                <button class="btn btn-primary" id="add-bazar-btn">
+                    <i class="fas fa-plus"></i> Add Bazar
+                </button>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Bazar Schedule</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="bazar-table" width="100%" cellspacing="0">
+                            <thead>
                                 <tr>
-                                    <th scope="col" class="px-6 py-3">সদস্য</th>
-                                    <th scope="col" class="px-6 py-3">১ জুলাই</th>
-                                    <th scope="col" class="px-6 py-3">২ জুলাই</th>
-                                    <th scope="col" class="px-6 py-3">...</th>
-                                    <th scope="col" class="px-6 py-3">মোট মিল</th>
+                                    <th>Date</th>
+                                    <th>Member</th>
+                                    <th>Amount</th>
+                                    <th>Details</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <td class="px-6 py-4">উদাহরণ সদস্য</td>
-                                    <td class="px-6 py-4">2</td>
-                                    <td class="px-6 py-4">1.5</td>
-                                    <td class="px-6 py-4">...</td>
-                                    <td class="px-6 py-4 font-bold">55.5</td>
+                                <tr>
+                                    <td colspan="5" class="text-center">No bazar data available</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-            `;
-        }
-        
-        function renderMemberList() {
-            const memberListSection = contentArea.querySelector('#member-list-section');
-            memberListSection.innerHTML = `<div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-                <h2 class="text-2xl font-bold mb-4">সদস্য তালিকা</h2>
-                <div id="members-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <p class="text-gray-500">সদস্যদের তালিকা লোড হচ্ছে...</p>
+            </div>
+
+            <div class="card shadow mb-4" id="shop-dues-card" style="display: none;">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Shop Dues</h6>
+                    <button class="btn btn-primary btn-sm" id="add-shop-due-btn">
+                        <i class="fas fa-plus"></i> Add Due
+                    </button>
                 </div>
-            </div>`;
-            
-            const q = query(collection(db, "users"), where("messId", "==", messId));
-            onSnapshot(q, (querySnapshot) => {
-                const container = document.getElementById('members-container');
-                container.innerHTML = '';
-                querySnapshot.forEach((doc) => {
-                    const member = doc.data();
-                    const memberCard = document.createElement('div');
-                    memberCard.className = 'bg-gray-100 dark:bg-gray-700 p-4 rounded-lg';
-                    memberCard.innerHTML = `
-                        <h3 class="font-bold text-lg">${member.name} ${member.role === 'admin' ? '<span class="text-xs bg-yellow-500 text-white px-2 py-1 rounded-full ml-2">অ্যাডমিন</span>' : ''}</h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">${member.mobile}</p>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">${member.email}</p>
-                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">ভাড়া: ${member.rent || 'N/A'} টাকা</p>
-                    `;
-                    container.appendChild(memberCard);
-                });
-            });
-        }
-        
-        function renderExpenseReport() {
-            contentArea.querySelector('#expense-report-section').innerHTML = `
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-                    <h2 class="text-2xl font-bold mb-4">মাসিক হিসাব ও রিপোর্ট</h2>
-                    <p class="text-gray-500">এই ফিচারটি শীঘ্রই আসছে...</p>
-                </div>
-            `;
-        }
-        
-        function renderAdminPanel() {
-            const adminPanelSection = contentArea.querySelector('#admin-panel-section');
-            adminPanelSection.innerHTML = `<div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-                <h2 class="text-2xl font-bold mb-4">অ্যাডমিন প্যানেল</h2>
-                <h3 class="text-xl font-semibold mb-2">যোগদানের আবেদনসমূহ</h3>
-                <div id="join-requests-container">
-                    <p class="text-gray-500">আবেদন লোড হচ্ছে...</p>
-                </div>
-            </div>`;
-
-            const q = query(collection(db, "messes", messId, "joinRequests"), where("status", "==", "pending"));
-            onSnapshot(q, (querySnapshot) => {
-                const container = document.getElementById('join-requests-container');
-                if(querySnapshot.empty) {
-                    container.innerHTML = '<p class="text-gray-500">কোনো নতুন আবেদন নেই।</p>';
-                    return;
-                }
-                container.innerHTML = '';
-                querySnapshot.forEach((docSnap) => {
-                    const request = docSnap.data();
-                    const reqId = docSnap.id;
-                    const reqCard = document.createElement('div');
-                    reqCard.className = 'bg-gray-100 dark:bg-gray-700 p-4 rounded-lg mb-3 flex justify-between items-center';
-                    reqCard.innerHTML = `
-                        <div>
-                            <p class="font-bold">${request.name}</p>
-                            <p class="text-sm">${request.mobile}</p>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="number" id="rent-${reqId}" class="w-24 px-2 py-1 mr-2 bg-gray-200 dark:bg-gray-600 rounded" placeholder="ভাড়া">
-                            <button data-id="${reqId}" class="approve-btn bg-green-500 text-white px-3 py-1 rounded-lg mr-2">Approve</button>
-                            <button data-id="${reqId}" class="reject-btn bg-red-500 text-white px-3 py-1 rounded-lg">Reject</button>
-                        </div>
-                    `;
-                    container.appendChild(reqCard);
-                });
-
-                // Add event listeners after creating the buttons
-                document.querySelectorAll('.approve-btn').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        const reqId = e.target.dataset.id;
-                        const rent = document.getElementById(`rent-${reqId}`).value;
-                        if(!rent) return showModal("ত্রুটি", "অনুগ্রহ করে বাসা ভাড়া নির্ধারণ করুন।");
-                        
-                        // This is a complex operation. It requires creating a new user account,
-                        // which can't be done directly by the admin for security reasons.
-                        // A better flow would be for the applicant to sign up first, then request to join.
-                        // For now, we'll just update the request status as a placeholder.
-                        
-                        const reqRef = doc(db, "messes", messId, "joinRequests", reqId);
-                        const reqDoc = await getDoc(reqRef);
-                        const reqData = reqDoc.data();
-
-                        // Placeholder logic: create a user doc (in a real app, this needs auth)
-                        // This is NOT secure but demonstrates the flow.
-                        const newUserId = "user_" + Date.now(); // Dummy ID
-                        await setDoc(doc(db, "users", newUserId), {
-                            name: reqData.name,
-                            mobile: reqData.mobile,
-                            address: reqData.address,
-                            messId: messId,
-                            role: 'member',
-                            rent: Number(rent),
-                            // In a real app, you would need email/password from the user.
-                        });
-
-                        await updateDoc(reqRef, { status: 'approved' });
-                        showModal("সফল", `${reqData.name} এখন মেসের সদস্য।`);
-                    });
-                });
-            });
-        }
-        
-        function renderDeveloperProfile() {
-            contentArea.querySelector('#developer-profile-section').innerHTML = `
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg text-center">
-                    <img src="https://placehold.co/150x150/4299e1/ffffff?text=MAHI" alt="Developer" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-500">
-                    <h2 class="text-3xl font-bold">Md Habibur Rahman Mahi</h2>
-                    <p class="text-lg text-blue-400 mb-4">Project: Infinity Mess Management</p>
-                    <p class="text-gray-500 dark:text-gray-400">Organization/Brand: Created by Mahi</p>
-                    <div class="flex justify-center space-x-6 mt-6 text-2xl">
-                        <a href="#" class="text-gray-500 hover:text-blue-500"><i class="fab fa-github"></i></a>
-                        <a href="#" class="text-gray-500 hover:text-blue-500"><i class="fas fa-briefcase"></i></a>
-                        <a href="#" class="text-gray-500 hover:text-blue-500"><i class="fas fa-envelope"></i></a>
-                    </div>
-                </div>
-            `;
-        }
-        
-        // --- DARK MODE TOGGLE ---
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-        const html = document.documentElement;
-        
-        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          html.classList.add('dark');
-          darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        } else {
-          html.classList.remove('dark');
-          darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-        }
-
-        darkModeToggle.addEventListener('click', () => {
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-                darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-            } else {
-                html.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-            }
-        });
-        
-        // PWA Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js').then(registration => {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                }, err => {
-                    console.log('ServiceWorker registration failed: ', err);
-                });
-            });
-        }
-        
-    </script>
-    
-    <!-- You would create these files separately: manifest.json and service-worker.js -->
-    <!--
-    // manifest.json
-    {
-      "name": "Infinity Mess Management",
-      "short_name": "InfinityMess",
-      "start_url": "/",
-      "display": "standalone",
-      "background_color": "#111827",
-      "theme_color": "#1f2937",
-      "icons": [
-        {
-          "src": "https://placehold.co/192x192/4299e1/ffffff?text=IM",
-          "sizes": "192x192",
-          "type": "image/png"
-        },
-        {
-          "src": "https://placehold.co/512x512/4299e1/ffffff?text=IM",
-          "sizes": "512x512",
-          "type": "image/png"
-        }
-      ]
-    }
-
-    // service-worker.js
-    const CACHE_NAME = 'infinity-mess-v1';
-    const urlsToCache = [
-      '/',
-      '/index.html',
-      // Add other assets like CSS, JS, images here
-    ];
-
-    self.addEventListener('install', event => {
-      event.waitUntil(
-        caches.open(CACHE_NAME)
-          .then(cache => {
-            console.log('Opened cache');
-            return cache.addAll(urlsToCache);
-          })
-      );
-    });
-
-    self.addEventListener('fetch', event => {
-      event.respondWith(
-        caches.match(event.request)
-          .then(response => {
-            // Cache hit - return response
-            if (response) {
-              return response;
-            }
-            return fetch(event.request);
-          }
-        )
-      );
-    });
-    -->
-
-</body>
-</html>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-
