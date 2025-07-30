@@ -618,4 +618,2148 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-
+                        <table class="table table-bordered" id="shop-dues-table" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Shop Name</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" class="text-center">No shop dues available</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal Count Page -->
+        <div id="meal-count-page" class="page" style="display: none;">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Meal Count</h1>
+                <div>
+                    <select class="form-select" id="meal-month-select">
+                        <option value="0">January</option>
+                        <option value="1">February</option>
+                        <option value="2">March</option>
+                        <option value="3">April</option>
+                        <option value="4">May</option>
+                        <option value="5">June</option>
+                        <option value="6">July</option>
+                        <option value="7">August</option>
+                        <option value="8">September</option>
+                        <option value="9">October</option>
+                        <option value="10">November</option>
+                        <option value="11">December</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Monthly Meal Count</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="meal-table" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center">No meal data available</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Meal Summary</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="expense-summary">
+                                <h5>Total Meals</h5>
+                                <div class="amount" id="total-meals">0</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="expense-summary">
+                                <h5>Average Meals/Day</h5>
+                                <div class="amount" id="avg-meals">0</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="expense-summary">
+                                <h5>Meal Rate</h5>
+                                <div class="amount" id="meal-rate">৳0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Members Page -->
+        <div id="members-page" class="page" style="display: none;">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Members</h1>
+                <button class="btn btn-primary" id="add-member-btn">
+                    <i class="fas fa-user-plus"></i> Add Member
+                </button>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Member List</h6>
+                </div>
+                <div class="card-body">
+                    <div id="members-list">
+                        <div class="member-card">
+                            <div class="member-info">
+                                <div class="member-avatar">A</div>
+                                <div>
+                                    <h5>Admin User</h5>
+                                    <p>admin@example.com | 01712345678</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expenses Page -->
+        <div id="expenses-page" class="page" style="display: none;">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Expenses & Accounts</h1>
+                <div>
+                    <select class="form-select" id="expense-month-select">
+                        <option value="0">January</option>
+                        <option value="1">February</option>
+                        <option value="2">March</option>
+                        <option value="3">April</option>
+                        <option value="4">May</option>
+                        <option value="5">June</option>
+                        <option value="6">July</option>
+                        <option value="7">August</option>
+                        <option value="8">September</option>
+                        <option value="9">October</option>
+                        <option value="10">November</option>
+                        <option value="11">December</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Monthly Expenses</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <div class="expense-summary">
+                                <h5>Total Bazar Cost</h5>
+                                <div class="amount" id="total-bazar-cost">৳0</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="expense-summary">
+                                <h5>Total Shop Dues</h5>
+                                <div class="amount" id="total-shop-dues">৳0</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 mb-3">
+                            <div class="expense-summary">
+                                <h5>Maid Bill</h5>
+                                <input type="number" class="form-control" id="maid-bill" placeholder="Enter amount">
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="expense-summary">
+                                <h5>Electricity Bill</h5>
+                                <input type="number" class="form-control" id="electricity-bill" placeholder="Enter amount">
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="expense-summary">
+                                <h5>WiFi Bill</h5>
+                                <input type="number" class="form-control" id="wifi-bill" placeholder="Enter amount">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <div class="expense-summary">
+                                <h5>Other Bills</h5>
+                                <input type="number" class="form-control" id="other-bills" placeholder="Enter amount">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="expense-summary">
+                                <h5>Total Expenses</h5>
+                                <div class="amount" id="total-expenses">৳0</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button class="btn btn-primary" id="calculate-expenses-btn">Calculate Expenses</button>
+                        <button class="btn btn-success" id="generate-report-btn">Generate Report</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Member Accounts</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="member-accounts-table" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Member</th>
+                                    <th>Meals</th>
+                                    <th>Meal Cost</th>
+                                    <th>House Rent</th>
+                                    <th>Total</th>
+                                    <th>Bazar Cost</th>
+                                    <th>Due/Refund</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="7" class="text-center">No member accounts available</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Developer Page -->
+        <div id="developer-page" class="page" style="display: none;">
+            <div class="developer-profile">
+                <div class="profile-img">
+                    <i class="fas fa-user-code"></i>
+                </div>
+                <h2>Infinity Mess Management</h2>
+                <h4>Developed by Md Habibur Rahman Mahi</h4>
+                <p class="text-muted">Created by Mahi</p>
+                
+                <div class="mt-4">
+                    <h5>Contact Information</h5>
+                    <p><i class="fas fa-envelope"></i> Email: mahi@example.com</p>
+                    <p><i class="fab fa-github"></i> GitHub: github.com/mahi</p>
+                    <p><i class="fas fa-globe"></i> Portfolio: mahi.example.com</p>
+                </div>
+                
+                <div class="mt-4">
+                    <h5>About This Project</h5>
+                    <p>Infinity Mess Management is a comprehensive web application designed to streamline the management of hostels and messes. It handles daily tasks like meal counting, market management, expense tracking, and member management with ease.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profile-page" class="page" style="display: none;">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Profile</h1>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">User Profile</h6>
+                </div>
+                <div class="card-body">
+                    <form id="profile-form">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="profile-name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="profile-name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="profile-email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="profile-email" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="profile-phone" class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="profile-phone" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="profile-address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="profile-address" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="profile-gender" class="form-label">Gender</label>
+                                <select class="form-select" id="profile-gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="profile-religion" class="form-label">Religion</label>
+                                <select class="form-select" id="profile-religion" required>
+                                    <option value="">Select Religion</option>
+                                    <option value="islam">Islam</option>
+                                    <option value="hinduism">Hinduism</option>
+                                    <option value="christianity">Christianity</option>
+                                    <option value="buddhism">Buddhism</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="profile-class" class="form-label">Class</label>
+                                <input type="text" class="form-control" id="profile-class" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="profile-department" class="form-label">Department/Group</label>
+                                <input type="text" class="form-control" id="profile-department" required>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div id="settings-page" class="page" style="display: none;">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Settings</h1>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">System Settings</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="mess-name" class="form-label">Mess Name</label>
+                        <input type="text" class="form-control" id="mess-name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="language-select" class="form-label">Language</label>
+                        <select class="form-select" id="language-select">
+                            <option value="en">English</option>
+                            <option value="bn">বাংলা</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="notification-switch">
+                            <label class="form-check-label" for="notification-switch">
+                                Enable Notifications
+                            </label>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-primary" id="save-settings-btn">Save Settings</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <span class="text-muted">© 2025 Infinity Nest | Website Developed by Md Habibur Rahman Mahi</span>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Login to Infinity Mess</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="login-form">
+                        <div class="mb-3">
+                            <label for="login-email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="login-email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="login-password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="login-password" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </form>
+                    <hr>
+                    <div class="text-center">
+                        <p>Don't have an account? <a href="#" id="show-signup-link">Sign Up</a></p>
+                        <p>Join a mess? <a href="#" id="show-join-link">Join Mess</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signupModalLabel">Create Admin Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="signup-form">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="signup-name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="signup-name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="signup-email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="signup-email" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="signup-phone" class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="signup-phone" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="signup-address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="signup-address" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="signup-gender" class="form-label">Gender</label>
+                                <select class="form-select" id="signup-gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="signup-religion" class="form-label">Religion</label>
+                                <select class="form-select" id="signup-religion" required>
+                                    <option value="">Select Religion</option>
+                                    <option value="islam">Islam</option>
+                                    <option value="hinduism">Hinduism</option>
+                                    <option value="christianity">Christianity</option>
+                                    <option value="buddhism">Buddhism</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="signup-class" class="form-label">Class</label>
+                                <input type="text" class="form-control" id="signup-class" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="signup-department" class="form-label">Department/Group</label>
+                                <input type="text" class="form-control" id="signup-department" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signup-password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="signup-password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signup-confirm-password" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="signup-confirm-password" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Sign Up</button>
+                        </div>
+                    </form>
+                    <div class="text-center mt-2">
+                        <p>Already have an account? <a href="#" id="show-login-link">Login</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Mess Modal -->
+    <div class="modal fade" id="createMessModal" tabindex="-1" aria-labelledby="createMessModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createMessModalLabel">Create a Mess</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="create-mess-form">
+                        <div class="mb-3">
+                            <label for="mess-name-input" class="form-label">Mess Name</label>
+                            <input type="text" class="form-control" id="mess-name-input" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Create Mess</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Join Mess Modal -->
+    <div class="modal fade" id="joinMessModal" tabindex="-1" aria-labelledby="joinMessModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="joinMessModalLabel">Join a Mess</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="join-mess-form">
+                        <div class="mb-3">
+                            <label for="mess-code-input" class="form-label">Mess Code</label>
+                            <input type="text" class="form-control" id="mess-code-input" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="join-name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="join-name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="join-email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="join-email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="join-phone" class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="join-phone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="join-address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="join-address" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Join Mess</button>
+                        </div>
+                    </form>
+                    <div class="text-center mt-2">
+                        <p>Already have an account? <a href="#" id="show-login-link-2">Login</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Bazar Modal -->
+    <div class="modal fade" id="addBazarModal" tabindex="-1" aria-labelledby="addBazarModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addBazarModalLabel">Add Bazar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-bazar-form">
+                        <div class="mb-3">
+                            <label for="bazar-date" class="form-label">Date</label>
+                            <input type="date" class="form-control" id="bazar-date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="bazar-member" class="form-label">Member</label>
+                            <select class="form-select" id="bazar-member" required>
+                                <option value="">Select Member</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="bazar-amount" class="form-label">Amount</label>
+                            <input type="number" class="form-control" id="bazar-amount" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="bazar-details" class="form-label">Details</label>
+                            <textarea class="form-control" id="bazar-details" rows="3"></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Add Bazar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Shop Due Modal -->
+    <div class="modal fade" id="addShopDueModal" tabindex="-1" aria-labelledby="addShopDueModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addShopDueModalLabel">Add Shop Due</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-shop-due-form">
+                        <div class="mb-3">
+                            <label for="shop-name" class="form-label">Shop Name</label>
+                            <input type="text" class="form-control" id="shop-name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="shop-amount" class="form-label">Amount</label>
+                            <input type="number" class="form-control" id="shop-amount" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="shop-date" class="form-label">Date</label>
+                            <input type="date" class="form-control" id="shop-date" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Add Due</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Notice Modal -->
+    <div class="modal fade" id="addNoticeModal" tabindex="-1" aria-labelledby="addNoticeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addNoticeModalLabel">Add Notice</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-notice-form">
+                        <div class="mb-3">
+                            <label for="notice-title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="notice-title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="notice-content" class="form-label">Content</label>
+                            <textarea class="form-control" id="notice-content" rows="5" required></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Add Notice</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Member Modal -->
+    <div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addMemberModalLabel">Add Member</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-member-form">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="member-name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="member-name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="member-email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="member-email" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="member-phone" class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="member-phone" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="member-address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="member-address" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="member-gender" class="form-label">Gender</label>
+                                <select class="form-select" id="member-gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="member-religion" class="form-label">Religion</label>
+                                <select class="form-select" id="member-religion" required>
+                                    <option value="">Select Religion</option>
+                                    <option value="islam">Islam</option>
+                                    <option value="hinduism">Hinduism</option>
+                                    <option value="christianity">Christianity</option>
+                                    <option value="buddhism">Buddhism</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="member-class" class="form-label">Class</label>
+                                <input type="text" class="form-control" id="member-class" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="member-department" class="form-label">Department/Group</label>
+                                <input type="text" class="form-control" id="member-department" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="member-rent" class="form-label">Monthly Rent</label>
+                                <input type="number" class="form-control" id="member-rent" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="member-password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="member-password" required>
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Add Member</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCvars41WY81WmVy1Tueo_rrSO90aIv_Gw",
+            authDomain: "try-382fa.firebaseapp.com",
+            projectId: "try-382fa",
+            storageBucket: "try-382fa.firebasestorage.app",
+            messagingSenderId: "952752280975",
+            appId: "1:952752280975:web:9025fc4a4efe34f78be7fa",
+            measurementId: "G-73PLMXERXX"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Global variables
+        let currentUser = null;
+        let currentMess = null;
+        let members = [];
+        let isAdmin = false;
+
+        // DOM Elements
+        const loader = document.getElementById('loader');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const content = document.getElementById('content');
+        const pages = document.querySelectorAll('.page');
+        const navLinks = document.querySelectorAll('.nav-link[data-page]');
+        const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+        const signupModal = new bootstrap.Modal(document.getElementById('signupModal'));
+        const createMessModal = new bootstrap.Modal(document.getElementById('createMessModal'));
+        const joinMessModal = new bootstrap.Modal(document.getElementById('joinMessModal'));
+        const addBazarModal = new bootstrap.Modal(document.getElementById('addBazarModal'));
+        const addShopDueModal = new bootstrap.Modal(document.getElementById('addShopDueModal'));
+        const addNoticeModal = new bootstrap.Modal(document.getElementById('addNoticeModal'));
+        const addMemberModal = new bootstrap.Modal(document.getElementById('addMemberModal'));
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if user is logged in
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    currentUser = user;
+                    document.getElementById('user-name').textContent = user.displayName || user.email;
+                    checkUserRole();
+                    loadMessData();
+                } else {
+                    showLoginPage();
+                }
+                hideLoader();
+            });
+
+            // Sidebar toggle
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+
+            // Navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.getAttribute('data-page');
+                    showPage(page);
+                    sidebar.classList.remove('active');
+                });
+            });
+
+            // Login form
+            document.getElementById('login-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                auth.signInWithEmailAndPassword(email, password)
+                    .then(() => {
+                        loginModal.hide();
+                        showNotification('Login successful', 'success');
+                    })
+                    .catch(error => {
+                        showNotification(error.message, 'danger');
+                    });
+            });
+
+            // Signup form
+            document.getElementById('signup-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const name = document.getElementById('signup-name').value;
+                const email = document.getElementById('signup-email').value;
+                const password = document.getElementById('signup-password').value;
+                const confirmPassword = document.getElementById('signup-confirm-password').value;
+                
+                if (password !== confirmPassword) {
+                    showNotification('Passwords do not match', 'danger');
+                    return;
+                }
+                
+                auth.createUserWithEmailAndPassword(email, password)
+                    .then(userCredential => {
+                        // Update user profile
+                        return userCredential.user.updateProfile({
+                            displayName: name
+                        });
+                    })
+                    .then(() => {
+                        // Create user document in Firestore
+                        const userData = {
+                            uid: auth.currentUser.uid,
+                            name: name,
+                            email: email,
+                            phone: document.getElementById('signup-phone').value,
+                            address: document.getElementById('signup-address').value,
+                            gender: document.getElementById('signup-gender').value,
+                            religion: document.getElementById('signup-religion').value,
+                            class: document.getElementById('signup-class').value,
+                            department: document.getElementById('signup-department').value,
+                            role: 'admin',
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        };
+                        
+                        return db.collection('users').doc(auth.currentUser.uid).set(userData);
+                    })
+                    .then(() => {
+                        signupModal.hide();
+                        createMessModal.show();
+                        showNotification('Account created successfully', 'success');
+                    })
+                    .catch(error => {
+                        showNotification(error.message, 'danger');
+                    });
+            });
+
+            // Create mess form
+            document.getElementById('create-mess-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const messName = document.getElementById('mess-name-input').value;
+                const messCode = generateMessCode();
+                
+                const messData = {
+                    name: messName,
+                    code: messCode,
+                    adminId: auth.currentUser.uid,
+                    adminName: auth.currentUser.displayName,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                db.collection('messes').add(messData)
+                    .then(docRef => {
+                        currentMess = {
+                            id: docRef.id,
+                            ...messData
+                        };
+                        
+                        // Update user document with mess ID
+                        return db.collection('users').doc(auth.currentUser.uid).update({
+                            messId: docRef.id,
+                            messCode: messCode
+                        });
+                    })
+                    .then(() => {
+                        createMessModal.hide();
+                        showNotification('Mess created successfully', 'success');
+                        loadMessData();
+                    })
+                    .catch(error => {
+                        showNotification(error.message, 'danger');
+                    });
+            });
+
+            // Join mess form
+            document.getElementById('join-mess-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const messCode = document.getElementById('mess-code-input').value;
+                const name = document.getElementById('join-name').value;
+                const email = document.getElementById('join-email').value;
+                const phone = document.getElementById('join-phone').value;
+                const address = document.getElementById('join-address').value;
+                
+                // Find mess by code
+                db.collection('messes').where('code', '==', messCode).get()
+                    .then(querySnapshot => {
+                        if (querySnapshot.empty) {
+                            showNotification('Invalid mess code', 'danger');
+                            return;
+                        }
+                        
+                        const messDoc = querySnapshot.docs[0];
+                        const messData = messDoc.data();
+                        
+                        // Create join request
+                        const requestData = {
+                            messId: messDoc.id,
+                            messName: messData.name,
+                            name: name,
+                            email: email,
+                            phone: phone,
+                            address: address,
+                            status: 'pending',
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        };
+                        
+                        return db.collection('joinRequests').add(requestData);
+                    })
+                    .then(() => {
+                        joinMessModal.hide();
+                        showNotification('Join request sent successfully', 'success');
+                    })
+                    .catch(error => {
+                        showNotification(error.message, 'danger');
+                    });
+            });
+
+            // Show signup link
+            document.getElementById('show-signup-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                loginModal.hide();
+                signupModal.show();
+            });
+
+            // Show login link
+            document.getElementById('show-login-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                signupModal.hide();
+                loginModal.show();
+            });
+
+            document.getElementById('show-login-link-2').addEventListener('click', (e) => {
+                e.preventDefault();
+                joinMessModal.hide();
+                loginModal.show();
+            });
+
+            // Show join link
+            document.getElementById('show-join-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                loginModal.hide();
+                joinMessModal.show();
+            });
+
+            // Logout button
+            document.getElementById('logout-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                auth.signOut()
+                    .then(() => {
+                        showNotification('Logged out successfully', 'success');
+                        showLoginPage();
+                    })
+                    .catch(error => {
+                        showNotification(error.message, 'danger');
+                    });
+            });
+
+            // Copy code button
+            document.getElementById('copy-code-btn').addEventListener('click', () => {
+                const messCode = document.getElementById('mess-code-display').textContent;
+                navigator.clipboard.writeText(messCode)
+                    .then(() => {
+                        showNotification('Mess code copied to clipboard', 'success');
+                    })
+                    .catch(error => {
+                        showNotification('Failed to copy code', 'danger');
+                    });
+            });
+
+            // Save meal button
+            document.getElementById('save-meal-btn').addEventListener('click', () => {
+                const morning = document.getElementById('morning-meal').checked;
+                const noon = document.getElementById('noon-meal').checked;
+                const night = document.getElementById('night-meal').checked;
+                
+                let mealCount = 0;
+                if (morning) mealCount += 0.5;
+                if (noon) mealCount += 1;
+                if (night) mealCount += 1;
+                
+                const today = new Date();
+                const dateStr = today.toISOString().split('T')[0];
+                
+                const mealData = {
+                    userId: currentUser.uid,
+                    date: dateStr,
+                    morning: morning,
+                    noon: noon,
+                    night: night,
+                    count: mealCount,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                db.collection('meals').add(mealData)
+                    .then(() => {
+                        showNotification('Meal saved successfully', 'success');
+                    })
+                    .catch(error => {
+                        showNotification(error.message, 'danger');
+                    });
+            });
+
+            // Add bazar button
+            document.getElementById('add-bazar-btn').addEventListener('click', () => {
+                // Populate member dropdown
+                const memberSelect = document.getElementById('bazar-member');
+                memberSelect.innerHTML = '<option value="">Select Member</option>';
+                
+                members.forEach(member => {
+                    const option = document.createElement('option');
+                    option.value = member.uid;
+                    option.textContent = member.name;
+                    memberSelect.appendChild(option);
+                });
+                
+                addBazarModal.show();
+            });
+
+            // Add bazar form
+            document.getElementById('add-bazar-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const date = document.getElementById('bazar-date').value;
+                const memberId = document.getElementById('bazar-member').value;
+                const amount = parseFloat(document.getElementById('bazar-amount').value);
+                const details = document.getElementById('bazar-details').value;
+                
+                const member = members.find(m => m.uid === memberId);
+                
+                const bazarData = {
+                    messId: currentMess.id,
+                    date: date,
+                    memberId: memberId,
+                    memberName: member.name,
+                    amount: amount,
+                    details: details,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                db.collection('bazars').add(bazarData)
+                    .then(() => {
+                        addBazarModal.hide();
+                        document.getElementById('add-bazar-form').reset();
+                        showNotification('Bazar added successfully', 'success');
+                        loadBazarData();
+                    })
+                    .catch(error => {
+                        showNotification(error.message, 'danger');
+                    });
+            });
+
+            // Add shop due button
+            document.getElementById('add-shop-due-btn').addEventListener('click', () => {
+                addShopDueModal.show();
+            });
+
+            // Add shop due form
+            document.getElementById('add-shop-due-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const shopName = document.getElementById('shop-name').value;
+                const amount = parseFloat(document.getElementById('shop-amount').value);
+                const date = document.getElementById('shop-date').value;
+                
+                const shopDueData = {
+                    messId: currentMess.id,
+                    shopName: shopName,
+                    amount: amount,
+                    date: date,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                db.collection('shopDues').add(shopDueData)
+                    .then(() => {
+                        addShopDueModal.hide();
+                        document.getElementById('add-shop-due-form').reset();
+                        showNotification('Shop due added successfully', 'success');
+                        loadShopDuesData();
+                    })
+                    .catch(error => {
+                        showNotification(error.message, 'danger');
+                    });
+            });
+
+            // Add notice button
+            document.getElementById('add-notice-btn').addEventListener('click', () => {
+                if (isAdmin) {
+                    addNoticeModal.show();
+                } else {
+                    showNotification('Only admin can add notices', 'danger');
+                }
+            });
+
+            // Add notice form
+            document.getElementById('add-notice-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const title = document.getElementById('notice-title').value;
+                const content = document.getElementById('notice-content').value;
+                
+                const noticeData = {
+                    messId: currentMess.id,
+                    title: title,
+                    content: content,
+                    authorId: currentUser.uid,
+                    authorName: currentUser.displayName,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                db.collection('notices').add(noticeData)
+                    .then(() => {
+                        addNoticeModal.hide();
+                        document.getElementById('add-notice-form').reset();
+                        showNotification('Notice added successfully', 'success');
+                        loadNoticeData();
+                    })
+                    .catch(error => {
+                        showNotification(error.message, 'danger');
+                    });
+            });
+
+            // Add member button
+            document.getElementById('add-member-btn').addEventListener('click', () => {
+                if (isAdmin) {
+                    addMemberModal.show();
+                } else {
+                    showNotification('Only admin can add members', 'danger');
+                }
+            });
+
+            // Add member form
+            document.getElementById('add-member-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const name = document.getElementById('member-name').value;
+                const email = document.getElementById('member-email').value;
+                const phone = document.getElementById('member-phone').value;
+                const address = document.getElementById('member-address').value;
+                const gender = document.getElementById('member-gender').value;
+                const religion = document.getElementById('member-religion').value;
+                const memberClass = document.getElementById('member-class').value;
+                const department = document.getElementById('member-department').value;
+                const rent = parseFloat(document.getElementById('member-rent').value);
+                const password = document.getElementById('member-password').value;
+                
+                // Create user account
+                auth.createUserWithEmailAndPassword(email, password)
+                    .then(userCredential => {
+                        // Update user profile
+                        return userCredential.user.updateProfile({
+                            displayName: name
+                        });
+                    })
+                    .then(() => {
+                        // Create user document in Firestore
+                        const userData = {
+                            uid: auth.currentUser.uid,
+                            name: name,
+                            email: email,
+                            phone: phone,
+                            address: address,
+                            gender: gender,
+                            religion: religion,
+                            class: memberClass,
+                            department: department,
+                            role: 'member',
+                            messId: currentMess.id,
+                            rent: rent,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        };
+                        
+                        return db.collection('users').doc(auth.currentUser.uid).set(userData);
+                    })
+                    .then(() => {
+                        addMemberModal.hide();
+                        document.getElementById('add-member-form').reset();
+                        showNotification('Member added successfully', 'success');
+                        loadMembersData();
+                    })
+                    .catch(error => {
+                        showNotification(error.message, 'danger');
+                    });
+            });
+
+            // Profile form
+            document.getElementById('profile-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const userData = {
+                    name: document.getElementById('profile-name').value,
+                    email: document.getElementById('profile-email').value,
+                    phone: document.getElementById('profile-phone').value,
+                    address: document.getElementById('profile-address').value,
+                    gender: document.getElementById('profile-gender').value,
+                    religion: document.getElementById('profile-religion').value,
+                    class: document.getElementById('profile-class').value,
+                    department: document.getElementById('profile-department').value
+                };
+                
+                // Update user profile in auth
+                auth.currentUser.updateProfile({
+                    displayName: userData.name
+                })
+                .then(() => {
+                    // Update user document in Firestore
+                    return db.collection('users').doc(currentUser.uid).update(userData);
+                })
+                .then(() => {
+                    showNotification('Profile updated successfully', 'success');
+                    document.getElementById('user-name').textContent = userData.name;
+                })
+                .catch(error => {
+                    showNotification(error.message, 'danger');
+                });
+            });
+
+            // Settings form
+            document.getElementById('save-settings-btn').addEventListener('click', () => {
+                if (!isAdmin) {
+                    showNotification('Only admin can update settings', 'danger');
+                    return;
+                }
+                
+                const messName = document.getElementById('mess-name').value;
+                
+                // Update mess document
+                db.collection('messes').doc(currentMess.id).update({
+                    name: messName
+                })
+                .then(() => {
+                    currentMess.name = messName;
+                    document.getElementById('mess-name-display').textContent = messName;
+                    showNotification('Settings saved successfully', 'success');
+                })
+                .catch(error => {
+                    showNotification(error.message, 'danger');
+                });
+            });
+
+            // Calculate expenses button
+            document.getElementById('calculate-expenses-btn').addEventListener('click', () => {
+                if (!isAdmin) {
+                    showNotification('Only admin can calculate expenses', 'danger');
+                    return;
+                }
+                
+                const maidBill = parseFloat(document.getElementById('maid-bill').value) || 0;
+                const electricityBill = parseFloat(document.getElementById('electricity-bill').value) || 0;
+                const wifiBill = parseFloat(document.getElementById('wifi-bill').value) || 0;
+                const otherBills = parseFloat(document.getElementById('other-bills').value) || 0;
+                
+                // Calculate total expenses
+                const totalBazarCost = parseFloat(document.getElementById('total-bazar-cost').textContent.replace('৳', '')) || 0;
+                const totalShopDues = parseFloat(document.getElementById('total-shop-dues').textContent.replace('৳', '')) || 0;
+                
+                const totalExpenses = totalBazarCost + totalShopDues + maidBill + electricityBill + wifiBill + otherBills;
+                document.getElementById('total-expenses').textContent = `৳${totalExpenses.toFixed(2)}`;
+                
+                // Calculate meal rate
+                const totalMeals = parseFloat(document.getElementById('total-meals').textContent) || 0;
+                const mealRate = totalMeals > 0 ? (totalBazarCost + totalShopDues) / totalMeals : 0;
+                document.getElementById('meal-rate').textContent = `৳${mealRate.toFixed(2)}`;
+                
+                // Calculate member accounts
+                calculateMemberAccounts(mealRate, maidBill, electricityBill, wifiBill, otherBills);
+                
+                showNotification('Expenses calculated successfully', 'success');
+            });
+
+            // Generate report button
+            document.getElementById('generate-report-btn').addEventListener('click', () => {
+                if (!isAdmin) {
+                    showNotification('Only admin can generate reports', 'danger');
+                    return;
+                }
+                
+                // This would typically generate a PDF report
+                showNotification('Report generation feature coming soon', 'info');
+            });
+
+            // Dark mode toggle
+            document.getElementById('dark-mode-toggle').addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                localStorage.setItem('darkMode', isDarkMode);
+                
+                const icon = document.querySelector('#dark-mode-toggle i');
+                if (isDarkMode) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+            });
+
+            // Check for saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+                const icon = document.querySelector('#dark-mode-toggle i');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+
+            // Month selectors
+            document.getElementById('meal-month-select').addEventListener('change', () => {
+                loadMealData();
+            });
+
+            document.getElementById('expense-month-select').addEventListener('change', () => {
+                loadExpenseData();
+            });
+        });
+
+        // Functions
+        function showLoader() {
+            loader.style.display = 'flex';
+        }
+
+        function hideLoader() {
+            loader.style.display = 'none';
+        }
+
+        function showNotification(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            alertDiv.style.top = '20px';
+            alertDiv.style.right = '20px';
+            alertDiv.style.zIndex = '9999';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        function showLoginPage() {
+            pages.forEach(page => {
+                page.style.display = 'none';
+            });
+            loginModal.show();
+        }
+
+        function showPage(pageName) {
+            pages.forEach(page => {
+                page.style.display = 'none';
+            });
+            
+            const page = document.getElementById(`${pageName}-page`);
+            if (page) {
+                page.style.display = 'block';
+                
+                // Update active nav link
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('data-page') === pageName) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                // Load page-specific data
+                switch (pageName) {
+                    case 'dashboard':
+                        loadDashboardData();
+                        break;
+                    case 'bazar-list':
+                        loadBazarData();
+                        break;
+                    case 'meal-count':
+                        loadMealData();
+                        break;
+                    case 'members':
+                        loadMembersData();
+                        break;
+                    case 'expenses':
+                        loadExpenseData();
+                        break;
+                    case 'profile':
+                        loadProfileData();
+                        break;
+                    case 'settings':
+                        loadSettingsData();
+                        break;
+                }
+            }
+        }
+
+        function checkUserRole() {
+            db.collection('users').doc(currentUser.uid).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        isAdmin = userData.role === 'admin';
+                        
+                        // Show/hide admin-only elements
+                        const adminElements = document.querySelectorAll('.admin-only');
+                        adminElements.forEach(element => {
+                            element.style.display = isAdmin ? 'block' : 'none';
+                        });
+                        
+                        // Show/hide add notice button
+                        const addNoticeBtn = document.getElementById('add-notice-btn');
+                        if (addNoticeBtn) {
+                            addNoticeBtn.style.display = isAdmin ? 'block' : 'none';
+                        }
+                    }
+                })
+                .catch(error => {
+                    showNotification(error.message, 'danger');
+                });
+        }
+
+        function loadMessData() {
+            if (!currentUser) return;
+            
+            db.collection('users').doc(currentUser.uid).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        
+                        if (userData.messId) {
+                            // Load mess data
+                            db.collection('messes').doc(userData.messId).get()
+                                .then(messDoc => {
+                                    if (messDoc.exists) {
+                                        currentMess = {
+                                            id: messDoc.id,
+                                            ...messDoc.data()
+                                        };
+                                        
+                                        // Update UI with mess data
+                                        document.getElementById('mess-name-display').textContent = currentMess.name;
+                                        document.getElementById('mess-code-display').textContent = currentMess.code;
+                                        
+                                        // Load dashboard data
+                                        showPage('dashboard');
+                                    }
+                                })
+                                .catch(error => {
+                                    showNotification(error.message, 'danger');
+                                });
+                        } else {
+                            // User hasn't joined a mess yet
+                            if (userData.role === 'admin') {
+                                createMessModal.show();
+                            } else {
+                                joinMessModal.show();
+                            }
+                        }
+                    }
+                })
+                .catch(error => {
+                    showNotification(error.message, 'danger');
+                });
+        }
+
+        function loadDashboardData() {
+            // Set current date
+            const today = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = `Date: ${today.toLocaleDateString('en-US', options)}`;
+            
+            // Load today's bazar
+            const todayStr = today.toISOString().split('T')[0];
+            db.collection('bazars')
+                .where('messId', '==', currentMess.id)
+                .where('date', '==', todayStr)
+                .get()
+                .then(querySnapshot => {
+                    const bazarInfo = document.getElementById('today-bazar-info');
+                    
+                    if (querySnapshot.empty) {
+                        bazarInfo.innerHTML = '<p>No bazar scheduled for today</p>';
+                    } else {
+                        let html = '';
+                        querySnapshot.forEach(doc => {
+                            const bazar = doc.data();
+                            html += `
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5>${bazar.memberName}</h5>
+                                        <p>Amount: ৳${bazar.amount}</p>
+                                    </div>
+                                    <div>
+                                        ${isAdmin ? `
+                                            <button class="btn btn-sm btn-danger delete-bazar-btn" data-id="${doc.id}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        bazarInfo.innerHTML = html;
+                        
+                        // Add event listeners to delete buttons
+                        document.querySelectorAll('.delete-bazar-btn').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                const bazarId = e.currentTarget.getAttribute('data-id');
+                                deleteBazar(bazarId);
+                            });
+                        });
+                    }
+                })
+                .catch(error => {
+                    showNotification(error.message, 'danger');
+                });
+            
+            // Load today's meal for current user
+            db.collection('meals')
+                .where('userId', '==', currentUser.uid)
+                .where('date', '==', todayStr)
+                .get()
+                .then(querySnapshot => {
+                    // Reset checkboxes
+                    document.getElementById('morning-meal').checked = false;
+                    document.getElementById('noon-meal').checked = false;
+                    document.getElementById('night-meal').checked = false;
+                    
+                    if (!querySnapshot.empty) {
+                        querySnapshot.forEach(doc => {
+                            const meal = doc.data();
+                            document.getElementById('morning-meal').checked = meal.morning;
+                            document.getElementById('noon-meal').checked = meal.noon;
+                            document.getElementById('night-meal').checked = meal.night;
+                        });
+                    }
+                })
+                .catch(error => {
+                    showNotification(error.message, 'danger');
+                });
+            
+            // Load notices
+            loadNoticeData();
+        }
+
+        function loadNoticeData() {
+            db.collection('notices')
+                .where('messId', '==', currentMess.id)
+                .orderBy('timestamp', 'desc')
+                .get()
+                .then(querySnapshot => {
+                    const noticeBoard = document.getElementById('notice-board');
+                    
+                    if (querySnapshot.empty) {
+                        noticeBoard.innerHTML = '<p>No notices available</p>';
+                    } else {
+                        let html = '';
+                        querySnapshot.forEach(doc => {
+                            const notice = doc.data();
+                            const date = notice.timestamp.toDate();
+                            const dateStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                            
+                            html += `
+                                <div class="notice-item">
+                                    <div class="notice-date">${dateStr}</div>
+                                    <div class="notice-content">
+                                        <h6>${notice.title}</h6>
+                                        <p>${notice.content}</p>
+                                        <small>By: ${notice.authorName}</small>
+                                    </div>
+                                    ${isAdmin ? `
+                                        <div class="mt-2">
+                                            <button class="btn btn-sm btn-danger delete-notice-btn" data-id="${doc.id}">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            `;
+                        });
+                        noticeBoard.innerHTML = html;
+                        
+                        // Add event listeners to delete buttons
+                        document.querySelectorAll('.delete-notice-btn').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                const noticeId = e.currentTarget.getAttribute('data-id');
+                                deleteNotice(noticeId);
+                            });
+                        });
+                    }
+                })
+                .catch(error => {
+                    showNotification(error.message, 'danger');
+                });
+        }
+
+        function loadBazarData() {
+            const selectedMonth = document.getElementById('meal-month-select').value;
+            const year = new Date().getFullYear();
+            const startDate = new Date(year, selectedMonth, 1);
+            const endDate = new Date(year, parseInt(selectedMonth) + 1, 0);
+            
+            db.collection('bazars')
+                .where('messId', '==', currentMess.id)
+                .where('date', '>=', startDate.toISOString().split('T')[0])
+                .where('date', '<=', endDate.toISOString().split('T')[0])
+                .orderBy('date')
+                .get()
+                .then(querySnapshot => {
+                    const bazarTable = document.getElementById('bazar-table').getElementsByTagName('tbody')[0];
+                    
+                    if (querySnapshot.empty) {
+                        bazarTable.innerHTML = '<tr><td colspan="5" class="text-center">No bazar data available</td></tr>';
+                    } else {
+                        let html = '';
+                        let totalAmount = 0;
+                        
+                        querySnapshot.forEach(doc => {
+                            const bazar = doc.data();
+                            totalAmount += bazar.amount;
+                            
+                            html += `
+                                <tr>
+                                    <td>${bazar.date}</td>
+                                    <td>${bazar.memberName}</td>
+                                    <td>৳${bazar.amount}</td>
+                                    <td>${bazar.details || '-'}</td>
+                                    <td>
+                                        ${isAdmin ? `
+                                            <button class="btn btn-sm btn-danger delete-bazar-btn" data-id="${doc.id}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        ` : ''}
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                        
+                        html += `
+                            <tr>
+                                <td colspan="2"><strong>Total</strong></td>
+                                <td><strong>৳${totalAmount.toFixed(2)}</strong></td>
+                                <td colspan="2"></td>
+                            </tr>
+                        `;
+                        
+                        bazarTable.innerHTML = html;
+                        
+                        // Update total bazar cost in expenses page
+                        document.getElementById('total-bazar-cost').textContent = `৳${totalAmount.toFixed(2)}`;
+                        
+                        // Add event listeners to delete buttons
+                        document.querySelectorAll('.delete-bazar-btn').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                const bazarId = e.currentTarget.getAttribute('data-id');
+                                deleteBazar(bazarId);
+                            });
+                        });
+                    }
+                })
+                .catch(error => {
+                    showNotification(error.message, 'danger');
+                });
+            
+            // Load shop dues
+            loadShopDuesData();
+        }
+
+        function loadShopDuesData() {
+            db.collection('shopDues')
+                .where('messId', '==', currentMess.id)
+                .orderBy('date', 'desc')
+                .get()
+                .then(querySnapshot => {
+                    const shopDuesCard = document.getElementById('shop-dues-card');
+                    const shopDuesTable = document.getElementById('shop-dues-table').getElementsByTagName('tbody')[0];
+                    
+                    if (querySnapshot.empty) {
+                        shopDuesCard.style.display = 'none';
+                    } else {
+                        shopDuesCard.style.display = 'block';
+                        let html = '';
+                        let totalAmount = 0;
+                        
+                        querySnapshot.forEach(doc => {
+                            const shopDue = doc.data();
+                            totalAmount += shopDue.amount;
+                            
+                            html += `
+                                <tr>
+                                    <td>${shopDue.shopName}</td>
+                                    <td>৳${shopDue.amount}</td>
+                                    <td>${shopDue.date}</td>
+                                    <td>
+                                        ${isAdmin ? `
+                                            <button class="btn btn-sm btn-danger delete-shop-due-btn" data-id="${doc.id}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        ` : ''}
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                        
+                        html += `
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td><strong>৳${totalAmount.toFixed(2)}</strong></td>
+                                <td colspan="2"></td>
+                            </tr>
+                        `;
+                        
+                        shopDuesTable.innerHTML = html;
+                        
+                        // Update total shop dues in expenses page
+                        document.getElementById('total-shop-dues').textContent = `৳${totalAmount.toFixed(2)}`;
+                        
+                        // Add event listeners to delete buttons
+                        document.querySelectorAll('.delete-shop-due-btn').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                const shopDueId = e.currentTarget.getAttribute('data-id');
+                                deleteShopDue(shopDueId);
+                            });
+                        });
+                    }
+                })
+                .catch(error => {
+                    showNotification(error.message, 'danger');
+                });
+        }
+
+        function loadMealData() {
+            const selectedMonth = document.getElementById('meal-month-select').value;
+            const year = new Date().getFullYear();
+            const startDate = new Date(year, selectedMonth, 1);
+            const endDate = new Date(year, parseInt(selectedMonth) + 1, 0);
+            
+            // Get all members
+            db.collection('users')
+                .where('messId', '==', currentMess.id)
+                .get()
+                .then(querySnapshot => {
+                    const members = [];
+                    querySnapshot.forEach(doc => {
+                        members.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+                    
+                    // Get all meals for the selected month
+                    db.collection('meals')
+                        .where('date', '>=', startDate.toISOString().split('T')[0])
+                        .where('date', '<=', endDate.toISOString().split('T')[0])
+                        .get()
+                        .then(mealQuerySnapshot => {
+                            const mealTable = document.getElementById('meal-table');
+                            const tableHead = mealTable.getElementsByTagName('thead')[0];
+                            const tableBody = mealTable.getElementsByTagName('tbody')[0];
+                            
+                            // Create table header
+                            let headerHtml = '<tr><th>Date</th>';
+                            members.forEach(member => {
+                                headerHtml += `<th>${member.name}</th>`;
+                            });
+                            headerHtml += '<th>Total</th></tr>';
+                            tableHead.innerHTML = headerHtml;
+                            
+                            // Create table body
+                            let bodyHtml = '';
+                            let totalMeals = 0;
+                            
+                            // Create a map to store meals by date and user
+                            const mealMap = {};
+                            mealQuerySnapshot.forEach(doc => {
+                                const meal = doc.data();
+                                if (!mealMap[meal.date]) {
+                                    mealMap[meal.date] = {};
+                                }
+                                mealMap[meal.date][meal.userId] = meal.count;
+                            });
+                            
+                            // Generate rows for each day in the month
+                            const daysInMonth = new Date(year, parseInt(selectedMonth) + 1, 0).getDate();
+                            for (let day = 1; day <= daysInMonth; day++) {
+                                const date = new Date(year, selectedMonth, day);
+                                const dateStr = date.toISOString().split('T')[0];
+                                
+                                let rowHtml = `<tr><td>${dateStr}</td>`;
+                                let dayTotal = 0;
+                                
+                                members.forEach(member => {
+                                    const mealCount = mealMap[dateStr] && mealMap[dateStr][member.id] ? mealMap[dateStr][member.id] : 0;
+                                    rowHtml += `<td>${mealCount}</td>`;
+                                    dayTotal += mealCount;
+                                });
+                                
+                                rowHtml += `<td><strong>${dayTotal}</strong></td></tr>`;
+                                bodyHtml += rowHtml;
+                                totalMeals += dayTotal;
+                            }
+                            
+                            // Add total row
+                            let totalRowHtml = '<tr><td><strong>Total</strong></td>';
+                            members.forEach(member => {
+                                let memberTotal = 0;
+                                for (const date in mealMap) {
+                                    if (mealMap[date][member.id]) {
+                                        memberTotal += mealMap[date][member.id];
+                                    }
+                                }
+                                totalRowHtml += `<td><strong>${memberTotal}</strong></td>`;
+                            });
+                            totalRowHtml += `<td><strong>${totalMeals}</strong></td></tr>`;
+                            bodyHtml += totalRowHtml;
+                            
+                            tableBody.innerHTML = bodyHtml;
+                            
+                            // Update meal summary
+                            document.getElementById('total-meals').textContent = totalMeals;
+                            const avgMeals = totalMeals / daysInMonth;
+                            document.getElementById('avg-meals').textContent = avgMeals.toFixed(1);
+                        })
+                        .catch(error => {
+                            showNotification(error.message, 'danger');
+                        });
+                })
+                .catch(error => {
+                    showNotification(error.message, 'danger');
+                });
+        }
+
+        function loadMembersData() {
+            db.collection('users')
+                .where('messId', '==', currentMess.id)
+                .get()
+                .then(querySnapshot => {
+                    const membersList = document.getElementById('members-list');
+                    members = [];
+                    
+                    if (querySnapshot.empty) {
+                        membersList.innerHTML = '<p>No members available</p>';
+                    } else {
+                        let html = '';
+                        querySnapshot.forEach(doc => {
+                            const member = doc.data();
+                            members.push({
+                                uid: doc.id,
+                                ...member
+                            });
+                            
+                            const initials = member.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                            
+                            html += `
+                                <div class="member-card">
+                                    <div class="member-info">
+                                        <div class="member-avatar">${initials}</div>
+                                        <div>
+                                            <h5>${member.name} ${member.role === 'admin' ? '(Admin)' : ''}</h5>
+                                            <p>${member.email} | ${member.phone}</p>
+                                            <p>Address: ${member.address}</p>
+                                            <p>Monthly Rent: ৳${member.rent}</p>
+                                        </div>
+                                        ${isAdmin ? `
+                                            <div>
+                                                <button class="btn btn-sm btn-danger delete-member-btn" data-id="${doc.id}">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        membersList.innerHTML = html;
+                        
+                        // Add event listeners to delete buttons
+                        document.querySelectorAll('.delete-member-btn').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                const memberId = e.currentTarget.getAttribute('data-id');
+                                deleteMember(memberId);
+                            });
+                        });
+                    }
+                })
+                .catch(error => {
+                    showNotification(error.message, 'danger');
+                });
+        }
+
+        function loadExpenseData() {
+            // Load bazar data
+            loadBazarData();
+            
+            // Load meal data
+            loadMealData();
+        }
+
+        function loadProfileData() {
+            db.collection('users').doc(currentUser.uid).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        
+                        document.getElementById('profile-name').value = userData.name || '';
+                        document.getElementById('profile-email').value = userData.email || '';
+                        document.getElementById('profile-phone').value = userData.phone || '';
+                        document.getElementById('profile-address').value = userData.address || '';
+                        document.getElementById('profile-gender').value = userData.gender || '';
+                        document.getElementById('profile-religion').value = userData.religion || '';
+                        document.getElementById('profile-class').value = userData.class || '';
+                        document.getElementById('profile-department').value = userData.department || '';
+                    }
+                })
+                .catch(error => {
+                    showNotification(error.message, 'danger');
+                });
+        }
+
+        function loadSettingsData() {
+            if (currentMess) {
+                document.getElementById('mess-name').value = currentMess.name || '';
+            }
+        }
+
+        function calculateMemberAccounts(mealRate, maidBill, electricityBill, wifiBill, otherBills) {
+            const selectedMonth = document.getElementById('expense-month-select').value;
+            const year = new Date().getFullYear();
+            const startDate = new Date(year, selectedMonth, 1);
+            const endDate = new Date(year, parseInt(selectedMonth) + 1, 0);
+            
+            // Get all members
+            db.collection('users')
+                .where('messId', '==', currentMess.id)
+                .get()
+                .then(querySnapshot => {
+                    const members = [];
+                    querySnapshot.forEach(doc => {
+                        members.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+                    
+                    // Get all meals for the selected month
+                    db.collection('meals')
+                        .where('date', '>=', startDate.toISOString().split('T')[0])
+                        .where('date', '<=', endDate.toISOString().split('T')[0])
+                        .get()
+                        .then(mealQuerySnapshot => {
+                            // Get all bazars for the selected month
+                            db.collection('bazars')
+                                .where('messId', '==', currentMess.id)
+                                .where('date', '>=', startDate.toISOString().split('T')[0])
+                                .where('date', '<=', endDate.toISOString().split('T')[0])
+                                .get()
+                                .then(bazarQuerySnapshot => {
+                                    // Create a map to store meals by user
+                                    const mealMap = {};
+                                    mealQuerySnapshot.forEach(doc => {
+                                        const meal = doc.data();
+                                        if (!mealMap[meal.userId]) {
+                                            mealMap[meal.userId] = 0;
+                                        }
+                                        mealMap[meal.userId] += meal.count;
+                                    });
+                                    
+                                    // Create a map to store bazar costs by user
+                                    const bazarMap = {};
+                                    bazarQuerySnapshot.forEach(doc => {
+                                        const bazar = doc.data();
+                                        if (!bazarMap[bazar.memberId]) {
+                                            bazarMap[bazar.memberId] = 0;
+                                        }
+                                        bazarMap[bazar.memberId] += bazar.amount;
+                                    });
+                                    
+                                    // Calculate member accounts
+                                    const memberAccountsTable = document.getElementById('member-accounts-table').getElementsByTagName('tbody')[0];
+                                    let html = '';
+                                    
+                                    members.forEach(member => {
+                                        const meals = mealMap[member.id] || 0;
+                                        const mealCost = meals * mealRate;
+                                        const bazarCost = bazarMap[member.id] || 0;
+                                        const sharedBills = (maidBill + electricityBill + wifiBill + otherBills) / members.length;
+                                        const totalCost = mealCost + member.rent + sharedBills;
+                                        const dueRefund = totalCost - bazarCost;
+                                        
+                                        html += `
+                                            <tr>
+                                                <td>${member.name}</td>
+                                                <td>${meals}</td>
+                                                <td>৳${mealCost.toFixed(2)}</td>
+                                                <td>৳${member.rent}</td>
+                                                <td>৳${totalCost.toFixed(2)}</td>
+                                                <td>৳${bazarCost.toFixed(2)}</td>
+                                                <td class="${dueRefund >= 0 ? 'text-danger' : 'text-success'}">
+                                                    ৳${Math.abs(dueRefund).toFixed(2)} ${dueRefund >= 0 ? '(Due)' : '(Refund)'}
+                                                </td>
+                                            </tr>
+                                        `;
+                                    });
+                                    
+                                    memberAccountsTable.innerHTML = html;
+                                })
+                                .catch(error => {
+                                    showNotification(error.message, 'danger');
+                                });
+                        })
+                        .catch(error => {
+                            showNotification(error.message, 'danger');
+                        });
+                })
+                .catch(error => {
+                    showNotification(error.message, 'danger');
+                });
+        }
+
+        function deleteBazar(bazarId) {
+            if (!isAdmin) {
+                showNotification('Only admin can delete bazars', 'danger');
+                return;
+            }
+            
+            if (confirm('Are you sure you want to delete this bazar?')) {
+                db.collection('bazars').doc(bazarId).delete()
+                    .then(() => {
+                        showNotification('Bazar deleted successfully', 'success');
+                        loadBazarData();
+                    })
+                    .catch(error => {
+                        showNotification(error.message, 'danger');
+                    });
+            }
+        }
+
+        function deleteShopDue(shopDueId) {
+            if (!isAdmin) {
+                showNotification('Only admin can delete shop dues', 'danger');
+                return;
+            }
+            
+            if (confirm('Are you sure you want to delete this shop due?')) {
+                db.collection('shopDues').doc(shopDueId).delete()
+                    .then(() => {
+                        showNotification('Shop due deleted successfully', 'success');
+                        loadShopDuesData();
+                    })
+                    .catch(error => {
+                        showNotification(error.message, 'danger');
+                    });
+            }
+        }
+
+        function deleteNotice(noticeId) {
+            if (!isAdmin) {
+                showNotification('Only admin can delete notices', 'danger');
+                return;
+            }
+            
+            if (confirm('Are you sure you want to delete this notice?')) {
+                db.collection('notices').doc(noticeId).delete()
+                    .then(() => {
+                        showNotification('Notice deleted successfully', 'success');
+                        loadNoticeData();
+                    })
+                    .catch(error => {
+                        showNotification(error.message, 'danger');
+                    });
+            }
+        }
+
+        function deleteMember(memberId) {
+            if (!isAdmin) {
+                showNotification('Only admin can delete members', 'danger');
+                return;
+            }
+            
+            if (confirm('Are you sure you want to delete this member? This action cannot be undone.')) {
+                // Delete user from Firebase Auth
+                db.collection('users').doc(memberId).get()
+                    .then(doc => {
+                        if (doc.exists) {
+                            const userData = doc.data();
+                            
+                            // Delete user from Firestore
+                            return db.collection('users').doc(memberId).delete();
+                        }
+                    })
+                    .then(() => {
+                        showNotification('Member deleted successfully', 'success');
+                        loadMembersData();
+                    })
+                    .catch(error => {
+                        showNotification(error.message, 'danger');
+                    });
+            }
+        }
+
+        function generateMessCode() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < 5; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        }
+    </script>
+</body>
+</html>
