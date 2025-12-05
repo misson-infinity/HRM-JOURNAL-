@@ -39,6 +39,8 @@
         .article-content img { max-width: 100%; height: auto; display: block; margin: 3rem auto; border-radius: 0.75rem; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); }
         .brand-icon { height: 30px; width: auto; margin-left: 0.25rem; margin-right: 0.25rem; display: inline-block; }
         @media (min-width: 768px) { .brand-icon { height: 36px; } }
+        /* Style for reaction feedback */
+        .reaction-clicked { transform: scale(1.3); box-shadow: 0 0 10px rgba(255, 165, 0, 0.7); transition: all 0.1s ease-out; }
     </style>
     
     <script>
@@ -100,7 +102,6 @@
             'category_update_success': 'successfully updated', 
             'category_delete_success': 'successfully deleted', 
             'go_back_to_dashboard': 'Go back to Post Dashboard',
-            // --- NEW UI TEXT FOR NEW FEATURES ---
             'share_article': 'Share Article',
             'copy_link': 'Copy Link',
             'react_to_article': 'React to this Article',
@@ -114,7 +115,7 @@
             <a href="#home" class="flex flex-col items-start gap-0 group">
                 <div class="flex items-end relative">
                     <span class="font-brand text-2xl md:text-4xl font-bold tracking-tight text-red-600">Infinity</span>
-                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3ZGAKLh5xvrm4t5qAkDx-V1ZtOOojJxFFBZFeqjKcDW-P1YSHlwgZtV9DxrcurPE9lKEoZH5bk0C8nV69oAAllM5wxtcRy2cxZociXMx4MtOpuet6snChXDz0UTGXpnmkC9hhRs6dyHC77rM0KID9lZeACuS280CebuXqr4NrPJEqlOABfargbiCW5I/s808/1000067315.jpg" alt="Stream Icon" class="brand-icon" />
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3ZGAKLh5xvrm4t5qAkDx-V1ZtOOojJxFFBZFeqjKcDW-P1YSHlwgZtV9DxrcurPE9lKEoZH5bk0C8nV69oAAllM5wxtcRy2cxZociXMx4MtOpuet6snChXDz0UTGXpnmkC9hhRs6dyHC77rM0KID9lZeACuS280CebuXqr4NrPJEqlOABfargbi7CW5I/s808/1000067315.jpg" alt="Stream Icon" class="brand-icon" />
                     <span class="font-brand text-2xl md:text-4xl font-bold tracking-tight text-gray-900">Stream</span>
                     <span class="text-xs md:text-sm font-bold text-gray-400 ml-2 tracking-wide">News Portal</span>
                 </div>
@@ -197,7 +198,8 @@
             "ahnafmahi19@gmail.com"
         ];
         const defaultCategories = ["Current Affairs", "Sports", "Fact Check", "Opinion"];
-        const CUSTOM_ICON_URL = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3ZGAKLh5xvrm4t5qAkDx-V1ZtOOojJxFFBZFeqjKcDW-P1YSHlwgZtV9DxrcurPE9lKEoZH5bk0C8nV69oAAllM5wxtcRy2cxZociXMx4MtOpuet6snChXDz0UTGXpnmkC9hhRs6dyHC77rM0KID9lZeACuS280CebuXqr4NrPJEqlOABfargbiCW5I/s808/1000067315.jpg";
+        // 💡 JAVASCRIPT/CONFIG CHANGE: Updated to use the user's requested icon URL
+        const CUSTOM_ICON_URL = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3ZGAKLh5xvrm4t5qAkDx-V1ZtOOojJxFFBZFeqjKcDW-P1YSHlwgZtV9DxrcurPE9lKEoZH5bk0C8nV69oAAllM5wxtcRy2cxZociXMx4MtOpuet6snChXDz0UTGXpnmkC9hhRs6dyHC77rM0KID9lZeACuS280CebuXqr4NrPJEqlOABfargbi7CW5I/s808/1000067315.jpg"; 
 
         let currentUser = null;
         let isAdmin = false;
@@ -225,9 +227,9 @@
             'reader_mode': 'READER MODE', 'unknown_date': 'Unknown Date', 'category_add_success': 'successfully added', 
             'category_update_success': 'successfully updated', 'category_delete_success': 'successfully deleted', 
             'go_back_to_dashboard': 'Go back to Post Dashboard',
-            'share_article': 'Share Article', // New
-            'copy_link': 'Copy Link', // New
-            'react_to_article': 'React to this Article', // New
+            'share_article': 'Share Article', 
+            'copy_link': 'Copy Link', 
+            'react_to_article': 'React to this Article', 
         };
 
         const t = (key) => UI_TEXT[key] || key;
@@ -235,11 +237,18 @@
         // --- NEW GLOBAL FUNCTIONS FOR REACTIONS AND SHARING ---
 
         /**
-         * Simulates adding a reaction. In a real application, this would update
-         * a Firestore document's reaction count.
+         * Simulates adding a reaction and provides visual feedback.
          */
-        window.handleReaction = (reactionType, articleId) => {
+        window.handleReaction = (reactionType, articleId, event) => {
+            const button = event.currentTarget;
             console.log(`User reacted with: ${reactionType} to article ID: ${articleId}`);
+            
+            // Visual feedback: brief scale-up effect
+            button.classList.add('reaction-clicked');
+            setTimeout(() => {
+                button.classList.remove('reaction-clicked');
+            }, 300);
+
             // ALERT: This is for demonstration. A real feature requires database integration.
             alert(`Thanks for reacting with ${reactionType}! (Feature in development)`);
         };
@@ -519,11 +528,11 @@
                             <div class="md:w-1/2">
                                 <h3 class="text-lg font-bold text-gray-800 mb-3">${t('react_to_article')}</h3>
                                 <div class="flex gap-3">
-                                    <button onclick="window.handleReaction('👍', '${id}')" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">👍</button>
-                                    <button onclick="window.handleReaction('❤️', '${id}')" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">❤️</button>
-                                    <button onclick="window.handleReaction('😂', '${id}')" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">😂</button>
-                                    <button onclick="window.handleReaction('😢', '${id}')" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">😢</button>
-                                    <button onclick="window.handleReaction('😡', '${id}')" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">😡</button>
+                                    <button onclick="window.handleReaction('👍', '${id}', event)" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">👍</button>
+                                    <button onclick="window.handleReaction('❤️', '${id}', event)" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">❤️</button>
+                                    <button onclick="window.handleReaction('😂', '${id}', event)" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">😂</button>
+                                    <button onclick="window.handleReaction('😢', '${id}', event)" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">😢</button>
+                                    <button onclick="window.handleReaction('😡', '${id}', event)" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">😡</button>
                                 </div>
                             </div>
                         </div>
