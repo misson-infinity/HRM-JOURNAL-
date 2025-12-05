@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -173,7 +174,7 @@
 
         <script type="module">
         import { initializeApp } from "firebase/app";
-        import { getFirestore, collection, getDocs, getDoc, addDoc, doc, query, orderBy, limit, serverTimestamp, updateDoc, deleteDoc } from "firebase/firestore";
+        import { getFirestore, collection, getDocs, getDoc, addDoc, doc, query, orderBy, limit, serverTimestamp, updateDoc, deleteDoc, increment } from "firebase/firestore";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 
         // --- Firebase Config ---
@@ -198,7 +199,6 @@
             "ahnafmahi19@gmail.com"
         ];
         const defaultCategories = ["Current Affairs", "Sports", "Fact Check", "Opinion"];
-        // 💡 JAVASCRIPT/CONFIG CHANGE: Updated to use the user's requested icon URL
         const CUSTOM_ICON_URL = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3ZGAKLh5xvrm4t5qAkDx-V1ZtOOojJxFFBZFeqjKcDW-P1YSHlwgZtV9DxrcurPE9lKEoZH5bk0C8nV69oAAllM5wxtcRy2cxZociXMx4MtOpuet6snChXDz0UTGXpnmkC9hhRs6dyHC77rM0KID9lZeACuS280CebuXqr4NrPJEqlOABfargbi7CW5I/s808/1000067315.jpg"; 
 
         let currentUser = null;
@@ -234,14 +234,13 @@
 
         const t = (key) => UI_TEXT[key] || key;
         
-        // --- NEW GLOBAL FUNCTIONS FOR REACTIONS AND SHARING ---
+        // --- GLOBAL FUNCTIONS (Now inside module to access DB) ---
 
         /**
-         * Simulates adding a reaction and provides visual feedback.
+         * Simulates adding a reaction, stores in DB and provides visual feedback.
          */
-        window.handleReaction = (reactionType, articleId, event) => {
+        window.handleReaction = async (reactionType, articleId, event) => {
             const button = event.currentTarget;
-            console.log(`User reacted with: ${reactionType} to article ID: ${articleId}`);
             
             // Visual feedback: brief scale-up effect
             button.classList.add('reaction-clicked');
@@ -249,15 +248,38 @@
                 button.classList.remove('reaction-clicked');
             }, 300);
 
-            // ALERT: This is for demonstration. A real feature requires database integration.
-            alert(`Thanks for reacting with ${reactionType}! (Feature in development)`);
+            // DB Update: using increment to handle concurrent updates
+            const articleRef = doc(db, "articles", articleId);
+            const fieldPath = `reactions.${reactionType}`; // Nested field like "reactions.👍"
+
+            try {
+                // Optimistic UI update (update number immediately)
+                const countSpan = document.getElementById(`count-${reactionType}-${articleId}`);
+                if (countSpan) {
+                    let currentCount = parseInt(countSpan.innerText) || 0;
+                    countSpan.innerText = currentCount + 1;
+                }
+
+                await updateDoc(articleRef, {
+                    [fieldPath]: increment(1)
+                });
+                console.log(`Reacted ${reactionType} to ${articleId}`);
+            } catch (error) {
+                console.error("Error updating reaction:", error);
+                // Revert UI if error (optional)
+                const countSpan = document.getElementById(`count-${reactionType}-${articleId}`);
+                if (countSpan) {
+                    let currentCount = parseInt(countSpan.innerText) || 0;
+                    countSpan.innerText = Math.max(0, currentCount - 1);
+                }
+                alert("Failed to add reaction. Please try again.");
+            }
         };
 
         /**
          * Handles copying the current article's URL to the clipboard.
          */
         window.copyArticleLink = () => {
-             // Since the URL is hash-based, we use the current window location
              const articleUrl = window.location.href;
              navigator.clipboard.writeText(articleUrl).then(() => {
                 const copyBtn = document.getElementById('copyLinkBtn');
@@ -287,34 +309,24 @@
             }
         };
 
-        // NEW FUNCTION: Update the live date and time in the header
         const updateHeaderDateTime = () => {
             const dateTimeElement = document.getElementById('header-date-time');
             if(dateTimeElement) {
                 const now = new Date();
-                // Format: Day, Month Day, Year | HH:MM AM/PM
                 const options = { 
-                    weekday: 'short', 
-                    month: 'short', 
-                    day: 'numeric', 
-                    year: 'numeric', 
-                    hour: '2-digit', 
-                    minute: '2-digit',
-                    hour12: true 
+                    weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', 
+                    hour: '2-digit', minute: '2-digit', hour12: true 
                 };
-                // Use a generic locale or 'en-US' for consistency
                 const formattedDateTime = now.toLocaleDateString('en-US', options).toUpperCase().replace(/, /g, ' | ');
                 dateTimeElement.textContent = formattedDateTime;
             }
         }
-        // Set up interval to update time every 60 seconds (60000ms)
         setInterval(updateHeaderDateTime, 60000);
 
 
         // --- CORE FUNCTIONS ---
         const loadCategories = async () => {
             let categoryObjects = [];
-            // Add defaults first
             defaultCategories.forEach(name => {
                 categoryObjects.push({ id: null, name: name, isDefault: true });
             });
@@ -326,7 +338,6 @@
                 
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    // Prevent duplicates
                     if(data.name && !defaultCategories.includes(data.name)) {
                         categoryObjects.push({ id: doc.id, name: data.name, isDefault: false }); 
                     }
@@ -334,8 +345,6 @@
             } catch (e) {
                 console.error("Error loading categories from DB, showing defaults only:", e);
             }
-            
-            // Sort English A-Z
             categoryObjects.sort((a, b) => a.name.localeCompare(b.name, 'en'));
             return categoryObjects; 
         };
@@ -385,7 +394,6 @@
         };
 
         const initUI = async () => {
-             // Static Text
              const btnGoogle = document.getElementById('txt-login-google');
              if(btnGoogle) btnGoogle.textContent = t('login_google');
              
@@ -395,11 +403,10 @@
              const btnLogout = document.getElementById('logout-btn');
              if(btnLogout) btnLogout.textContent = t('logout');
 
-             // Load Categories
              const cats = await loadCategories();
              renderCategoriesMenu(cats);
              updateAuthUI();
-             updateHeaderDateTime(); // Initial call for date/time
+             updateHeaderDateTime(); 
         }
 
         // --- AUTH ACTIONS ---
@@ -496,7 +503,6 @@
                 
                 const data = docSnap.data();
                 const videoId = getYouTubeId(data.youtubeLink || '');
-                // Date string now includes time for full display
                 const dateString = data.createdAt?.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) || t('unknown_date');
                 const adminEditButton = isAdmin ? `<button onclick="window.location.hash='#admin/edit/${id}'" class="text-[10px] md:text-xs bg-blue-600 text-white px-2 py-1 rounded-full hover:bg-blue-700 ml-2 md:ml-4 transition font-semibold">${t('article_edit')}</button>` : '';
 
@@ -505,6 +511,14 @@
                 const articleTitle = encodeURIComponent(data.title);
                 const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`;
                 const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(articleUrl)}&text=${articleTitle}`;
+                
+                // Get reaction counts
+                const reactions = data.reactions || {};
+                const rLike = reactions['👍'] || 0;
+                const rLove = reactions['❤️'] || 0;
+                const rLaugh = reactions['😂'] || 0;
+                const rSad = reactions['😢'] || 0;
+                const rAngry = reactions['😡'] || 0;
 
                 const shareAndReactionSection = `
                     <div class="px-4 md:px-12 mt-8 pt-6 border-t border-gray-200">
@@ -528,11 +542,26 @@
                             <div class="md:w-1/2">
                                 <h3 class="text-lg font-bold text-gray-800 mb-3">${t('react_to_article')}</h3>
                                 <div class="flex gap-3">
-                                    <button onclick="window.handleReaction('👍', '${id}', event)" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">👍</button>
-                                    <button onclick="window.handleReaction('❤️', '${id}', event)" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">❤️</button>
-                                    <button onclick="window.handleReaction('😂', '${id}', event)" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">😂</button>
-                                    <button onclick="window.handleReaction('😢', '${id}', event)" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">😢</button>
-                                    <button onclick="window.handleReaction('😡', '${id}', event)" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">😡</button>
+                                    <button onclick="window.handleReaction('👍', '${id}', event)" class="flex flex-col items-center justify-center p-2 bg-gray-100 rounded-lg shadow-sm hover:bg-gray-200 transition min-w-[50px]">
+                                        <span class="text-2xl hover:scale-110 transition duration-150">👍</span>
+                                        <span id="count-👍-${id}" class="text-xs font-bold text-gray-600 mt-1">${rLike}</span>
+                                    </button>
+                                    <button onclick="window.handleReaction('❤️', '${id}', event)" class="flex flex-col items-center justify-center p-2 bg-gray-100 rounded-lg shadow-sm hover:bg-gray-200 transition min-w-[50px]">
+                                        <span class="text-2xl hover:scale-110 transition duration-150">❤️</span>
+                                        <span id="count-❤️-${id}" class="text-xs font-bold text-gray-600 mt-1">${rLove}</span>
+                                    </button>
+                                    <button onclick="window.handleReaction('😂', '${id}', event)" class="flex flex-col items-center justify-center p-2 bg-gray-100 rounded-lg shadow-sm hover:bg-gray-200 transition min-w-[50px]">
+                                        <span class="text-2xl hover:scale-110 transition duration-150">😂</span>
+                                        <span id="count-😂-${id}" class="text-xs font-bold text-gray-600 mt-1">${rLaugh}</span>
+                                    </button>
+                                    <button onclick="window.handleReaction('😢', '${id}', event)" class="flex flex-col items-center justify-center p-2 bg-gray-100 rounded-lg shadow-sm hover:bg-gray-200 transition min-w-[50px]">
+                                        <span class="text-2xl hover:scale-110 transition duration-150">😢</span>
+                                        <span id="count-😢-${id}" class="text-xs font-bold text-gray-600 mt-1">${rSad}</span>
+                                    </button>
+                                    <button onclick="window.handleReaction('😡', '${id}', event)" class="flex flex-col items-center justify-center p-2 bg-gray-100 rounded-lg shadow-sm hover:bg-gray-200 transition min-w-[50px]">
+                                        <span class="text-2xl hover:scale-110 transition duration-150">😡</span>
+                                        <span id="count-😡-${id}" class="text-xs font-bold text-gray-600 mt-1">${rAngry}</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -615,7 +644,6 @@
         };
 
         const renderCategoryManagement = async () => {
-             // Auth Check
              if (!isAuthReady) { renderLoading(); return; }
              if (!isAdmin) { window.location.hash = '#admin-login'; return; }
 
@@ -652,13 +680,12 @@
                 categoryList.innerHTML += `<li class="flex justify-between items-center p-4 hover:bg-gray-50 transition"><span class="font-medium text-gray-900">${cat.name}</span><div>${buttons}</div></li>`;
             });
 
-            // Handlers
             document.getElementById('addCategoryBtn').addEventListener('click', async () => {
                 const name = document.getElementById('newCategory').value.trim();
                 if(!name || currentCategoryNames.includes(name)) return alert("Invalid or duplicate name.");
                 try {
                     await addDoc(collection(db, "categories"), { name, createdAt: serverTimestamp(), addedBy: currentUser.email });
-                    renderCategoryManagement(); // Re-render
+                    renderCategoryManagement(); 
                 } catch(e) { alert(e.message); }
             });
 
@@ -681,14 +708,12 @@
         };
 
         const renderAdmin = async () => {
-            // Wait for auth init
             if (!isAuthReady) {
                 renderLoading();
                 return;
             }
 
             if (!currentUser || !isAdmin) {
-                // If logged in as non-admin
                 if (currentUser) {
                      root.innerHTML = `<div class="flex flex-col items-center justify-center py-20 bg-red-50 rounded-xl border border-red-200 shadow-md"><i class="fas fa-ban text-4xl text-red-500 mb-4"></i><h2 class="text-xl font-bold text-red-700 mb-2">${t('admin_access_denied_title')}</h2><p class="text-gray-600 text-center max-w-md">${t('admin_access_denied_body')} <b>(${currentUser.email})</b></p></div>`;
                 } else {
@@ -732,7 +757,6 @@
                 <h3 class="text-xl md:text-2xl font-bold mt-10 md:mt-12 mb-4 text-gray-800">${t('recent_posts')}</h3>
                 <div id="admin-article-list" class="bg-white shadow-xl rounded-xl overflow-hidden border border-gray-100"></div>`;
 
-            // Populate Dropdown
             const catSelect = document.getElementById('category');
             categories.forEach(cat => {
                 const opt = document.createElement('option');
@@ -741,7 +765,6 @@
                 catSelect.appendChild(opt);
             });
 
-            // Load Recent Posts List
             const listDiv = document.getElementById('admin-article-list');
             const q = query(collection(db, "articles"), orderBy("createdAt", "desc"), limit(10));
             getDocs(q).then(snap => {
@@ -755,7 +778,6 @@
                 listDiv.innerHTML = html + '</ul>';
             });
 
-            // Handle Submit
             document.getElementById('postForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const id = document.getElementById('articleId').value;
@@ -801,7 +823,6 @@
             const hash = window.location.hash;
             const parts = hash.split('/');
 
-            // Reset edit state unless we are specifically in edit mode route
             if(!(parts[0] === '#admin' && parts[1] === 'edit')) {
                 articleToEdit = null;
             }
@@ -813,10 +834,9 @@
             else if(hash === '#admin') renderAdmin();
             else if(hash === '#admin/categories') renderCategoryManagement();
             else if(parts[0] === '#admin' && parts[1] === 'edit' && parts[2]) {
-                if(!isAuthReady) { renderLoading(); return; } // Wait for auth
+                if(!isAuthReady) { renderLoading(); return; } 
                 if(!isAdmin) { window.location.hash = '#admin-login'; return; }
                 
-                // Fetch only if we haven't already OR if the ID is different
                 if(!articleToEdit || articleToEdit.id !== parts[2]) {
                     renderLoading();
                     const docSnap = await getDoc(doc(db, "articles", parts[2]));
@@ -837,7 +857,7 @@
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
             isAdmin = user && ADMIN_EMAILS.includes(user.email);
-            isAuthReady = true; // Signal that auth is done loading
+            isAuthReady = true; 
             initUI();
             router();
         });
