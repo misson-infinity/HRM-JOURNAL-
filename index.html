@@ -24,7 +24,9 @@
     </script>
 
     <style>
-        /* Base and Font Styles */
+        /* ---------------------------------------------------- */
+        /* BASE & TYPOGRAPHY - Optimized for Readability */
+        /* ---------------------------------------------------- */
         body { 
             font-family: 'Baloo Da 2', sans-serif; 
             background-color: #f5f7fa; /* Lighter, more professional background */
@@ -42,27 +44,33 @@
         .loader { border: 4px solid #f3f3f3; border-top: 4px solid #dc2626; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        /* Professional Headline Style */
+        /* Professional Headline Style - Responsive Sizing */
         .headline-lg {
             color: #1a1a1a; 
             font-weight: 800; 
-            font-size: 2rem; 
+            font-size: 2rem; /* Mobile */
             line-height: 1.3; 
             transition: color 0.3s;
         }
-        @media (min-width: 768px) {
+        @media (min-width: 768px) { /* Tablet/Desktop */
             .headline-lg {
-                font-size: 2.75rem; 
+                font-size: 3rem; 
                 line-height: 1.2;
             }
         }
         
-        /* Article Content Styling for maximum readability */
+        /* Article Content Styling for maximum readability (Body Text) */
         .article-content { 
-            font-size: 1.15rem; 
-            line-height: 2; 
+            font-size: 1.0rem; /* Mobile base font size */
+            line-height: 1.8; 
             text-align: justify;
             color: #333333;
+        }
+        @media (min-width: 768px) {
+             .article-content {
+                font-size: 1.15rem; /* Desktop body font size */
+                line-height: 2;
+            }
         }
         .article-content p { margin-bottom: 1.5rem; }
         .article-content h2, .article-content h3 { font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; color: #374151; }
@@ -77,20 +85,31 @@
         
         /* Brand Icon Style */
         .brand-icon {
-            height: 36px; 
+            height: 30px; /* Smaller on mobile */
             width: auto; 
             margin-left: 0.25rem;
             margin-right: 0.25rem;
             vertical-align: middle; 
         }
+        @media (min-width: 768px) {
+             .brand-icon {
+                height: 36px;
+            }
+        }
         
         /* Language Toggle Customization */
         .lang-btn {
-            padding: 0.4rem 1rem;
-            font-size: 0.875rem;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.75rem; /* Smaller button on mobile */
             font-weight: 700;
             border: 1px solid #e5e7eb;
             transition: all 0.2s;
+        }
+        @media (min-width: 768px) {
+             .lang-btn {
+                padding: 0.4rem 1rem;
+                font-size: 0.875rem;
+            }
         }
         .lang-btn.active {
             background-color: #dc2626; /* Red 600 */
@@ -109,7 +128,7 @@
     <script>
         const LANG_EN = 'en';
         const LANG_BN = 'bn';
-        let currentLang = 'bn'; // Initialize later from storage
+        let currentLang = 'bn'; 
         
         // --- TEXT CONSTANTS for Internationalization (i18n) ---
         const UI_TEXT = {
@@ -277,6 +296,7 @@
             
             // 4. Update Categories
             loadCategories().then(renderCategoriesMenu);
+            updateAuthUI(); // Ensure auth buttons are updated on language change
         };
         
         // Initialize language from localStorage
@@ -291,24 +311,24 @@
             // updateLanguageUI will be called inside onAuthStateChanged
         });
     </script>
-    <header class="bg-white sticky top-0 z-40 border-b border-gray-200 shadow-md h-20 flex items-center">
-        <div class="container mx-auto px-4 flex justify-between items-center relative max-w-5xl">
+    <header class="bg-white sticky top-0 z-40 border-b border-gray-200 shadow-md h-16 md:h-20 flex items-center">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8 flex justify-between items-center relative max-w-7xl">
             <a href="#home" class="flex items-center gap-1 group">
                 <div class="relative flex items-center">
-                    <span class="font-brand text-4xl font-bold tracking-tight text-red-600">Infinity</span>
+                    <span class="font-brand text-2xl md:text-4xl font-bold tracking-tight text-red-600">Infinity</span>
                     <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3ZGAKLh5xvrm4t5qAkDx-V1ZtOOojJxFFBZFeqjKcDW-P1YSHlwgZtV9DxrcurPE9lKEoZH5bk0C8nV69oAAllM5wxtcRy2cxZociXMx4MtOpuet6snChXDz0UTGXpnmkC9hhRs6dyHC77rM0KID9lZeACuS280CebuXqr4NrPJEqlOABfargbi7CW5I/s808/1000067315.jpg" alt="Stream Icon" class="brand-icon" />
-                    <span class="font-brand text-4xl font-bold tracking-tight text-gray-900">Stream</span>
+                    <span class="font-brand text-2xl md:text-4xl font-bold tracking-tight text-gray-900">Stream</span>
                 </div>
-                <sup class="text-[12px] uppercase font-bold text-red-600 mt-2 ml-1 border px-2 py-0.5 border-red-400 bg-red-100 rounded-full">${t('news_suffix')}</sup>
+                <sup class="text-[10px] md:text-[12px] uppercase font-bold text-red-600 mt-2 ml-1 border px-1.5 py-0.5 md:px-2 border-red-400 bg-red-100 rounded-full">${t('news_suffix')}</sup>
             </a>
 
-            <div class="flex items-center gap-4">
-                <div id="auth-status" class="hidden md:block text-xs font-bold text-gray-500"></div>
+            <div class="flex items-center gap-3 md:gap-4">
+                <div id="auth-status" class="hidden lg:block text-xs font-bold text-gray-500"></div>
                 <div class="hidden md:flex items-center text-sm font-medium rounded-full overflow-hidden shadow-inner bg-white">
                     <button id="lang-en-btn" onclick="setLanguage(LANG_EN)" class="lang-btn rounded-l-full">Eng</button>
                     <button id="lang-bn-btn" onclick="setLanguage(LANG_BN)" class="lang-btn rounded-r-full">বাংলা</button>
                 </div>
-                <button onclick="toggleMenu()" class="text-3xl text-gray-800 hover:text-red-600 focus:outline-none">
+                <button onclick="toggleMenu()" class="text-2xl md:text-3xl text-gray-800 hover:text-red-600 focus:outline-none">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
@@ -322,7 +342,14 @@
             <button onclick="toggleMenu()" class="text-2xl text-gray-500 hover:text-red-500"><i class="fas fa-times"></i></button>
         </div>
         <div class="flex-grow overflow-y-auto custom-scroll p-6">
-            <ul id="menu-categories" class="space-y-6 text-xl font-medium text-gray-800">
+            <div class="md:hidden text-center mb-6">
+                <div class="flex items-center text-sm font-medium rounded-full overflow-hidden shadow-inner bg-white border border-gray-200">
+                    <button id="lang-en-btn-mobile" onclick="setLanguage(LANG_EN)" class="lang-btn rounded-l-full flex-grow">Eng</button>
+                    <button id="lang-bn-btn-mobile" onclick="setLanguage(LANG_BN)" class="lang-btn rounded-r-full flex-grow">বাংলা</button>
+                </div>
+            </div>
+            
+            <ul id="menu-categories" class="space-y-4 text-lg font-medium text-gray-800">
                 <li><a id="menu-home-link" href="#home" onclick="toggleMenu()" class="hover:text-red-600 block">${t('home')}</a></li>
             </ul>
         </div>
@@ -346,13 +373,13 @@
         </div>
     </div>
 
-    <main id="app-root" class="flex-grow container mx-auto px-0 md:px-4 py-10 max-w-5xl min-h-[60vh]">
+    <main id="app-root" class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 max-w-7xl min-h-[60vh]">
         <div class="flex justify-center items-center h-64"><div class="loader"></div></div>
     </main>
 
-    <footer class="bg-gray-100 border-t border-gray-200 mt-16 py-8">
-        <div class="container mx-auto px-4 text-center">
-            <p class="text-gray-600 text-sm">© Infinity Stream | News Portal | Developed by Mahi</p>
+    <footer class="bg-gray-100 border-t border-gray-200 mt-12 md:mt-16 py-6 md:py-8">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-7xl">
+            <p class="text-gray-600 text-xs md:text-sm">© Infinity Stream | News Portal | Developed by Mahi</p>
         </div>
     </footer>
 
@@ -390,7 +417,7 @@
         // --- CONSTANTS ---
         const defaultCategories = ["Current Affairs", "Sports", "Fact Check", "Opinion"];
         const DEFAULT_THUMBNAIL = "https://via.placeholder.com/1600x900/e5e7eb/4b5563?text=Infinity+Stream+News"; 
-        const AUTHOR_NAME = t('author_name');
+        const AUTHOR_NAME = 'Infinity Stream News Desk';
         const CUSTOM_ICON_URL = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3ZGAKLh5xvrm4t5qAkDx-V1ZtOOojJxFFBZFeqjKcDW-P1YSHlwgZtV9DxrcurPE9lKEoZH5bk0C8nV69oAAllM5wxtcRy2cxZociXMx4MtOpuet6snChXDz0UTGXpnmkC9hhRs6dyHC77rM0KID9lZeACuS280CebuXqr4NrPJEqlOABfargbi7CW5I/s808/1000067315.jpg";
 
         // --- Category Management Functions ---
@@ -453,6 +480,13 @@
             const logoutBtn = document.getElementById('logout-btn');
             const loggedOutSection = document.getElementById('logged-out-section');
             const status = document.getElementById('auth-status');
+            const langEnBtnMobile = document.getElementById('lang-en-btn-mobile');
+            const langBnBtnMobile = document.getElementById('lang-bn-btn-mobile');
+            
+            // Sync mobile language buttons
+            if (langEnBtnMobile) langEnBtnMobile.classList.toggle('active', currentLang === LANG_EN);
+            if (langBnBtnMobile) langBnBtnMobile.classList.toggle('active', currentLang === LANG_BN);
+
 
             if (currentUser) {
                 loggedOutSection.classList.add('hidden');
@@ -460,7 +494,7 @@
                 logoutBtn.onclick = () => signOut(auth);
                 
                 status.textContent = isAdmin ? t('admin_mode') : t('reader_mode');
-                status.className = isAdmin ? "hidden md:block text-xs font-bold text-red-600 border border-red-200 px-2 py-1 rounded bg-red-50" : "hidden md:block text-xs font-bold text-gray-500";
+                status.className = isAdmin ? "hidden lg:block text-xs font-bold text-red-600 border border-red-200 px-2 py-1 rounded bg-red-50" : "hidden lg:block text-xs font-bold text-gray-500";
             } else {
                 loggedOutSection.classList.remove('hidden');
                 logoutBtn.classList.add('hidden');
@@ -523,7 +557,7 @@
                 if (categoryFilter && categoryFilter !== t('home')) {
                     q = query(articlesRef, orderBy("createdAt", "desc")); 
                 } else {
-                    q = query(articlesRef, orderBy("createdAt", "desc"), limit(15));
+                    q = query(articlesRef, orderBy("createdAt", "desc"), limit(20));
                 }
                 
                 const querySnapshot = await getDocs(q);
@@ -537,30 +571,32 @@
 
                 if (filteredDocs.length === 0) return root.innerHTML = `<div class="text-center py-20 text-gray-500 text-xl font-semibold">${t('no_articles_in_category')}</div>`;
 
-                let html = `<h1 class="text-3xl font-extrabold text-gray-900 mb-8 px-4 md:px-0 border-b-4 border-red-600 pb-3 inline-block">${filterTitle}</h1><div class="space-y-10">`;
+                let html = `
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-8 border-b-4 border-red-600 pb-3 inline-block">
+                        ${filterTitle}
+                    </h1>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">`;
                 
                 filteredDocs.forEach((data) => {
                     const dateString = data.createdAt?.toDate().toLocaleDateString(currentLang === LANG_BN ? 'bn-BD' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' }) || t('unknown_date');
                     const thumbnailSrc = data.thumbnail || null; 
                     const hasThumbnail = !!thumbnailSrc;
                     
-                    // Advanced Article Card Design
+                    // Advanced Article Card Design - Optimized for Grid
                     html += `
                     <div class="bg-white rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 group cursor-pointer" onclick="window.location.hash='#article/${data.id}'">
-                        <div class="${hasThumbnail ? 'md:flex' : 'flex flex-col'}">
-                            ${hasThumbnail ? `
-                            <div class="md:w-5/12 lg:w-4/12 h-64 md:h-72 relative overflow-hidden">
-                                <img src="${thumbnailSrc}" alt="${data.title}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-                                <div class="absolute top-4 left-4"><span class="bg-red-700 text-white text-xs font-bold px-3 py-1 rounded-full uppercase shadow-lg">${data.category}</span></div>
-                            </div>` : ''}
-                            <div class="${hasThumbnail ? 'md:w-7/12 lg:w-8/12' : 'w-full'} p-6 md:p-8 flex flex-col justify-center">
-                                ${!hasThumbnail ? `<div class="mb-2"><span class="bg-gray-200 text-red-700 text-xs font-bold px-3 py-1 rounded-full uppercase">${data.category}</span></div>` : ''}
-                                <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-3 group-hover:text-red-700 transition">${data.title}</h2>
-                                <p class="text-gray-600 line-clamp-3 mb-4 text-base">${data.excerpt || ''}</p>
-                                <div class="text-sm text-gray-500 font-medium border-t pt-3 flex justify-between items-center">
-                                    <span>${dateString}</span>
-                                    <span class="text-red-600 font-extrabold flex items-center gap-2">${t('read_more')} <i class="fas fa-arrow-right text-xs ml-1"></i></span>
-                                </div>
+                        ${hasThumbnail ? `
+                        <div class="h-56 relative overflow-hidden">
+                            <img src="${thumbnailSrc}" alt="${data.title}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                            <div class="absolute top-4 left-4"><span class="bg-red-700 text-white text-xs font-bold px-3 py-1 rounded-full uppercase shadow-lg">${data.category}</span></div>
+                        </div>` : `<div class="p-6 h-56 flex items-center justify-center bg-gray-100"><span class="text-gray-500 font-bold text-center">${data.category}</span></div>`}
+                        
+                        <div class="p-5 flex flex-col justify-between h-56">
+                            <h2 class="text-xl lg:text-2xl font-extrabold text-gray-900 mb-2 line-clamp-3 group-hover:text-red-700 transition">${data.title}</h2>
+                            <p class="text-gray-600 line-clamp-2 text-sm mb-3">${data.excerpt || ''}</p>
+                            <div class="text-xs text-gray-500 font-medium border-t pt-3 flex justify-between items-center">
+                                <span>${dateString}</span>
+                                <span class="text-red-600 font-extrabold flex items-center gap-1">${t('read_more')} <i class="fas fa-arrow-right text-[10px] ml-1"></i></span>
                             </div>
                         </div>
                     </div>`;
@@ -581,39 +617,40 @@
                 let videoEmbed = '';
                 const videoId = getYouTubeId(data.youtubeLink || '');
                 if (videoId) {
-                    videoEmbed = `<div class="aspect-video my-8 mx-auto w-full md:w-11/12 max-w-4xl">
-                        <iframe class="w-full h-full rounded-xl shadow-2xl" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    // Optimized video embed size
+                    videoEmbed = `<div class="aspect-video my-6 md:my-8 mx-auto w-full max-w-4xl">
+                        <iframe class="w-full h-full rounded-lg md:rounded-xl shadow-xl md:shadow-2xl" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>`;
                 }
                 
                 const dateString = data.createdAt?.toDate().toLocaleDateString(currentLang === LANG_BN ? 'bn-BD' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) || t('unknown_date');
                 const thumbnailSrc = data.thumbnail || null;
                 
-                const adminEditButton = isAdmin ? `<button onclick="window.location.hash='#admin/edit/${id}'" class="text-xs bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-700 ml-4 transition font-semibold">${t('article_edit')}</button>` : '';
+                const adminEditButton = isAdmin ? `<button onclick="window.location.hash='#admin/edit/${id}'" class="text-[10px] md:text-xs bg-blue-600 text-white px-2 py-1 rounded-full hover:bg-blue-700 ml-2 md:ml-4 transition font-semibold">${t('article_edit')}</button>` : '';
 
                 
                 root.innerHTML = `
-                <article class="bg-white rounded-xl shadow-2xl overflow-hidden pb-10 border border-gray-100">
-                    <div class="px-6 md:px-12 pt-8 pb-4">
-                        <span class="text-red-700 font-extrabold text-sm uppercase tracking-widest bg-red-50 px-3 py-1 rounded-full">${data.category}</span>
-                        <h1 class="headline-lg mt-4 mb-6 leading-tight text-gray-900">${data.title}</h1>
+                <article class="bg-white rounded-lg md:rounded-xl shadow-xl md:shadow-2xl overflow-hidden pb-8 md:pb-10 border border-gray-100">
+                    <div class="px-4 md:px-12 pt-6 md:pt-8 pb-4">
+                        <span class="text-red-700 font-extrabold text-xs md:text-sm uppercase tracking-widest bg-red-50 px-3 py-1 rounded-full">${data.category}</span>
+                        <h1 class="headline-lg mt-3 md:mt-4 mb-4 md:mb-6 leading-tight text-gray-900">${data.title}</h1>
                     </div>
                     
-                    <div class="px-6 md:px-12 flex items-center gap-4 mb-6 pb-6 border-b border-gray-200">
-                        <div class="w-12 h-12 rounded-full bg-red-700 overflow-hidden flex items-center justify-center shadow-lg">
+                    <div class="px-4 md:px-12 flex items-center gap-4 mb-6 pb-4 md:pb-6 border-b border-gray-200">
+                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-red-700 overflow-hidden flex items-center justify-center shadow-lg">
                              <img src="${CUSTOM_ICON_URL}" alt="Author Icon" class="w-full h-full object-cover p-1">
                         </div>
                         <div>
-                            <p class="font-bold text-base text-gray-800">${t('author_name')} ${adminEditButton}</p>
+                            <p class="font-bold text-sm md:text-base text-gray-800">${t('author_name')} ${adminEditButton}</p>
                             <p class="text-xs text-gray-500">${dateString}</p>
                         </div>
                     </div>
 
-                    ${thumbnailSrc ? `<img src="${thumbnailSrc}" alt="${data.title} Thumbnail" class="w-full max-h-[500px] object-cover bg-gray-100 mb-6 shadow-xl">` : ''}
+                    ${thumbnailSrc ? `<img src="${thumbnailSrc}" alt="${data.title} Thumbnail" class="w-full max-h-[400px] md:max-h-[500px] object-cover bg-gray-100 mb-6 shadow-xl">` : ''}
                     
                     ${videoEmbed}
                     
-                    <div class="px-6 md:px-12 prose prose-xl prose-red max-w-none text-gray-800 article-content">${data.body}</div>
+                    <div class="px-4 md:px-12 prose prose-xl prose-red max-w-none text-gray-800 article-content">${data.body}</div>
                 </article>`;
             } catch (e) { root.innerHTML = `<div class="text-center text-red-500">${t('error_loading_article')} ${e.message}</div>`; }
         };
@@ -624,16 +661,17 @@
                 return;
             }
 
+            // Optimized form layout for mobile and desktop
             root.innerHTML = `
-                <div class="flex flex-col items-center justify-center py-10 px-4">
-                    <div class="bg-white p-8 md:p-10 rounded-xl shadow-2xl w-full max-w-sm border-t-8 border-red-600">
-                        <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">${t('admin_login_title')}</h2>
-                        <form id="emailLoginForm" class="space-y-6">
-                            <input type="email" id="login-email" class="w-full border p-4 rounded-lg focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('email')}" required>
-                            <input type="password" id="login-password" class="w-full border p-4 rounded-lg focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('password')}" required>
-                            <button type="submit" class="w-full bg-red-600 text-white py-4 font-extrabold hover:bg-red-700 rounded-lg transition shadow-md">${t('login')}</button>
+                <div class="flex flex-col items-center justify-center py-6 md:py-10 px-4">
+                    <div class="bg-white p-6 md:p-10 rounded-xl shadow-2xl w-full max-w-md border-t-8 border-red-600">
+                        <h2 class="text-2xl md:text-3xl font-bold text-center mb-6 md:mb-8 text-gray-800">${t('admin_login_title')}</h2>
+                        <form id="emailLoginForm" class="space-y-4 md:space-y-6">
+                            <input type="email" id="login-email" class="w-full border p-3 md:p-4 rounded-lg text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('email')}" required>
+                            <input type="password" id="login-password" class="w-full border p-3 md:p-4 rounded-lg text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('password')}" required>
+                            <button type="submit" class="w-full bg-red-600 text-white py-3 md:py-4 font-extrabold hover:bg-red-700 rounded-lg transition shadow-md text-base">${t('login')}</button>
                         </form>
-                        <div class="text-center mt-6">
+                        <div class="text-center mt-4 md:mt-6">
                             <a href="#home" class="text-sm text-gray-500 hover:text-red-600 font-medium"><i class="fas fa-arrow-left mr-1"></i> ${t('back_to_home')}</a>
                         </div>
                     </div>
@@ -670,17 +708,17 @@
             root.innerHTML = `
                 <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl border-t-8 border-red-600">
                     <div class="flex justify-between items-center mb-6 border-b pb-4">
-                        <h2 class="text-3xl font-bold text-gray-800">${t('category_management')}</h2>
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-800">${t('category_management')}</h2>
                         <span class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">${t('verified_admin')}</span>
                     </div>
                     
                     <a href="#admin" class="text-sm text-blue-600 hover:text-blue-800 font-bold mb-6 block"><i class="fas fa-arrow-left mr-2"></i>${t('go_back_to_dashboard')}</a>
 
-                    <div class="border border-red-200 p-5 rounded-lg mb-8 bg-red-50">
+                    <div class="border border-red-200 p-4 md:p-5 rounded-lg mb-8 bg-red-50">
                         <h3 class="text-xl font-bold mb-3 text-red-700">${t('add_new_category')}</h3>
-                        <div class="flex gap-2">
+                        <div class="flex flex-col md:flex-row gap-3 md:gap-2">
                             <input type="text" id="newCategory" class="border p-3 rounded-lg focus:ring-2 ring-red-500 outline-none w-full" placeholder="${t('new_category_name')}" required>
-                            <button id="addCategoryBtn" class="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition text-sm font-bold shadow-md">${t('add')}</button>
+                            <button id="addCategoryBtn" class="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition text-sm font-bold shadow-md md:w-auto">${t('add')}</button>
                         </div>
                     </div>
                     
@@ -701,8 +739,8 @@
                     let actionButtons = '';
                     if (isEditable) {
                         actionButtons = `
-                            <button data-id="${cat.id}" data-name="${cat.name}" class="edit-category text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full hover:bg-blue-200 transition font-bold">Edit</button>
-                            <button data-id="${cat.id}" class="delete-category text-xs bg-red-100 text-red-700 px-3 py-1 rounded-full hover:bg-red-200 transition ml-2 font-bold">Delete</button>
+                            <button data-id="${cat.id}" data-name="${cat.name}" class="edit-category text-[10px] md:text-xs bg-blue-100 text-blue-700 px-2 md:px-3 py-1 rounded-full hover:bg-blue-200 transition font-bold">Edit</button>
+                            <button data-id="${cat.id}" class="delete-category text-[10px] md:text-xs bg-red-100 text-red-700 px-2 md:px-3 py-1 rounded-full hover:bg-red-200 transition ml-2 font-bold">Delete</button>
                         `;
                     } else {
                         actionButtons = `<span class="text-xs text-gray-400 font-semibold">${t('default_category')}</span>`;
@@ -710,7 +748,7 @@
 
                     categoryList.innerHTML += `
                         <li class="flex justify-between items-center p-4 hover:bg-gray-50 transition">
-                            <span class="font-medium text-gray-900">${cat.name}</span>
+                            <span class="font-medium text-gray-900 text-sm md:text-base">${cat.name}</span>
                             <div>${actionButtons}</div>
                         </li>
                     `;
@@ -807,9 +845,9 @@
             const renderDashboardUI = (mode = 'new') => {
                 root.innerHTML = `
                     <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl border-t-8 border-red-600">
-                        <div class="flex justify-between items-center mb-6 border-b pb-4">
-                            <h2 class="text-3xl font-bold text-gray-800">${mode === 'new' ? t('new_post') : t('edit_post')}</h2>
-                            <span class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">${t('verified_admin')}: ${currentUser.email}</span>
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b pb-4">
+                            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">${mode === 'new' ? t('new_post') : t('edit_post')}</h2>
+                            <span class="text-xs mt-2 md:mt-0 bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">${t('verified_admin')}: ${currentUser.email}</span>
                         </div>
                         
                         <div class="flex flex-wrap gap-3 mb-8">
@@ -817,30 +855,30 @@
                             ${mode === 'edit' ? `<a href="#admin" class="text-sm bg-red-100 text-red-700 py-2 px-4 rounded-full hover:bg-red-200 transition font-bold"><i class="fas fa-plus mr-2"></i>${t('create_new_post')}</a>` : ''}
                         </div>
                         
-                        <form id="postForm" class="space-y-5">
+                        <form id="postForm" class="space-y-4 md:space-y-5">
                             <input type="hidden" id="articleId" value="${articleToEdit ? articleToEdit.id : ''}">
-                            <input type="text" id="title" class="w-full border p-4 rounded-lg focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('article_title')}" value="${articleToEdit ? articleToEdit.title : ''}" required>
+                            <input type="text" id="title" class="w-full border p-3 md:p-4 rounded-lg text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('article_title')}" value="${articleToEdit ? articleToEdit.title : ''}" required>
                             
-                            <select id="category" class="w-full border p-4 rounded-lg bg-white focus:ring-4 ring-red-500 outline-none transition shadow-inner">
+                            <select id="category" class="w-full border p-3 md:p-4 rounded-lg bg-white text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner">
                                 </select>
 
-                            <input type="url" id="thumb" class="w-full border p-4 rounded-lg focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('thumbnail_link')}" value="${articleToEdit ? articleToEdit.thumbnail : ''}">
-                            <input type="url" id="youtubeLink" class="w-full border p-4 rounded-lg focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('youtube_link')}" value="${articleToEdit ? articleToEdit.youtubeLink : ''}">
+                            <input type="url" id="thumb" class="w-full border p-3 md:p-4 rounded-lg text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('thumbnail_link')}" value="${articleToEdit ? articleToEdit.thumbnail : ''}">
+                            <input type="url" id="youtubeLink" class="w-full border p-3 md:p-4 rounded-lg text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('youtube_link')}" value="${articleToEdit ? articleToEdit.youtubeLink : ''}">
                             
-                            <textarea id="excerpt" rows="3" class="w-full border p-4 rounded-lg focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('excerpt')}" >${articleToEdit ? articleToEdit.excerpt : ''}</textarea>
+                            <textarea id="excerpt" rows="3" class="w-full border p-3 md:p-4 rounded-lg text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('excerpt')}" >${articleToEdit ? articleToEdit.excerpt : ''}</textarea>
                             
-                            <textarea id="body" rows="15" class="w-full border p-4 rounded-lg focus:ring-4 ring-red-500 outline-none text-base transition shadow-inner" placeholder="${t('body_content')}" required>${articleToEdit ? articleToEdit.body : ''}</textarea>
+                            <textarea id="body" rows="15" class="w-full border p-3 md:p-4 rounded-lg text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('body_content')}" required>${articleToEdit ? articleToEdit.body : ''}</textarea>
                             
-                            <div class="flex gap-4 pt-2">
-                                <button type="submit" id="submitBtn" class="flex-grow bg-red-600 text-white py-4 font-extrabold hover:bg-red-700 rounded-lg transition shadow-xl">
+                            <div class="flex flex-col md:flex-row gap-4 pt-2">
+                                <button type="submit" id="submitBtn" class="flex-grow bg-red-600 text-white py-3 md:py-4 font-extrabold hover:bg-red-700 rounded-lg transition shadow-xl text-base">
                                     ${mode === 'new' ? t('publish_post') : t('update_post')}
                                 </button>
-                                ${mode === 'edit' ? `<button type="button" id="deleteBtn" class="w-1/4 bg-gray-500 text-white py-4 font-extrabold hover:bg-gray-600 rounded-lg transition shadow-xl">${t('delete_post')}</button>` : ''}
+                                ${mode === 'edit' ? `<button type="button" id="deleteBtn" class="w-full md:w-1/4 bg-gray-500 text-white py-3 md:py-4 font-extrabold hover:bg-gray-600 rounded-lg transition shadow-xl text-base">${t('delete_post')}</button>` : ''}
                             </div>
                         </form>
                     </div>
 
-                    <h3 class="text-2xl font-bold mt-12 mb-4 text-gray-800">${t('recent_posts')}</h3>
+                    <h3 class="text-xl md:text-2xl font-bold mt-10 md:mt-12 mb-4 text-gray-800">${t('recent_posts')}</h3>
                     <div id="admin-article-list" class="bg-white shadow-xl rounded-xl overflow-hidden border border-gray-100">
                         </div>
                 `;
@@ -882,11 +920,11 @@
                         html += `
                         <li class="flex justify-between items-center p-4 hover:bg-gray-50 transition">
                             <div class="flex-grow">
-                                <p class="font-medium text-gray-900 line-clamp-1">${data.title}</p>
+                                <p class="font-medium text-gray-900 line-clamp-1 text-sm md:text-base">${data.title}</p>
                                 <span class="text-xs text-red-600 font-bold">${data.category}</span>
                                 <span class="text-xs text-gray-500 ml-2"> | ${date}</span>
                             </div>
-                            <button onclick="window.location.hash='#admin/edit/${doc.id}'" class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full ml-4 hover:bg-blue-200 font-bold">${t('edit')}</button>
+                            <button onclick="window.location.hash='#admin/edit/${doc.id}'" class="text-[10px] md:text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full ml-4 hover:bg-blue-200 font-bold">${t('edit')}</button>
                         </li>`;
                     });
                     html += '</ul>';
