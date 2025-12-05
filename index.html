@@ -1,1441 +1,789 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>প্রার্থী তথ্য পোর্টাল | বাংলাদেশ জামায়াতে ইসলামী</title>
+    <title>Infinity Stream | News Portal</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Noto+Serif+Bengali:wght@400;500;600;700&family=Playfair+Display:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <style>
-        /* --- ১. আধুনিক কালার প্যালেট ও ভেরিয়েবল --- */
-        :root {
-            --primary-color: #006a4e;       /* জামায়াত গ্রিন */
-            --primary-dark: #004d38;        /* গাঢ় গ্রিন */
-            --primary-light: #e8f5e9;       /* হালকা ব্যাকগ্রাউন্ড গ্রিন */
-            --secondary-color: #d32f2f;     /* লাল (অ্যাকসেন্ট) */
-            --text-main: #1a202c;           /* প্রধান টেক্সট */
-            --text-muted: #718096;          /* গৌণ টেক্সট */
-            --white: #ffffff;
-            --bg-body: #f7fafc;             /* বডি ব্যাকগ্রাউন্ড */
-            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --radius: 12px;                 /* রাউন্ডেড কর্নার */
-            --transition: all 0.3s ease;
-        }
-
-        /* --- ২. গ্লোবাল রিসেট ও টাইপোগ্রাফি --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; outline: none; }
-        body { background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
-        a { text-decoration: none; color: inherit; cursor: pointer; transition: var(--transition); }
-        ul { list-style: none; }
-        
-        /* স্ক্রলবার ডিজাইন */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
-
-        /* --- ৩. মডার্ন হেডার ও নেভিগেশন --- */
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid #eee;
-        }
-        .navbar {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-        }
-        .logo-icon {
-            font-size: 36px;
-            color: var(--primary-color);
-            background: var(--primary-light);
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-        .party-name h1 {
-            font-size: 1.4rem;
-            line-height: 1.2;
-            color: var(--primary-color);
-            font-weight: 700;
-        }
-        .party-name span {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
-
-        /* ডেস্কটপ মেনু */
-        .nav-menu { display: flex; gap: 10px; align-items: center; }
-        .btn-nav {
-            font-weight: 600;
-            padding: 10px 18px;
-            border-radius: 50px;
-            font-size: 0.95rem;
-            color: var(--text-main);
-            border: 1px solid transparent;
-        }
-        .btn-nav:hover, .btn-nav.active-nav {
-            color: var(--primary-color);
-            background: var(--primary-light);
-            border-color: rgba(0, 106, 78, 0.1);
-        }
-        .btn-nav-cta {
-            background: var(--secondary-color) !important;
-            color: white !important;
-            box-shadow: 0 4px 6px rgba(211, 47, 47, 0.2);
-        }
-        .btn-nav-cta:hover { background: #b71c1c !important; transform: translateY(-2px); }
-
-        /* মোবাইল মেনু টগল */
-        .mobile-menu-icon { display: none; font-size: 24px; cursor: pointer; color: var(--primary-color); }
-
-        /* --- ৪. স্লাইডার ও হিরো সেকশন --- */
-        .hero-section { margin-bottom: 40px; }
-        .slider-container {
-            position: relative;
-            max-width: 1280px;
-            margin: 20px auto;
-            height: 450px;
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-        }
-        .slide { display: none; width: 100%; height: 100%; position: relative; }
-        .slide img { width: 100%; height: 100%; object-fit: cover; transition: transform 6s linear; }
-        .active-slide img { transform: scale(1.05); } 
-        
-        .slide-content {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to top, rgba(0,60,40, 0.9), rgba(0,0,0,0.2) 60%, transparent);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 60px 40px;
-            color: white;
-        }
-        .slide-content h2 { font-size: 2.5rem; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        .slide-content p { font-size: 1.2rem; max-width: 700px; opacity: 0.9; }
-        .active-slide { display: block; animation: fadeIn 0.8s; }
-
-        /* --- ৫. পেজ সেকশন ও অ্যানিমেশন --- */
-        .page-section { display: none; padding-bottom: 60px; animation: slideUp 0.5s ease-out; }
-        .page-section.active { display: block; }
-        
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
-
-        /* সেকশন হেডার */
-        .section-header { text-align: center; margin: 50px 0 40px; }
-        .section-header h2 { 
-            font-size: 2.2rem; 
-            color: var(--primary-color); 
-            position: relative; 
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-        .section-header h2::after {
-            content: ''; display: block; width: 50%; height: 4px; 
-            background: var(--secondary-color); margin: 8px auto 0; border-radius: 2px;
-        }
-        .section-header p { color: var(--text-muted); font-size: 1.1rem; }
-
-        /* --- ৬. ফিচার গ্রিড (হোম পেজ) --- */
-        .intro-box {
-            text-align: center; max-width: 900px; margin: 0 auto 50px; 
-            background: white; padding: 40px; border-radius: var(--radius);
-            box-shadow: var(--card-shadow); border-top: 5px solid var(--primary-color);
-        }
-        
-        .feature-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px;
-        }
-        .feature-box {
-            background: white; padding: 35px 25px; border-radius: var(--radius);
-            text-align: center; box-shadow: var(--card-shadow); transition: var(--transition);
-            cursor: pointer; border: 1px solid #eee; position: relative; overflow: hidden;
-        }
-        .feature-box:hover { transform: translateY(-8px); box-shadow: var(--hover-shadow); border-color: var(--primary-color); }
-        .feature-box::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
-            background: var(--primary-color); transform: scaleX(0); transition: var(--transition); transform-origin: left;
-        }
-        .feature-box:hover::before { transform: scaleX(1); }
-        
-        .feature-icon { 
-            width: 70px; height: 70px; line-height: 70px; border-radius: 50%;
-            background: var(--primary-light); color: var(--primary-color);
-            font-size: 28px; margin: 0 auto 20px; transition: var(--transition);
-        }
-        .feature-box:hover .feature-icon { background: var(--primary-color); color: white; }
-        .feature-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 10px; color: var(--text-main); }
-
-        /* --- ৭. কার্ড ডিজাইন (বিভাগ ও জেলা) --- */
-        .grid-box { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        
-        .card {
-            background: white; border-radius: var(--radius); padding: 30px;
-            text-align: center; box-shadow: var(--card-shadow); transition: var(--transition);
-            border: 1px solid #f0f0f0; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 100%;
-        }
-        .card:hover { transform: translateY(-5px); box-shadow: var(--hover-shadow); border-color: var(--primary-color); }
-        
-        .card-icon { font-size: 40px; color: var(--primary-color); margin-bottom: 15px; opacity: 0.8; }
-        .card h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 5px; color: var(--text-main); }
-        .card p { font-size: 0.95rem; color: var(--text-muted); background: var(--bg-body); padding: 5px 12px; border-radius: 20px; margin-top: 10px;}
-
-        /* --- ৮. লিস্ট ভিউ (আসন তালিকা) --- */
-        .list-container { background: white; border-radius: var(--radius); box-shadow: var(--card-shadow); overflow: hidden; }
-        .seat-list-item {
-            padding: 20px 25px; border-bottom: 1px solid #f0f0f0;
-            display: flex; justify-content: space-between; align-items: center;
-            cursor: pointer; transition: var(--transition);
-        }
-        .seat-list-item:last-child { border-bottom: none; }
-        .seat-list-item:hover { background-color: var(--primary-light); padding-left: 35px; }
-        
-        .seat-name { font-weight: 700; font-size: 1.1rem; color: var(--primary-dark); }
-        .candidate-preview { display: flex; align-items: center; gap: 10px; color: var(--text-muted); font-weight: 500; }
-        .candidate-preview i { color: var(--secondary-color); }
-
-        /* --- ৯. ব্যাক বাটন ডিজাইন --- */
-        .back-btn {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: white; color: var(--primary-color); border: 1px solid var(--primary-color);
-            padding: 8px 20px; border-radius: 30px; font-weight: 600; cursor: pointer;
-            transition: var(--transition); margin-bottom: 25px;
-        }
-        .back-btn:hover { background: var(--primary-color); color: white; }
-
-        /* --- ১০. প্রার্থী প্রোফাইল ডিজাইন (গুরুত্বপূর্ণ) --- */
-        .profile-card {
-            background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--card-shadow);
-            max-width: 1000px; margin: 0 auto;
-        }
-        .profile-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            padding: 40px 20px; text-align: center; color: white;
-        }
-        .profile-img-box {
-            position: relative; width: 160px; height: 160px; margin: 0 auto 20px;
-        }
-        .profile-img {
-            width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
-            border: 5px solid rgba(255,255,255,0.3); background: white;
-        }
-        .symbol-badge {
-            position: absolute; bottom: 5px; right: 5px;
-            background: var(--secondary-color); color: white;
-            padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        .profile-info h2 { font-size: 2rem; font-weight: 700; margin-bottom: 5px; }
-        .profile-info p { font-size: 1.1rem; opacity: 0.9; }
-
-        /* ট্যাবস */
-        .profile-tabs {
-            display: flex; justify-content: center; flex-wrap: wrap;
-            background: white; border-bottom: 1px solid #eee; padding: 10px; gap: 10px;
-        }
-        .tab-link {
-            padding: 10px 25px; cursor: pointer; font-weight: 600;
-            border-radius: 30px; transition: var(--transition); color: var(--text-muted);
-            border: 1px solid transparent;
-        }
-        .tab-link:hover { background: var(--bg-body); color: var(--primary-color); }
-        .tab-link.active-tab { background: var(--primary-light); color: var(--primary-color); border-color: rgba(0,106,78,0.1); }
-        
-        .tab-content { padding: 40px; display: none; animation: fadeIn 0.4s; }
-        .tab-content.active-content { display: block; }
-        .tab-content h3 { color: var(--primary-color); margin-bottom: 20px; border-left: 4px solid var(--secondary-color); padding-left: 12px; }
-
-        /* প্রোফাইল টেবিল/লিস্ট */
-        .info-table { width: 100%; border-collapse: collapse; }
-        .info-table td { padding: 12px 15px; border-bottom: 1px dashed #eee; font-size: 1.05rem; }
-        .info-table td:first-child { font-weight: 600; color: var(--text-muted); width: 40%; }
-        .info-table td:last-child { font-weight: 600; color: var(--text-main); text-align: right; }
-
-        /* সোশ্যাল লিংক বক্স */
-        .social-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .social-card {
-            display: flex; align-items: center; gap: 15px; padding: 15px;
-            border: 1px solid #eee; border-radius: 10px; transition: var(--transition);
-        }
-        .social-card:hover { border-color: var(--primary-color); background: var(--primary-light); }
-        .social-card i { font-size: 24px; color: var(--secondary-color); }
-        .social-card span { font-weight: 600; color: var(--primary-color); font-size: 0.95rem; }
-
-        /* --- ১১. ইনপুট ফর্ম ডিজাইন --- */
-        .form-wrapper { background: white; padding: 40px; border-radius: 16px; box-shadow: var(--card-shadow); max-width: 800px; margin: 0 auto; }
-        .form-group { margin-bottom: 25px; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
-        .form-control {
-            width: 100%; padding: 14px; border: 1px solid #e2e8f0; border-radius: 8px;
-            font-size: 1rem; transition: var(--transition); background: #f8fafc;
-        }
-        .form-control:focus { border-color: var(--primary-color); background: white; box-shadow: 0 0 0 3px rgba(0, 106, 78, 0.1); }
-        
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        
-        .btn-submit {
-            width: 100%; padding: 15px; background: var(--primary-color); color: white;
-            border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer;
-            transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        .btn-submit:hover { background: var(--primary-dark); transform: translateY(-2px); }
-
-        /* --- ১২. ইশতেহার ও প্রতিশ্রুতি --- */
-        .manifesto-card { 
-            background: white; padding: 30px; border-radius: 12px; 
-            box-shadow: var(--card-shadow); margin-bottom: 20px; border-left: 5px solid var(--primary-color);
-        }
-        .manifesto-card h3 { color: var(--primary-dark); margin-bottom: 10px; }
-
-        /* --- ১৩. ফুটার --- */
-        footer { 
-            background: #1a202c; color: #cbd5e0; text-align: center; 
-            padding: 40px 20px; margin-top: 60px; font-size: 0.9rem;
-        }
-        footer p { opacity: 0.8; }
-
-        /* --- ১৪. রেসপনসিভ মিডিয়া কোয়েরি --- */
-        @media (max-width: 992px) {
-            .navbar { padding: 15px; }
-            .slider-container { height: 350px; }
-            .slide-content h2 { font-size: 2rem; }
-        }
-
-        @media (max-width: 768px) {
-            .mobile-menu-icon { display: block; }
-            .nav-menu {
-                display: none; position: absolute; top: 70px; left: 0; width: 100%;
-                background: white; flex-direction: column; padding: 20px;
-                box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-top: 1px solid #eee;
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"
             }
-            .nav-menu.show-mobile { display: flex; animation: slideUp 0.3s; }
-            .btn-nav { width: 100%; text-align: center; border-radius: 8px; }
-            
-            .form-row { grid-template-columns: 1fr; }
-            .slider-container { height: 250px; }
-            .slide-content { padding: 30px 20px; }
-            .slide-content h2 { font-size: 1.5rem; }
-            .profile-tabs { gap: 5px; }
-            .tab-link { padding: 8px 15px; font-size: 0.9rem; flex-grow: 1; text-align: center; }
-            .info-table td { display: block; width: 100% !important; text-align: left !important; padding: 5px 0; }
-            .info-table td:first-child { color: var(--primary-color); margin-top: 10px; }
         }
+    </script>
+
+    <style>
+        body { font-family: 'Roboto', sans-serif; background-color: #ffffff; color: #1a1a1a; }
+        .font-brand { font-family: 'Playfair Display', serif; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 3px; }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #333; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* For article content HTML */
+        .article-content img { max-width: 100%; height: auto; display: block; margin: 1rem auto; border-radius: 0.5rem; }
+        
+        /* Ensure article content uses a standard English-friendly font */
+        .article-content { font-family: 'Roboto', sans-serif; }
     </style>
 </head>
-<body onload="initializePage()">
+<body class="bg-gray-50 min-h-screen flex flex-col">
 
-    <header>
-        <div class="navbar">
-            <div class="logo-area" onclick="showPage('home')">
-                <div class="logo-icon"><i class="fas fa-balance-scale"></i></div>
-                <div class="party-name">
-                    <h1>বাংলাদেশ জামায়াতে ইসলামী</h1>
-                    <span>কেন্দ্রীয় নির্বাচন পরিচালনা কমিটি</span>
+    <header class="bg-white sticky top-0 z-40 border-b border-gray-100 shadow-sm h-16 flex items-center">
+        <div class="container mx-auto px-4 flex justify-between items-center relative">
+            <a href="#home" class="flex items-center gap-1 group">
+                <div class="relative">
+                    <span class="font-brand text-3xl font-bold tracking-tight text-black">Infinity Stream</span>
+                    <i class="fas fa-search absolute top-1 left-1 text-[10px] text-white"></i>
                 </div>
-            </div>
-            
-            <i class="fas fa-bars mobile-menu-icon" onclick="toggleMobileMenu()"></i>
+                <sup class="text-[10px] uppercase font-bold text-gray-500 mt-1 ml-1 border px-1 border-gray-300">News Portal</sup>
+            </a>
 
-            <div class="nav-menu" id="navMenu">
-                <a onclick="showPage('home')" class="btn-nav">হোম</a>
-                <a onclick="showPage('manifesto-page')" class="btn-nav">ইশতেহার</a>
-                <a onclick="showPage('promise-page')" class="btn-nav">প্রতিশ্রুতি</a>
-                <a onclick="showPage('objective-page')" class="btn-nav">লক্ষ্য ও উদ্দেশ্য</a>
-                <a onclick="showPage('candidate-list')" class="btn-nav">প্রার্থী তালিকা</a>
-                <a onclick="showPage('info-input-page')" class="btn-nav btn-nav-cta">তথ্য দিন</a>
+            <div class="flex items-center gap-4">
+                <div id="auth-status" class="hidden md:block text-xs font-bold text-gray-500"></div>
+                <div class="hidden md:flex items-center text-sm font-medium border border-gray-300 rounded overflow-hidden">
+                    <button class="px-3 py-1 bg-gray-700 text-white">Eng</button>
+                    <button class="px-3 py-1 bg-gray-100 text-gray-500">বাংলা</button>
+                </div>
+                <button onclick="toggleMenu()" class="text-3xl text-gray-800 hover:text-gray-600 focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </div>
     </header>
 
-    <div id="home" class="page-section active">
-        <div class="slider-container">
-            <div class="slide active-slide">
-                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjXuwrJKFc-JcOkpJ8j-ypMUBR2JYkkYwvHfOr0wqszHdohIpp6iJL_L_1-V2TbWIeybD-tLt6z8cMI5z22lxlIAWc_oseANiDrPQyY605gBf8q0Icbwcf6ChYDNBo8_LFP1Qp5sz2vnQhx90f-0y2umeT72QTht4dfByqlccED3hi6DldfJ_Y5luY-qG0/s1248/1000060957.png" alt="জনসভা">
-                <div class="slide-content">
-                    <h2>ইনসাফ ভিত্তিক সমাজ গড়ার প্রত্যয়</h2>
-                    <p>জনগণের অধিকার আদায়ে আমাদের নিরলস সংগ্রাম ও সৎ লোকের শাসন প্রতিষ্ঠা।</p>
-                </div>
-            </div>
-            <div class="slide">
-                <img src="https://img.freepik.com/free-photo/group-diverse-hands-holding-each-other-support_53876-64385.jpg" alt="ঐক্য">
-                <div class="slide-content">
-                    <h2>সামাজিক ঐক্য ও সংহতি</h2>
-                    <p>ধর্ম-বর্ণ নির্বিশেষে একটি মানবিক বাংলাদেশ গড়ার শপথ।</p>
-                </div>
-            </div>
-            <div class="slide">
-                <img src="https://img.freepik.com/free-photo/people-stacking-hands-together-park_53876-63293.jpg" alt="সেবা">
-                <div class="slide-content">
-                    <h2>মানবসেবায় সর্বদা নিয়োজিত</h2>
-                    <p>দুর্যোগ ও সংকটে মানুষের পাশে আমাদের কর্মীবৃন্দ।</p>
-                </div>
-            </div>
+    <div id="side-menu-overlay" class="fixed inset-0 bg-black/50 z-50 hidden transition-opacity duration-300 opacity-0" onclick="toggleMenu()"></div>
+    <div id="side-menu" class="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-gray-50 z-50 transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col">
+        <div class="flex justify-between items-center p-5 border-b bg-white">
+            <h2 class="font-brand text-2xl font-bold">Infinity Stream</h2>
+            <button onclick="toggleMenu()" class="text-2xl text-gray-500 hover:text-red-500"><i class="fas fa-times"></i></button>
         </div>
-
-        <div class="container">
-            <div class="intro-box">
-                <h2 style="color: var(--primary-color); margin-bottom: 15px;">সৎ লোকের শাসন, ইনসাফ ভিত্তিক সমাজ</h2>
-                <p style="color: var(--text-muted); font-size: 1.1rem;">
-                    বাংলাদেশ জামায়াতে ইসলামী একটি আদর্শিক রাজনৈতিক দল। আমাদের লক্ষ্য হলো আল্লাহর জমিনে আল্লাহর আইন ও সৎ লোকের শাসন প্রতিষ্ঠার মাধ্যমে একটি শোষণমুক্ত, ইনসাফপূর্ণ ও কল্যাণমুখী রাষ্ট্র গঠন করা।
-                </p>
+        <div class="flex-grow overflow-y-auto custom-scroll p-6">
+            <ul id="menu-categories" class="space-y-6 text-xl font-medium text-gray-800">
+                <li><a href="#home" onclick="toggleMenu()" class="hover:text-red-600 block">Home</a></li>
+                </ul>
+        </div>
+        <div class="p-6 bg-white border-t">
+            <div id="logged-out-section" class="space-y-3">
+                <button id="login-google-btn" class="w-full border border-gray-300 py-2 rounded text-sm font-bold bg-white hover:bg-gray-50 flex items-center justify-center gap-2">
+                    <i class="fab fa-google"></i> Google Login
+                </button>
+                <button id="login-email-btn" class="w-full bg-black text-white py-2 rounded text-sm font-bold hover:bg-gray-800">
+                    Admin Login (Email/Pass)
+                </button>
             </div>
-
-            <div class="section-header">
-                <h2>আমাদের কার্যক্রম</h2>
-                <p>এক নজরে আমাদের গুরুত্বপূর্ণ বিভাগসমূহ</p>
-            </div>
-
-            <div class="feature-grid">
-                <div class="feature-box" onclick="showPage('manifesto-page')">
-                    <div class="feature-icon"><i class="fas fa-book-open"></i></div>
-                    <div class="feature-title">নির্বাচনী ইশতেহার</div>
-                    <p style="color: var(--text-muted);">রাষ্ট্র পরিচালনার রূপরেখা ও পরিকল্পনাসমূহ জানুন।</p>
-                </div>
-                <div class="feature-box" onclick="showPage('promise-page')">
-                    <div class="feature-icon"><i class="fas fa-handshake"></i></div>
-                    <div class="feature-title">আমাদের প্রতিশ্রুতি</div>
-                    <p style="color: var(--text-muted);">শিক্ষা, স্বাস্থ্য ও কর্মসংস্থানে আমাদের অঙ্গীকার।</p>
-                </div>
-                <div class="feature-box" onclick="showPage('candidate-list')">
-                    <div class="feature-icon"><i class="fas fa-users"></i></div>
-                    <div class="feature-title">প্রার্থী পরিচিতি</div>
-                    <p style="color: var(--text-muted);">আপনার এলাকার যোগ্য প্রার্থীকে চিনুন ও জানুন।</p>
-                </div>
-                <div class="feature-box" onclick="showPage('info-input-page')">
-                    <div class="feature-icon"><i class="fas fa-edit"></i></div>
-                    <div class="feature-title">তথ্য ও পরামর্শ</div>
-                    <p style="color: var(--text-muted);">আপনার মূল্যবান মতামত বা এলাকার সমস্যা জানান।</p>
-                </div>
+            <button id="logout-btn" class="w-full border border-gray-300 py-2 rounded text-sm font-bold mb-4 hidden bg-red-50 text-red-600 hover:bg-red-100">Logout</button>
+            <div class="flex gap-4 text-2xl text-gray-800 justify-center">
+                <i class="fab fa-facebook-square"></i><i class="fa-brands fa-x-twitter"></i><i class="fab fa-youtube"></i>
             </div>
         </div>
     </div>
 
-    <div id="candidate-list" class="page-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>বিভাগ নির্বাচন করুন</h2>
-                <p>সমগ্র বাংলাদেশের আসন ভিত্তিক প্রার্থী তালিকা দেখতে বিভাগ নির্বাচন করুন</p>
-            </div>
-            <div class="grid-box" id="division-card-container"></div>
-        </div>
-    </div>
-    
-    <div id="division-detail" class="page-section">
-        <div class="container">
-            <div class="back-btn" onclick="showPage('candidate-list')"> 
-                <i class="fas fa-arrow-left"></i> সকল বিভাগে ফিরে যান
-            </div>
-            <div class="section-header">
-                <h2 id="division-detail-title">বিভাগ</h2>
-                <p>এই বিভাগের জেলাগুলোর তালিকা</p>
-            </div>
-            <div class="grid-box" id="district-card-container"></div>
-        </div>
-    </div>
+    <main id="app-root" class="flex-grow container mx-auto px-0 md:px-4 py-6 max-w-4xl min-h-[60vh]">
+        <div class="flex justify-center items-center h-64"><div class="loader"></div></div>
+    </main>
 
-    <div id="district-detail" class="page-section">
-        <div class="container">
-            <div class="back-btn" onclick="renderDivisionDetail(currentDivision)"> 
-                <i class="fas fa-arrow-left"></i> <span id="back-to-division-name">বিভাগে</span> ফিরে যান
-            </div>
-            <div class="section-header">
-                <h2 id="district-detail-title">জেলা</h2>
-                <p>নির্বাচনী আসন ও মনোনীত প্রার্থীগণ</p>
-            </div>
-            <div class="list-container">
-                <ul id="seat-candidate-list-container"></ul>
-            </div>
-        </div>
-    </div>
-
-    <div id="candidate-profile" class="page-section">
-        <div class="container" style="margin-top: 20px;">
-            <div class="back-btn" onclick="showPage('district-detail')">
-                <i class="fas fa-arrow-left"></i> তালিকায় ফিরে যান
-            </div>
-            
-            <div class="profile-card">
-                <div class="profile-header">
-                    <div class="profile-img-box">
-                        <img id="profile-img" src="" alt="Candidate" class="profile-img">
-                        <div class="symbol-badge" id="profile-symbol">প্রতীক</div>
-                    </div>
-                    <div class="profile-info">
-                        <h2 id="profile-name">প্রার্থীর নাম</h2>
-                        <p id="profile-seat">আসন এলাকা</p>
-                    </div>
-                </div>
-
-                <div class="profile-tabs">
-                    <div class="tab-link active-tab" onclick="openTab(event, 'bio-dynamic')">
-                        <i class="fas fa-user-circle"></i> পরিচিতি
-                    </div>
-                    <div class="tab-link" onclick="openTab(event, 'manifesto-dynamic')">
-                        <i class="fas fa-clipboard-list"></i> ইশতেহার
-                    </div>
-                    <div class="tab-link" onclick="openTab(event, 'campaign-dynamic')">
-                         <i class="fas fa-bullhorn"></i> প্রচারণা
-                    </div>
-                    <div class="tab-link" onclick="openTab(event, 'contact-dynamic')">
-                         <i class="fas fa-phone-alt"></i> যোগাযোগ
-                    </div>
-                </div>
-                
-                <div id="bio-dynamic" class="tab-content active-content">
-                    <h3>ব্যক্তিগত ও শিক্ষাগত তথ্য</h3>
-                    <table class="info-table">
-                        <tr><td>নাম</td><td id="bio-list-name"></td></tr>
-                        <tr><td>জন্ম তারিখ</td><td id="bio-list-dob"></td></tr>
-                        <tr><td>পেশা</td><td id="bio-list-occupation"></td></tr>
-                        <tr><td>সর্বোচ্চ শিক্ষা</td><td id="bio-list-education"></td></tr>
-                        <tr><td>রাজনৈতিক পটভূমি</td><td id="bio-list-political"></td></tr>
-                    </table>
-                    <div style="margin-top: 30px; color: var(--text-main); line-height: 1.8;">
-                        <h4 style="margin-bottom: 10px;">বিস্তারিত জীবনী:</h4>
-                        <p id="bio-content-long"></p>
-                    </div>
-                </div>
-                
-                <div id="manifesto-dynamic" class="tab-content">
-                    <h3>এলাকার জন্য বিশেষ প্রতিশ্রুতি</h3>
-                    <div class="manifesto-card">
-                         <h4><i class="fas fa-heartbeat" style="color: var(--secondary-color);"></i> স্বাস্থ্য সেবা</h4>
-                         <p id="manifesto-list-health"></p>
-                    </div>
-                    <div class="manifesto-card">
-                         <h4><i class="fas fa-graduation-cap" style="color: var(--secondary-color);"></i> শিক্ষা উন্নয়ন</h4>
-                         <p id="manifesto-list-education"></p>
-                    </div>
-                    <div class="manifesto-card">
-                         <h4><i class="fas fa-road" style="color: var(--secondary-color);"></i> অবকাঠামো</h4>
-                         <p id="manifesto-list-infra"></p>
-                    </div>
-                    <div style="background: var(--primary-light); padding: 20px; border-radius: 8px; margin-top: 20px;">
-                        <strong>পূর্ণাঙ্গ ইশতেহার:</strong>
-                        <p id="manifesto-content-long" style="margin-top: 10px;"></p>
-                    </div>
-                </div>
-                
-                <div id="campaign-dynamic" class="tab-content">
-                    <h3>প্রচারণা কার্যক্রম ও মিডিয়া লিংক</h3>
-                    <div id="campaign-links-container" class="social-grid"></div>
-                    <p style="color: var(--text-muted); margin-top: 30px; font-style: italic; text-align: center;">
-                        *এখানে প্রার্থীর জনসভা, ভিডিও বার্তা বা অন্য কোনো গুরুত্বপূর্ণ কাজের লিংক পাওয়া যাবে।
-                    </p>
-                </div>
-
-                <div id="contact-dynamic" class="tab-content">
-                    <h3>সরাসরি যোগাযোগ</h3>
-                    <div class="contact-box" style="text-align: center; padding: 40px;">
-                        <i class="fas fa-headset" style="font-size: 50px; color: var(--primary-color); margin-bottom: 20px;"></i>
-                        <p style="font-size: 1.5rem; font-weight: 700; color: var(--text-main);" id="contact-content"></p>
-                        <p style="color: var(--text-muted);">আপনার যেকোনো প্রয়োজনে আমরা পাশে আছি।</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="manifesto-page" class="page-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>নির্বাচনী ইশতেহার ২০২৫</h2>
-                <p>আমাদের রাষ্ট্র পরিচালনার মূলনীতি</p>
-            </div>
-            <div class="form-wrapper" style="max-width: 1000px;">
-                <div class="manifesto-card">
-                    <h3>১. আইনের শাসন প্রতিষ্ঠা</h3>
-                    <p>ন্যায়বিচার নিশ্চিত করতে বিচার বিভাগকে সম্পূর্ণ স্বাধীন ও কার্যকর করা হবে। মানবাধিকার লঙ্ঘন কঠোরভাবে দমন করা হবে।</p>
-                </div>
-                <div class="manifesto-card">
-                    <h3>২. অর্থনীতি ও কর্মসংস্থান</h3>
-                    <p>সুদমুক্ত অর্থনীতি চালু এবং বেকার যুবকদের জন্য কর্মসংস্থান ব্যাংক প্রতিষ্ঠা করা হবে। উদ্যোক্তাদের বিশেষ প্রণোদনা দেওয়া হবে।</p>
-                </div>
-                <div class="manifesto-card">
-                    <h3>৩. শিক্ষা ব্যবস্থা</h3>
-                    <p>নৈতিকতা ও প্রযুক্তি নির্ভর আধুনিক শিক্ষা ব্যবস্থা প্রবর্তন করা হবে। কারিগরি শিক্ষায় বিশেষ জোর দেওয়া হবে।</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="promise-page" class="page-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>আমাদের প্রতিশ্রুতি</h2>
-                <p>জনগণের কল্যাণে আমাদের অঙ্গীকারসমূহ</p>
-            </div>
-            <div class="grid-box">
-                <div class="card" style="cursor: default;">
-                    <i class="fas fa-hospital-user card-icon"></i>
-                    <h3>ফ্রি চিকিৎসা</h3>
-                    <p>দরিদ্র ও অসহায় মানুষের জন্য বিনামূল্যে স্বাস্থ্যসেবা ও ঔষধ নিশ্চিত করা হবে।</p>
-                </div>
-                <div class="card" style="cursor: default;">
-                    <i class="fas fa-shield-alt card-icon"></i>
-                    <h3>নিরাপত্তা</h3>
-                    <p>সন্ত্রাস, চাঁদাবাজ ও মাদকমুক্ত নিরাপদ জনপদ গঠন করা হবে।</p>
-                </div>
-                <div class="card" style="cursor: default;">
-                    <i class="fas fa-seedling card-icon"></i>
-                    <h3>কৃষক সেবা</h3>
-                    <p>সার, বীজ ও সেচের ন্যায্যমূল্য এবং কৃষিপণ্যের সঠিক বাজার ব্যবস্থা নিশ্চিত করা হবে।</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="objective-page" class="page-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>দলের উদ্দেশ্য ও লক্ষ্য</h2>
-            </div>
-            <div class="intro-box">
-                <i class="fas fa-quran" style="font-size: 40px; color: var(--primary-color); margin-bottom: 20px;"></i>
-                <p style="font-size: 1.3rem; font-weight: 600; font-style: italic;">
-                    "আমাদের চূড়ান্ত লক্ষ্য হলো মহান আল্লাহর সন্তুষ্টি অর্জন। 
-                    পার্থিব জীবনে মানুষের কল্যাণ সাধন এবং আখেরাতে মুক্তির জন্য আমরা কাজ করে যাচ্ছি।"
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <div id="info-input-page" class="page-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>তথ্য ও পরামর্শ দিন</h2>
-                <p>আপনার এলাকার নির্বাচনী তথ্য, অভিযোগ বা ছবি আমাদের কাছে পাঠান</p>
-            </div>
-            
-            <div class="form-wrapper">
-                <form>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>আপনার নাম</label>
-                            <input type="text" class="form-control" placeholder="পুরো নাম লিখুন" required>
-                        </div>
-                        <div class="form-group">
-                            <label>মোবাইল নম্বর</label>
-                            <input type="tel" class="form-control" placeholder="017XXXXXXXX" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>বিভাগ নির্বাচন করুন</label>
-                            <select id="info-division" class="form-control" onchange="populateDistrictOptions()" required>
-                                <option value="" selected disabled>বিভাগ</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>জেলা নির্বাচন করুন</label>
-                            <select id="info-district" class="form-control" onchange="populateSeatOptions()">
-                                <option value="" selected disabled>জেলা</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>আসন নির্বাচন করুন (ঐচ্ছিক)</label>
-                        <select id="info-seat" class="form-control">
-                            <option value="">আসন (ঐচ্ছিক)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>আপনার বার্তা / তথ্য</label>
-                        <textarea rows="5" class="form-control" placeholder="এখানে বিস্তারিত লিখুন..."></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>ছবি/ভিডিও আপলোড করুন (ঐচ্ছিক)</label>
-                        <div style="border: 2px dashed #cbd5e0; padding: 20px; text-align: center; border-radius: 8px; background: #f8fafc;">
-                            <input type="file" class="form-control" accept="image/*,video/*" style="border: none; background: transparent;">
-                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 5px;">সর্বোচ্চ ৫ মেগাবাইট।</p>
-                        </div>
-                    </div>
-
-                    <button type="button" class="btn-submit" onclick="submitInfoForm()">
-                        <i class="fas fa-paper-plane"></i> তথ্য পাঠান
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <div class="container">
-            <p>&copy; ২০২৫ বাংলাদেশ জামায়াতে ইসলামী | কেন্দ্রীয় নির্বাচন পরিচালনা কমিটি</p>
-            <p style="font-size: 0.8rem; margin-top: 5px;">ডিজিটাল প্রচার বিভাগ কর্তৃক পরিচালিত</p>
+    <footer class="bg-white border-t mt-12 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-500 text-sm">© Infinity Stream</p>
         </div>
     </footer>
 
-    <script>
-        // --- ১. গ্লোবাল স্টেট ---
-        let currentDivision = '';
-        let currentDistrict = '';
+    <script type="module">
+        import { initializeApp } from "firebase/app";
+        import { getFirestore, collection, getDocs, getDoc, addDoc, doc, query, orderBy, limit, serverTimestamp, updateDoc, deleteDoc } from "firebase/firestore";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBlVYaMOrpj2JbE59eeRoO8TdKGwBFTQJM",
+            authDomain: "infinity-stream-13726.firebaseapp.com",
+            projectId: "infinity-stream-13726",
+            storageBucket: "infinity-stream-13726.firebasestorage.app",
+            messagingSenderId: "708884808002",
+            appId: "1:708884808002:web:434d7c704fc78d7d42c8db",
+            measurementId: "G-1G049G8NBD"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
         
-        // --- ২. ডেটাবেস (আপনার দেওয়া ৩০০ আসনের হুবহু ডেটা) ---
-        // ছবি যোগ করার নিয়ম: প্রতিটি প্রার্থীর তথ্যে { ..., img: "ছবির_লিংক", ... } যোগ করুন।
-        const candidateData = {
-            "রংপুর": {
-                "পঞ্চগড়": [
-                    { 
-                        seat: "পঞ্চগড়-১ (সদর- তেতুলিয়া- আটোয়ারী)", 
-                        candidate: "মোঃ ইকবাল হোসাইন", 
-                        img: "", // <-- এখানে ছবির লিংক দিন
-                        details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1FEpq6tcrT/' }] } 
-                    },
-                    { seat: "পঞ্চগড়-১ (সদর- তেতুলিয়া- আটোয়ারী)", candidate: "মোঃ ইকবাল হোসাইন", img: "", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1FEpq6tcrT/' }] } },
-                    { seat: "পঞ্চগড়-২ (দেবীগঞ্জ- বোদা)", candidate: "মোঃ শাফিউল্লাহ সুফী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1DddHY1ytq/' }] } }
-                ],
-                "ঠাকুরগাঁও": [
-                    { seat: "ঠাকুরগাঁও-১ (সদর)", candidate: "মোঃ দেলোয়ার হোসেন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1aUCd6R1qj/' }] } },
-                    { seat: "ঠাকুরগাঁও-২ (বালীয়াডাঙ্গী- হরিপুর- রানীশংকাইল আংশিক)", candidate: "মোঃ আঃ হাকীম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/mabdulhakim.official' }] } },
-                    { seat: "ঠাকুরগাঁও-৩ (পীরগঞ্জ- রানীশংকাইল আংশিক)", candidate: "মোঃ মিজানুর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1C3GUzBoTy/' }] } }
-                ],
-                "দিনাজপুর": [
-                    { seat: "দিনাজপুর-১ (বীরগঞ্জ- কাহারোল)", candidate: "মোঃ মতিউর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1DEx3ubxRP/' }] } },
-                    { seat: "দিনাজপুর-২ (বেচাগঞ্জ- বিরল)", candidate: "অধ্যাক্ষ আফজালুল আনাম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/AKM.AfzalulAnamOfficial' }] } },
-                    { seat: "দিনাজপুর-৩ (সদর)", candidate: "এ্যাডঃ ময়নুল আলম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/mynulalamdnj' }] } },
-                    { seat: "দিনাজপুর-৪ (খাসনামা- চিরিরবন্দর)", candidate: "আফতাব উদ্দীন মোল্লা", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1Eth9DdK84/' }] } },
-                    { seat: "দিনাজপুর-৫ (পার্বতীপুর- ফুলবাড়ী)", candidate: "মোঃ আনোয়ার হোসেন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/AnowarHosenOfficialDinajpur5' }] } },
-                    { seat: "দিনাজপুর-৬ (নবাবগঞ্জ- বিরামপুর - হাকিমপু- ঘোরাঘাট)", candidate: "মোঃ আনোয়ারুল ইসলাম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1716BPZD5z/' }] } }
-                ],
-                "নীলফামারী": [
-                    { seat: "নীলফামারী-১ (ডিমলা-ডোমার)", candidate: "অধ্যঃ মাঃ আঃ সাত্তার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1FLv9FwqqA/' }] } },
-                    { seat: "নীলফামারীর-২ (সদর)", candidate: "আ্যাডঃ আল ফারুক আঃ লতিফ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/17BKrkvYWM/' }] } },
-                    { seat: "নীলফামারী-৩ (জলঢাকা)", candidate: "মাওঃ ওয়াবায়দুল্লাহ সালফী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1JAkBL976Q/' }] } },
-                    { seat: "নীলফামারী-৪ (সৈয়দপুর- কিশোরগঞ্জ)", candidate: "হাফেজ মাওঃ আঃ মোনতাকিম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1GWTZaq7We/' }] } }
-                ],
-                "লালমনিরহাট": [
-                    { seat: "লালমনিরহাট-১ (পাটগ্রাম- হাতীবান্ধা)", candidate: "আনওয়ারুল ইসলাম রাজু", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1AtbL9ss2J/' }] } },
-                    { seat: "লালমনিরহাট-২ (আদিতমারী- কালীগঞ্জ)", candidate: "আ্যাডঃ ফিরোজ হায়দার লাভলু", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19XirQFAVT/' }] } },
-                    { seat: "লালমনিরহাট-৩ (সদর)", candidate: "প্রভাষক হারুন আর রশীদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1HiWU6gubp/' }] } }
-                ],
-                "রংপুর": [
-                    { seat: "রংপুর-১ (গংগাচড়া- সিটি আংশিক)", candidate: "অধ্যাঃ রায়হান সিরাজী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/profile.php?id=61577564171222' }] } },
-                    { seat: "রংপুর-২ (তারাগঞ্জ- বদরগঞ্জ)", candidate: "এটিএম আজহারুল ইসলাম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1EeZKDg1Ne/' }] } },
-                    { seat: "রংপুর-৩ (সদর)", candidate: "মাহবুবুর রহমান বেলাল", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/MahbuburRahmanBelal.official?mibextid=ZbWKwL' }] } },
-                    { seat: "রংপুর-৪ (পীরগাছা- কাউনিয়া)", candidate: "এটিএম আজম খান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/profile.php?id=61568289722104' }] } },
-                    { seat: "রংপুর-৫ (মিঠাপুকুর)", candidate: "মোঃ গোলাম রব্বানী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19a4UPf8V6/' }] } },
-                    { seat: "রংপুর-৬ (পীরগঞ্জ)", candidate: "অধ্যাঃ মাওঃ নূরুল আমিন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/15jHtNZPXd/' }] } }
-                ],
-                "কুড়িগ্রাম": [
-                    { seat: "কুড়িগ্রাম-১ (ভুরুঙ্গামারী- নাগেশ্বরী)", candidate: "অধ্যাঃ আনোয়ারুল ইসলাম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16zLnW3GXr/' }] } },
-                    { seat: "কুড়িগ্রাম-২ (রাজারহাট- ফুলবাড়ী- সদর)", candidate: "এ্যাডঃ ইয়াসিন আলী সরকার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/17Qxw5yT1T/' }] } },
-                    { seat: "কুড়িগ্রাম-৩ (উলিপুর)", candidate: "ব্যারিঃ মাহবুব আলম সালেহী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CkmXYkw7f/' }] } },
-                    { seat: "কুড়িগ্রাম-৪ (রৌমারী- চর রাজীবপুর- চিলমারীর১- উলিপুর-২)", candidate: "মোস্তাফিজুর রহমান মোস্তাক", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19Gy7WKkRh/' }] } }
-                ],
-                "গাইবান্ধা": [
-                    { seat: "গাইবান্ধা-১ (সুন্দরগঞ্জ)", candidate: "মাজেদুর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1YrJwiHpfE/' }] } },
-                    { seat: "গাইবান্ধা-২ (সদর)", candidate: "আঃ করিম সরকার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1D6FUBTwqX/' }] } },
-                    { seat: "গাইবান্ধা-৩ (সাদুল্লাপুর- পলাশবাড়ী)", candidate: "মাওঃ নজরুল ইসলাম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1FdxdMWXPU/' }] } },
-                    { seat: "গাইবান্ধা-৪ (গোবিন্দগঞ্জ)", candidate: "ডাঃ আঃ রহিম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1E5pPbyK9S/' }] } },
-                    { seat: "গাইবান্ধা-৫ (ফুলছড়ি- সাঘাটা)", candidate: "বীর মুক্তিযোদ্ধা আঃ ওয়ারেছ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19Ks5XMgRc/' }] } }
-                ]
-            },
-            "রাজশাহী": {
-                "জয়পুরহাট": [
-                    { seat: "জয়পুরহাট-১ (সদর- পাঁচবিবি)", candidate: "ডাঃ ফজলুর রহমান সাঈদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/17PYxu76o1/' }] } },
-                    { seat: "জয়পুরহাট-২ (কালাই- ক্ষেতলাল- আক্কেলপুর)", candidate: "এস এম রাশেদুল আলম সবুজ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1PdbVzwUTc/' }] } }
-                ],
-                "বগুড়া": [
-                    { seat: "বগুড়া-১ (সারিয়াকান্দি- সোনাতলা)", candidate: "অধ্যক্ষ শাহাবুদ্দীন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19TbpV4HUM/' }] } },
-                    { seat: "বগুড়া-২ (শিবগঞ্জ)", candidate: "অধ্যক্ষ মাওঃ শাহদাতুজ্জামান", details: { campaigns: [] } },
-                    { seat: "বগুড়া-৩ (আদমদীঘি- দুপচাচিয়া)", candidate: "নূর মোঃ আবু তাহের", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1A45mBvqwZ/' }] } },
-                    { seat: "বগুড়া-4 (কাহালু- নন্দীগ্রাম)", candidate: "মোস্তফা ফয়সাল পারভেজ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16qZ3t8ugv/' }] } },
-                    { seat: "বগুড়া-৫ (শেরপুর- ধুনট)", candidate: "দাবিবুর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19xfJSZSdi/' }] } },
-                    { seat: "বগুড়া-৬ (সদর)", candidate: "আবিদুর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1BH86iEx7G/' }] } },
-                    { seat: "বগুড়া-৭ (গাবতলী- শাজাহানপুর)", candidate: "জনাব গোলাম রব্বানী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1HdP62puJL/' }] } }
-                ],
-                "চাঁপাইনবাবগঞ্জ": [
-                    { seat: "চাঁপাইনবাবগঞ্জ-১ (শিবগঞ্জ)", candidate: "ডাঃ কেরামত আলী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1BtAjTX5Xy/' }] } },
-                    { seat: "চাঁপাইনবয়াবগঞ্জ-২ (ভোলাহাট- গোমস্তাপুর- নাচোল)", candidate: "ডঃ মিজানুর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1AsrLmdL2B/' }] } },
-                    { seat: "চাঁপাইনবয়াবগঞ্জ-৩ (সদর)", candidate: "নূরুল ইসলাম বুলবুল", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1PtvS2oJyY/' }] } }
-                ],
-                "নওগাঁ": [
-                    { seat: "নওগাঁ-১ (পোরশা- সাপাহার- নিয়ামতপুর)", candidate: "অধ্যক্ষ মাহবুবুল আলম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/profile.php?id=61572957302662' }] } },
-                    { seat: "নওগাঁ-২ (পত্মীতলা- ধামইরহাট)", candidate: "ইজ্ঞিঃ এনামুল হক", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/EngineerEnamulHaque' }] } },
-                    { seat: "নওগাঁ-৩ (বদলগাছি- মহাদেবপুর)", candidate: "মাওঃ মাহফুজুর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19jGhEHyYq/' }] } },
-                    { seat: "নওগাঁ-৪ (মাইন্দা)", candidate: "খন্দকার মোঃ আঃ রাকিব", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/Abdur.Rakib.Manda?mibextid=ZbWKwL' }] } },
-                    { seat: "নওগাঁ-৫ (সদর)", candidate: "আ্যাডঃ আ স ম সায়েম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/sadat.pramanik?mibextid=ZbWKwL' }] } },
-                    { seat: "নওগাঁ-৬ (রানীনগর- আত্রাই)", candidate: "মোঃ খবিরুল ইসলাম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/profile.php?id=61572751782174' }] } }
-                ],
-                "রাজশাহী": [
-                    { seat: "রাজশাহী-১ (গোদাগারী- তানোড়)", candidate: "অধ্যাঃ মুজিবুর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/17CxwXYn1v/' }] } },
-                    { seat: "রাজশাহী-২ (সদর- সিটি)", candidate: "ডাঃ মোঃ জাহাঙ্গীর", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1JBw97hu6a/' }] } },
-                    { seat: "রাজশাহী-৩ (পবা- মোহনপুর)", candidate: "অধ্যাপক আবুল কালাম আজাদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1E19qPRwnA/' }] } },
-                    { seat: "রাজশাহী-৪ (বাগমারা)", candidate: "ডাঃ আঃ বারী সরদার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1H6P4Uvg8u/' }] } },
-                    { seat: "রাজশাহী-৫ (পুঠিয়া- দুর্গাপুর)", candidate: "নুরুজ্জামান লিটন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1F4NLpVcJz/' }] } },
-                    { seat: "রাজশাহী-৬ (চারঘাট- বাঘা)", candidate: "অধ্যাঃ নাজমুল হক", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1B6bpQHpV2/' }] } }
-                ],
-                "নাটোর": [
-                    { seat: "নাটোর-১ (লালপুর- বাগাতিপাড়া)", candidate: "মাওঃ আবুল কালাম আজাদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1BHPUQqeze/' }] } },
-                    { seat: "নাটোর-২ (সদর- নালডাঙ্গা)", candidate: "অধ্যাঃ ইউনূস আলী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CvvPUFKyz/' }] } },
-                    { seat: "নাটোর-৩ (সিংড়া)", candidate: "প্রফেঃ সাইদুর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1BQLjJg6Sk/' }] } },
-                    { seat: "নাটোর-৪ (গুরুদাসপুর- বড়ইগ্রাম)", candidate: "অধ্যাপক আব্দুল হাকিম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CNTtw6kp6/' }] } }
-                ],
-                "সিরাজগঞ্জ": [
-                    { seat: "সিরাজগঞ্জ-১ (কাজিপুর- সদর আংশিক)", candidate: "অধ্যাপক মাওলানা শাহীনুর আলম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/mowlanashahinuralom?mibextid=ZbWKwL' }] } },
-                    { seat: "সিরাজগঞ্জ-২ (সদর- কামারখন্দ)", candidate: "অধ্যাপক জাহিদুল ইসলাম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/17LFYdXjMp/' }] } },
-                    { seat: "সিরাজগঞ্জ-৩ (রায়গঞ্জ- তাড়াশ)", candidate: "ড. মাওঃ আঃ সামাদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16q2uSf6Lz/' }] } },
-                    { seat: "সিরাজগঞ্জ-৪ (উল্লাপাড়া)", candidate: "মাওলানা রফিকুল ইসলাম খান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16vj9TMpkL/' }] } },
-                    { seat: "সিরাজগঞ্জ-৫ (বেলকুচি- চৌহালী)", candidate: "মাওলানা আলী আলম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CF7HFggge/' }] } },
-                    { seat: "সিরাজগঞ্জ-৬ (শাহজাদপুর)", candidate: "মিজানুর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1H3WvZi31H/' }] } }
-                ],
-                "পাবনা": [
-                    { seat: "পাবনা-১ (সাঁথিয়া আংশিক- বেড়া আংশিক)", candidate: "ব্যারিঃ নাজিবুর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1NqnT44KsY/' }] } },
-                    { seat: "পাবনা-২ (সুজানগর- আমিনপুর)", candidate: "মোঃ হেসাব উদ্দীন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/15gZS1baVE/' }] } },
-                    { seat: "পাবনা-৩ (চাটমোহর- ভাংগুড়া- ফরিদপুর)", candidate: "মাওঃ আলী আজগর", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1Ep6QBF2KZ/' }] } },
-                    { seat: "পাবনা-৪ (আটঘরিয়া- ঈশ্বরদী)", candidate: "অধ্যাঃ আবু তালেব মন্ডল", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/17e7qx1i77/' }] } },
-                    { seat: "পাবনা-৫ (সদর)", candidate: "মোঃ ইকবাল হোসেন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/17QkE4eXeW/' }] } }
-                ]
-            },
-            "খুলনা": {
-                "মেহেরপুর": [
-                    { seat: "মেহেরপুর-১ (সদর- মুজিবনগর)", candidate: "মাওঃ মোঃ তাজউদ্দীন খান", details: { campaigns: [] } },
-                    { seat: "মেহেরপুর-২ (গাংনী)", candidate: "মোঃ নাজমুল হুদা", details: { campaigns: [] } }
-                ],
-                "কুষ্টিয়া": [
-                    { seat: "কুষ্টিয়া-১ (দৌলতপুর)", candidate: "উপাঃ মাওঃ বেলাল উদ্দীন", details: { campaigns: [] } },
-                    { seat: "কুষ্টিয়া-২ (ভেড়ামারা- মিরপুর)", candidate: "মোঃ আঃ গফুর", details: { campaigns: [] } },
-                    { seat: "কুষ্টিয়া-৩(সদর-ইসলামি বিশ্ববিদ্যালয়)", candidate: "মুফতি আমির হামজা", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/14GiiRtk6WG/' }] } },
-                    { seat: "কুষ্টিয়া-৪ (কুমারখালি- খোকশা)", candidate: "আফজাল হোসাইন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1AHFbQqw2R/' }] } }
-                ],
-                "চুয়াডাঙ্গা": [
-                    { seat: "চুয়াডাঙ্গা-১ (আলমডাঙ্গা- সদর আংশিক)", candidate: "এ্যডঃ মাসুদ পারভেজ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/199d5Sqha2/' }] } },
-                    { seat: "চুয়াডাঙ্গা-২ (দামুরহুদা- সদর আংশিক)", candidate: "মোঃ রুহুল আমিন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/14EkRx3wU5y/' }] } }
-                ],
-                "ঝিনাইদহ": [
-                    { seat: "ঝিনাইদহ-১ (শৈলকুপা)", candidate: "এস এম মতিয়ার রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CgVspLHh2/' }] } },
-                    { seat: "ঝিনাইদহ-২ (হরিণাকুণ্ডু- সদর আংশিক)", candidate: "আলী আযম মোঃ আবু বকর", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1VyKJqJVVD/' }] } },
-                    { seat: "ঝিনাইদহ-৩ (কোটচাঁদপুর- মহেশপুর)", candidate: "অধ্যাঃ মতিয়ার রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/motiar.rahman.833841?mibextid=ZbWKwL' }] } },
-                    { seat: "ঝিনাইদহ-৪ (কালিগঞ্জ- সদর আংশিক)", candidate: "মাওঃ আবু তালেব", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1LNRFagk4K/' }] } }
-                ],
-                "যশোর": [
-                    { seat: "যশোর-১ (শর্শা- বেনাপোল)", candidate: "মাওঃ আজিজুর রহমান", details: { campaigns: [] } },
-                    { seat: "যশোর-২ (চৌগাছা- ঝিকরগাছা)", candidate: "ডাঃ মুসলেহ উদ্দীন ফরিদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CcaZS77NK' }] } },
-                    { seat: "যশোর-৩ (সদর-১)", candidate: "আঃ কাদের ভিপি", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1DtVLBBmcH/' }] } },
-                    { seat: "যশোর-৪ (বাঘারপাড়া- অভয়নগর)", candidate: "অধ্যাঃ গোলাম রসূল", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1AzBEXm1Ti/' }] } },
-                    { seat: "যশোর-৫ (মনিরামপুর)", candidate: "আ্যডঃ গাজী এনামুল হক", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/Gazi.Enamul.Haque1957' }] } },
-                    { seat: "যশোর-৬ (কেশবপুর)", candidate: "অধ্যাঃ মোক্তার আলী", details: { campaigns: [] } }
-                ],
-                "মাগুরা": [
-                    { seat: "মাগুরা-১ (শ্রীপুর- সদর আংশিক)", candidate: "আঃ মতিন", details: { campaigns: [] } },
-                    { seat: "মাগুরা-২ (শালিখা- মোহাম্মদপুর- সদর আংশিক)", candidate: "অধ্যাঃ এবি বাকের", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/14HQBDPuPZt/' }] } }
-                ],
-                "নড়াইল": [
-                    { seat: "নড়াইল-১ (কালিয়া- সদর আংশিক)", candidate: "মাওঃ ওয়াবায়দুল্লাহ কায়সার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CnWrDz5u4/' }] } },
-                    { seat: "নড়াইল-২ (লোহাগড়া- সদর আংশিক)", candidate: "আতাউর রহমান বাচ্চু", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1EhGsiNsYx/' }] } }
-                ],
-                "বাগেরহাট": [
-                    { seat: "বাগেরহাট-১ (ফকিরহাট- মোল্লাহাট- চিতলমারী)", candidate: "মোঃ আঃ ওয়াদুদ শেখ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16wTEwJ3MD/' }] } },
-                    { seat: "বাগেরহাট-২ (কচুয়া- সদর- রামপাল)", candidate: "শেখ মঞ্জুরুল হক রাহাদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1DyzedoDfZ/' }] } },
-                    { seat: "বাগেরহাট-৩ (মোংলা- মোড়লগঞ্জ- শরণখোলা)", candidate: "মোঃ আঃ আলীম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CnwbQiyVG/' }] } }
-                ],
-                "খুলনা": [
-                    { seat: "খুলনা-১ (বটিয়াঘাটা- দাকোপ)", candidate: "শেখ আবু ইউসুফ", details: { campaigns: [] } },
-                    { seat: "খুলনা-২ (সিটি আংশিক)", candidate: "আ্যডঃ শেখ জাহাঙ্গীর হোসাইন হেলাল", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/14KTCH1Fdvg/' }] } },
-                    { seat: "খুলনা-৩ (সিটি আংশিক)", candidate: "অধ্যাঃ মাহফুজুর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/14LSbJStbQA/' }] } },
-                    { seat: "খুলনা-৪ (দীঘলীয়া- রূপসা- তেরখাদা)", candidate: "অধ্যঃ মাওঃ কবিরুল ইসলাম", details: { campaigns: [] } },
-                    { seat: "খুলনা-৫ (ফুলতলা- ডুমুরিয়া)", candidate: "মিঞা গোলাম পরওয়ার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1AVDdZahuY/' }] } },
-                    { seat: "খুলনা-৬ (কয়রা- পাইকগাছা)", candidate: "মাওঃ আবুল কালাম আজাদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/MawlanaAbulKalamAzadOfficialPage' }] } }
-                ],
-                "সাতক্ষীরা": [
-                    { seat: "সাতক্ষীরা-১ (কালারোয়া- তালা)", candidate: "অধ্যক্ষ ইজ্জতুল্লাহ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1D1fcmWqiY/' }] } },
-                    { seat: "সাতক্ষীরা-২ (সদর)", candidate: "মুহাদ্দিস আঃ খালেক", details: { campaigns: [] } },
-                    { seat: "সাতক্ষীরা-৩ (আশাশুনি- কালিগঞ্জ আংশিক- দেবহাটা আংশিক)", candidate: "মুহাদ্দীস রবিউল বাশার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1MMgZSawCe/' }] } },
-                    { seat: "সাতক্ষীরা-৪ (শ্যামনগর- কালীগঞ্জ আংশিক)", candidate: "গাজী নজরুল ইসলাম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16YvVkVW4q/' }] } }
-                ]
-            },
-            "বরিশাল": {
-                "বরগুনা": [
-                    { seat: "বরগুনা-১ (সদর- আমতলী- তালতলী)", candidate: "মাওঃ মুহিবুল্লাহ হারুণ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19tRq5scMA/' }] } },
-                    { seat: "বরগুনা-২ (বামনা- পাথরঘাটা- বেতাগী)", candidate: "জনাব ডঃ সুলতান আহমেদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1aU94boLzZ/' }] } }
-                ],
-                "পটুয়াখালী": [
-                    { seat: "পটুয়াখালী-১ (মির্জাগঞ্জ- দুমকী- সদর)", candidate: "আ্যডঃ নাজমুল আহসান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16PBVcZBcp/' }] } },
-                    { seat: "পটুয়াখালী-২ (বাউফল)", candidate: "ডঃ শফিকুর ইসলাম মাসুদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1C2i21wjsM/' }] } },
-                    { seat: "পটুয়াখালী-৩ (দশমিনা- গলাচিপা)", candidate: "অধ্যাপক শাহ আলম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CJGPdpWMt/' }] } },
-                    { seat: "পটুয়াখালী-৪ (রাঙ্গাবালী- কলাপাড়া)", candidate: "মাওঃ আঃ কওয়ুম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1BAH4aU3hi/' }] } }
-                ],
-                "ভোলা": [
-                    { seat: "ভোলা-১ (সদর)", candidate: "অধ্যক্ষ মাওঃ নজরুল ইসলাম", details: { campaigns: [] } },
-                    { seat: "ভোলা-২ (দৌলতখান- বোরহানউদ্দিন)", candidate: "মাওলানা ফজলুর রহমান", details: { campaigns: [] } },
-                    { seat: "ভোলা-৩ (তাজমুদ্দীন- লালমোহর)", candidate: "মোঃ নিজামুল হক নাঈম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1T4KcHXPQk/' }] } },
-                    { seat: "ভোলা-৪ (মণপুরা- চরফ্যাশন)", candidate: "অধ্যক্ষ মাওলানা মোস্তফা কামাল", details: { campaigns: [] } }
-                ],
-                "বরিশাল": [
-                    { seat: "বরিশাল-১ (অগৈলঝাড়া- গৌড়নদী)", candidate: "মাওঃ কামরুল ইসলাম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1JYYvKMKrR/' }] } },
-                    { seat: "বরিশাল-২ (উজিরপুর- বানারীপাড়া)", candidate: "মাঃ আঃ মান্নান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/17QAxJ5Pjp/' }] } },
-                    { seat: "বরিশাল-৩ (মুলাদী- বাবুগঞ্জ)", candidate: "জহিরউদ্দিন মোহাম্মদ বাবর", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1BBxqUKGv2/' }] } },
-                    { seat: "বরিশাল-৪ (মেহেন্দিগঞ্জ- হিজলা)", candidate: "অধ্যাঃ আঃ জব্বার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/mdabduljabbar.official' }] } },
-                    { seat: "বরিশাল-৫ (সিটি- সদর)", candidate: "আ্যাডঃ মোয়াজ্জেম হোসাইন হেলাল", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/MuazzamHelal' }] } },
-                    { seat: "বরিশাল-৬ (বাকেরগঞ্জ)", candidate: "মাওঃ মাহমুদুন্নাবী তালুকদার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19ovb2THBf/' }] } }
-                ],
-                "ঝালকাঠি": [
-                    { seat: "ঝালকাঠি-১ (রাজাপুর- কাঁঠালিয়া)", candidate: "অধ্যাঃ ডাঃ মাওঃ হেমায়েত উদ্দীন", details: { campaigns: [] } },
-                    { seat: "ঝালকাঠি-২ (সদর- নলছিটি)", candidate: "শেখ নেয়ামুল করিম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CbCULaWfk/' }] } }
-                ],
-                "পিরোজপুর": [
-                    { seat: "পিরোজপুর-১ (সদর- ইন্দুরকান্দী- নজিরপুর)", candidate: "শামীম সাঈদী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1GJEWi2J4x/' }] } },
-                    { seat: "পিরোজপুর-২ (কাউখালী- ভান্ডারিয়া- নেছারবাদ)", candidate: "মাসুদ সাঈদী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/14GW2ntBkZi/' }] } },
-                    { seat: "পিরোজপুর-৩ (মঠবাড়িয়া)", candidate: "অধ্যাঃ শরীফ আঃ জলিল", details: { campaigns: [] } }
-                ]
-            },
-            "ঢাকা": {
-                "টাঙ্গাইল": [
-                    { seat: "টাঙ্গাইল-১ (মধুপুর- ধনবাড়ী)", candidate: "অধ্যক্ষ মোন্তাজ আলী সরকার", details: { campaigns: [] } },
-                    { seat: "টাঙ্গাইল-২ (গোপালপুর- ভূয়াপুর)", candidate: "হুমায়ুন কবির", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1BNg97Z2Xv/' }] } },
-                    { seat: "টাঙ্গাইল-৩ (ঘাটাইল)", candidate: "হুসনে মোবারক বাবলু", details: { campaigns: [] } },
-                    { seat: "টাঙ্গাইল-4 (কালিহাতি)", candidate: "প্রফেসর খন্দকর আঃ রাজ্জাক", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1FSyytepqY/' }] } },
-                    { seat: "টাঙ্গাইল-৫ (সদর)", candidate: "আহসান হাবিব মাসুদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CDdtY3vhV/' }] } },
-                    { seat: "টাঙ্গাইল-৬ (দেলদুয়ার- নাগরপুর)", candidate: "ডাঃ আঃ হামিদ", details: { campaigns: [] } },
-                    { seat: "টাঙ্গাইল-৭ (মির্জাপুর)", candidate: "অধ্যক্ষ আব্দুল্লাহ তালুকদার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/18zSXVBH2f/' }] } },
-                    { seat: "টাঙ্গাইল-৮ (বাসাইল- সখিপুর)", candidate: "অধ্যাপক মাওঃ শফিকুল ইসলাম খান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1N3FiX7CKp/' }] } }
-                ],
-                "জামালপুর": [
-                    { seat: "জামালপুর-১ (বকশিগঞ্জ- দেওয়ানগঞ্জ)", candidate: "অধ্যাঃ নাজমুল হাসান সাঈদী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19a3cYdGeA/' }] } },
-                    { seat: "জামালপুর-২ (ইসলামপুর)", candidate: "ডঃ সামিউল হক ফারুকী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CugBda2jP/' }] } },
-                    { seat: "জামালপুর-৩ (মাদারগঞ্জ- মেলান্দহ- হাজারীগঞ্জ পৌ)", candidate: "মাওঃ মুজিবুর রহমান আজাদী", details: { campaigns: [] } },
-                    { seat: "জামালপুর-৪ (সরিষাবাড়ী- সদর ১)", candidate: "মাওঃ আঃ আওয়াল", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1A3wqbGaWX/' }] } },
-                    { seat: "জামালপুর-৫ (সদর আংশিক)", candidate: "মাওঃ আঃ সাত্তার", details: { campaigns: [] } }
-                ],
-                "শেরপুর": [
-                    { seat: "শেরপুর-১ (সদর)", candidate: "হাফেজ রাশিদুল ইসলাম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1FLFCTQk78/' }] } },
-                    { seat: "শেরপুর-২ (নকলা- নালিতাবাড়ী)", candidate: "গোলাম কিবরিয়া (ভিপি)", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19gSbYt2rX/' }] } },
-                    { seat: "শেরপুর-৩ (শ্রীবর্দী- ঝিনাইগাতি)", candidate: "নুরুজ্জামান বাদল", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1FPwrCkPtc/' }] } }
-                ],
-                "ময়মনসিংহ": [
-                    { seat: "ময়মনসিংহ-১ (হালুয়াঘাট- ধোবাউড়া)", candidate: "মাহফুজুর রহমান মুক্তা", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1A4i3QBh3y/' }] } },
-                    { seat: "ময়মনসিংহ-২ (ফুলপুর- তারাকান্দা)", candidate: "আলহাজ্ব মাহবুব মণ্ডল", details: { campaigns: [] } },
-                    { seat: "ময়মনসিংহ-৩ (গৌরীপুর)", candidate: "মাওলানা বদরুজ্জামান", details: { campaigns: [] } },
-                    { seat: "ময়মনসিংহ-৪ (সদর- সিটি)", candidate: "মাওঃ কামরুল হাসান ইমরুল", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1X5Wjdv7vp/' }] } },
-                    { seat: "ময়মনসিংহ-৫ (মুক্তাগাছা)", candidate: "মতিউর রহমান আকন্দ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/15tmdDvPpo/' }] } },
-                    { seat: "ময়মনসিংহ-৬ (ফুলবাড়িয়া)", candidate: "অধ্যক্ষ কামরুল হাসান মিলন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/Quamrulhassanmilon.fulbaria' }] } },
-                    { seat: "ময়মনসিংহ-৭ (ত্রিশাল)", candidate: "আসাদুজ্জামান সোহেল", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1EwXuV1jhf/' }] } },
-                    { seat: "ময়মনসিংহ-৮ (ঈশ্বরগঞ্জ)", candidate: "অধ্যক্ষ মঞ্জরুল হক", details: { campaigns: [] } },
-                    { seat: "ময়মনসিংহ-৯ (নান্দাইল)", candidate: "এ কে এম আনোয়ারুল ইসলাম চান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16tkjudCJc/' }] } },
-                    { seat: "ময়মনসিংহ-১০ (গফরগাঁও)", candidate: "মাওঃ ইসমাইল হোসেন সোহেল", details: { campaigns: [] } },
-                    { seat: "ময়মনসিংহ-১১ (ভালুকা)", candidate: "সাইফ উল্লাহ পাঠান ফজলু", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1Ay55jpqfo/' }] } }
-                ],
-                "নেত্রকোণা": [
-                    { seat: "নেত্রকোণা-১ (কলমাকান্দা- দুর্গাপুর)", candidate: "মাওঃ আবুল হাসেম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/profile.php?id=61577743677309' }] } },
-                    { seat: "নেত্রকোণা-২ (সদর- বারহাট্টা)", candidate: "অধ্যাঃ মাওঃ এনামুল হক", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/profile.php?id=61573708268843' }] } },
-                    { seat: "নেত্রকোণা-৩ (আটপাড়া- কেন্দুয়া)", candidate: "খাইরুল কবির নিয়জী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19xokJ8dLf/' }] } },
-                    { seat: "নেত্রকোণা-৪ (মোহনগঞ্জ- খালিয়াজুড়ি- মদন)", candidate: "অধ্যাঃ আল হেলাল তাকুলদার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19weF96gVd/' }] } },
-                    { seat: "নেত্রকোণা-৫ (পূর্বধলা)", candidate: "প্রফেসর মাসুম মোস্তফা", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1K2CKtMq8Q/' }] } }
-                ],
-                "কিশোরগঞ্জ": [
-                    { seat: "কিশোরগঞ্জ-১ (সদর- হোসেনপুর)", candidate: "অধ্যক্ষ মোকাদ্দেস আলী ভূইয়া", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1BjhSAbrAL/' }] } },
-                    { seat: "কিশোরগঞ্জ-২ (কাটিয়াদি- পাকুন্দিয়া)", candidate: "শফিকুল ইসলাম মোড়ল", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1DTvAk95fd/' }] } },
-                    { seat: "কিশোরগঞ্জ-৩ (তাড়াইল- করিমগঞ্জ)", candidate: "কর্ণেল প্রোঃ ডাঃ জিহাদ খান (অবঃ)", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/DrZehadKhan?mibextid=ZbWKwL' }] } },
-                    { seat: "কিশোরগঞ্জ-৪ (ইটনা- মিঠামইন- অষ্টগ্রাম)", candidate: "শেখ মোহাম্মদ রোকন রেজা", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/RokanRezaSheikh' }] } },
-                    { seat: "কিশোরগঞ্জ-৫ (নিকলী-বাজিতপুর)", candidate: "অধ্যক্ষ রমজান আলী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/profile.php?id=100094524366571' }] } },
-                    { seat: "কিশোরগঞ্জ-৬(কুলিয়ারচর-ভৌরব)", candidate: "মাওলানা কবির হোসেন", details: { campaigns: [] } }
-                ],
-                "মানিকগঞ্জ": [
-                    { seat: "মানিকগঞ্জ-১ (দৌলতপুর- শিবালয়- ঘিওর)", candidate: "ডাঃ আবু বকর সিদ্দিকী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/15zwmeaekv/' }] } },
-                    { seat: "মানিকগঞ্জ-২ (সিঙ্গাইর- হরিরামপুর- সদর আংশিক)", candidate: "মোঃ জাহিদুর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19DTpW1dyx/' }] } },
-                    { seat: "মানিকগঞ্জ-৩ (সাটুরিয়া- সদর আংশিক)", candidate: "মাওঃ দেলোয়ার হোসাইন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1FZDgCKzPL/' }] } }
-                ],
-                "মুন্সিগঞ্জ": [
-                    { seat: "মুন্সিগঞ্জ-১ (শ্রীনগর-সিরাজদিখান)", candidate: "মাওঃ ফখরুদ্দীন রাজী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/17HrxTCa7H/' }] } },
-                    { seat: "মুন্সিগঞ্জ-২ (লৌহজং- টংগীবাড়ি)", candidate: "অধ্যাঃ এ বি এম ফজলুল করীম্", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/15P8onrocy9/' }] } },
-                    { seat: "মুন্সিগঞ্জ-৩ (গজারিয়া- সদর)", candidate: "আবী ইউসুফ খান", details: { campaigns: [] } }
-                ],
-                "ঢাকা": [
-                    { seat: "ঢাকা-১ (দোহার- নবাবগঞ্জ)", candidate: "ব্যারিষ্টার নজরুল ইসলাম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1EUnUMeQBp/' }] } },
-                    { seat: "ঢাকা-২ (সিটি দঃ আংশিক- সাভার আংশিক- কেরানিগঞ্জ আংশিক)", candidate: "ইজ্ঞিঃ মোঃ তৌহিদ হাসান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1Gb34vf59Z/' }] } },
-                    { seat: "ঢাকা-৩ (কেরানিগঞ্জ আংশিক)", candidate: "অধ্যক্ষ মোঃ শাহীনুর ইসলাম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19woeasLDq/' }] } },
-                    { seat: "ঢাকা-৪ (কদমতলী আংশিক- শ্যামপুর- যাত্রাবাড়ী আংশিক)", candidate: "সৈয়দ জয়নুল আবেদীন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1PVN1dgrmc/' }] } },
-                    { seat: "ঢাকা-৫ (যাত্রাবাড়ী আংশিক- কদমতলী আংশিক- ডেমরা)", candidate: "কামাল হোসেন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1JEXBwg6Nu/' }] } },
-                    { seat: "ঢাকা-৬ (সূত্রাপুর- ওয়ারি- গোল্ডারিয়া- কোতোয়ালী আংশিক- বংশাল আংশিক)", candidate: "ডঃ আঃ মান্নান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/DrAbdulMannanOfficial' }] } },
-                    { seat: "ঢাকা-৭ (বংশাল আংশিক- লালবাগ- চকবাজার- কোতোয়ালি আংশিক)", candidate: "হাজী হাফেজ মোঃ এনায়েতুল্লাহ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/17LuV97rLY/' }] } },
-                    { seat: "ঢাকা-৮ (মতিঝিল- পল্টন- রমনা- শাহবাগ- শাহজাহাপুর)", candidate: "আ্যডঃ হেলাল উদ্দিন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1C4b6GftSA/' }] } },
-                    { seat: "ঢাকা-৯ (খিলগাঁও- সবুজবাগ- মুগদা)", candidate: "কবির আহমেদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/173naRMfA8/' }] } },
-                    { seat: "ঢাকা-১০ (ধানমন্ডি- নিউমার্কেট- কলাবাগান- হাজারীবাগ)", candidate: "আ্যাডঃ জসীমউদ্দীন সরকার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1D1staPqdC/' }] } },
-                    { seat: "ঢাকা-১১ (মেট্রোপলিটন এর বাড্ডা থানা,ভাটারা থানা, রামপুরা থানা, হাতিরঝিল থানার একাংশ- সিটি উঃ আংশিক)", candidate: "আ্যাডঃ আতিকুর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1FP7JfxHMc/' }] } },
-                    { seat: "ঢাকা-১২ (সিটি উঃ আংশিক)", candidate: "সাইফুল আলম খান মিলন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1Ad7G7hysm/' }] } },
-                    { seat: "ঢাকা-১৩ (সিটি উঃ আংশিক)", candidate: "মোঃ মোবারক হোসাইন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CGsBTrgw2/' }] } },
-                    { seat: "ঢাকা-১৪ (সাভার১- সিটি উঃ আংশিক)", candidate: "ব্যারিঃ আহমদ বিন কাসিম আরমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/MirBinQuasemBarristerAtLaw' }] } },
-                    { seat: "ঢাকা-১৫ (মিরপুর-কাফরুল)", candidate: "ডাঃ শফিকুর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1WamxPGfi3/' }] } },
-                    { seat: "ঢাকা-১৬ (সিটি উঃ আংশিক)", candidate: "কর্ণেল আঃ বাতেন (অবঃ)", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1GX25VuTk3/' }] } },
-                    { seat: "ঢাকা-১৭ (সিটি উঃ আংশিক- ক্যান্টম্যান্ট)", candidate: "ডা. এস এস খালিদুজ্জামান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/drkhaliduzzamansm' }] } },
-                    { seat: "ঢাকা-১৮ (সিটি উঃ আংশিক)", candidate: "অধ্যক্ষ আশরাফুল হক", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1DQx3HuzN3/' }] } },
-                    { seat: "ঢাকা-১৯ (সাভার আংশিক)", candidate: "আফজাল হোসাইন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1JVLoyEiQa/' }] } },
-                    { seat: "ঢাকা-২০ (ধামরাই)", candidate: "মাওঃ আঃ রউফ", details: { campaigns: [] } }
-                ],
-                "গাজীপুর": [
-                    { seat: "গাজীপুর-১ (কালিয়াকৈর- সিটি আংশিক)", candidate: "shah Alam Bokshi", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/177zaMveFM/' }] } },
-                    { seat: "গাজীপুর-২ (সিটি আংশিক- কেন্টনম্যান্ট)", candidate: "হোসেন আলী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/hosseinalig2' }] } },
-                    { seat: "গাজীপুর-৩ (শ্রীপুর- সদর আংশিক)", candidate: "জাহাঙ্গীর আলম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/Dr.JahangirOfficial' }] } },
-                    { seat: "গাজীপুর-৪ (কপাসিয়া)", candidate: "সালাহউদ্দিন আয়্যুবী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/174bbiuTo4/' }] } },
-                    { seat: "গাজীপুর-৫ (কালীগঞ্জ- সদর আংশিক- সিটি আংশিক)", candidate: "খায়রুল হাসান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1FBvUt2xZt/' }] } },
-                    { seat: "গাজীপুর-৬ (সিটি আংশিক)", candidate: "ডঃ হাফিজুর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1FSUjsaqmD/' }] } }
-                ],
-                "নরসিংদী": [
-                    { seat: "নরসিংদী-১ (সদর আংশিক)", candidate: "ইব্রাহিম ভূঁইয়া", details: { campaigns: [] } },
-                    { seat: "নরসিংদী-২ (পলাশ- সদর আংশিক)", candidate: "উপাধ্যক্ষ মাওলানা আমজাদ হোসাইন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/amzad.hossain.466376' }] } },
-                    { seat: "নরসিংদী-৩ (শিবপুর)", candidate: "মাওঃ মোস্তাফিজুর রহমান কাওছার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1XgseeQfEZ/' }] } },
-                    { seat: "নরসিংদী-৪ (মনোহরদী- বেলাবো)", candidate: "মাওলানা জাহাঙ্গীর আলম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/profile.php?id=100056240723257' }] } },
-                    { seat: "নরসিংদী-৫ (রায়পুরা)", candidate: "মাও জাহাঙ্গীর আলম", details: { campaigns: [] } }
-                ],
-                "নারায়ণগঞ্জ": [
-                    { seat: "নারায়ণগঞ্জ-১ (রূপগঞ্জ)", candidate: "আনোয়ার হোসাইন মোল্লা", details: { campaigns: [] } },
-                    { seat: "নারায়ণগঞ্জ-২ (আড়াইহাজার আংশিক)", candidate: "ইলিয়াস মোল্লা", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1GCucnMhi2/' }] } },
-                    { seat: "নারায়ণগঞ্জ-৩ (সোনারগাঁও)", candidate: "ডঃ ইকবাল হোসেন ভূইয়া", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1BV3sKRTDr/' }] } },
-                    { seat: "নারায়ণগঞ্জ-4 (ফতুল্লা- সিদ্ধিরগঞ্জ)", candidate: "আঃ জব্বার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16Wct7bYCK/' }] } },
-                    { seat: "নারায়ণগঞ্জ-৫ (সদর- বন্দর)", candidate: "মাওঃ ময়নূদ্দীন আহমেদ", details: { campaigns: [] } }
-                ],
-                "রাজবাড়ী": [
-                    { seat: "রাজবাড়ী-১ (সদর- গোয়ালন্দ)", candidate: "আ্যাডঃ মোঃ নূরুল ইসলাম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1B95VA1mof/' }] } },
-                    { seat: "রাজবাড়ী-২ (পাংশা- কালুখালী- বালিয়াকান্দী)", candidate: "হারুন-আর-রশীদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1AWP5q4ajR/' }] } }
-                ],
-                "ফরিদপুর": [
-                    { seat: "ফরিদপুর-১ (মধুখালী- বোয়ালমারী- আলফাডাঙ্গা)", candidate: "ডঃ মোঃ ইলিয়াস মোল্লা", details:  { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/17DrtU1jiS/' }] } },
-                    { seat: "ফরিদপুর-২ (নগরকান্দা- সালথা)", candidate: "মাওঃ সোরহাব হোসেন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1GUFZJJzbD/' }] } },
-                    { seat: "ফরিদপুর-৩ (সদর)", candidate: "অধ্যাপক আঃ তাওয়াব", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19t7o1wzxs/' }] } },
-                    { seat: "ফরিদপুর-৪ (ভাঙ্গা- সদরপুর- চরভাদ্রাসেন)", candidate: "মাওঃ সরওয়ার হোসেন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16W2KSvh3Q/' }] } }
-                ],
-                "গোপালগঞ্জ": [
-                    { seat: "গোপালগঞ্জ-১ (মুকসুদপুর- কাশিয়ানী আংশিক)", candidate: "অধ্যঃ মাওঃ আঃ হামিদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1C9CMJ6B9g/' }] } },
-                    { seat: "গোপালগঞ্জ-২ (সদর- কাশিয়ানী আংশিক)", candidate: "আ্যাডঃ আজমল হোসাইন সরদার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CXZVBu7ww/' }] } },
-                    { seat: "গোপালগঞ্জ-৩ (টুঙ্গিপাড়া- কোটালিপাড়া)", candidate: "অধ্যাঃ রেজাউল করীম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1Fzuc28PPr/' }] } }
-                ],
-                "মাদারীপুর": [
-                    { seat: "মাদারীপুর-১ (শিবচর)", candidate: "মাওঃ সরওয়ার হোসাইন", details: { campaigns: [] } },
-                    { seat: "মাদারীপুর-২ (রাজৈর- সদর আংশিক)", candidate: "মাওঃ কমরুল ইসলাম সাঈদ আনসারী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/17kh9EyUEc/' }] } },
-                    { seat: "মাদারীপুর-৩ (কালকিনী- ডাসার- সদর আংশিক)", candidate: "মোঃ রফিকুল ইসলাম মৃধা", details: { campaigns: [] } }
-                ],
-                "শরীয়তপুর": [
-                    { seat: "শরীয়তপুর-১ (সদর- জাজিরা)", candidate: "ডঃ মোশারফ হোসেন মাসুদ", details: { campaigns: [] } },
-                    { seat: "শরীয়তপুর-২ (নাড়িয়া- সখিপুর)", candidate: "ডাঃ মাহমুদ হোসেন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/DrMahmudHossainOfficial' }] } },
-                    { seat: "শরীয়তপুর-৩ (ড্যামুডা- গোসাইরহাট- ভেদরগঞ্জ)", candidate: "মোঃ আজহারুল ইসলাম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CijugQXFQ/' }] } }
-                ]
-            },
-            "সিলেট": {
-                "সুনামগঞ্জ": [
-                    { seat: "সুনামগঞ্জ-১ (ধর্মপাশা- মধ্যপুর- তাহিরপুর- জামালগঞ্জ)", candidate: "মাওঃ তোফায়েল আহমেদ খান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1HmnqHNPJS/' }] } },
-                    { seat: "সুনামগঞ্জ-২ (দিরাই- শাল্লা)", candidate: "আ্যাড. শিশির মনির", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1JJuaKb7cL/' }] } },
-                    { seat: "সুনামগঞ্জ-৩ (জগন্নাথপুর- শান্তিগঞ্জ)", candidate: "অ্যাডঃ ইয়াসিন খান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16zBaMcNoe/' }] } },
-                    { seat: "সুনামগঞ্জ-৪ (বিশ্বম্ভপুর- সদর)", candidate: "মোঃ শামসুদ্দিন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/17NxCQzpd3/' }] } },
-                    { seat: "সুনামগঞ্জ-৫ (দোয়ারাবাজার- ছাতক)", candidate: "অধ্যক্ষ মাওঃ আঃ সালাম আল মাদানী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1FWMrJWkzf/' }] } }
-                ],
-                "সিলেট": [
-                    { seat: "সিলেট-১ (সিটি- সদর)", candidate: "মাওঃ হাবিবুর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1L9ydLTCk6/' }] } },
-                    { seat: "সিলেট-২ (বিশ্বনাথ- ওসমানী নগর)", candidate: "প্রফেঃ এম এ হান্নান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1FH3PsyCHj/' }] } },
-                    { seat: "সিলেট-৩ (দঃ সূরমা- ফেঞ্চুগঞ্জ- বালাগঞ্জ)", candidate: "মাওঃ লোকমান আহমদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16B1byu5ka/' }] } },
-                    { seat: "সিলেট-৪ (কোম্পানিগঞ্জ- গোয়াইনঘাট- জৈন্তাপুর)", candidate: "জয়নাল আবেদীন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1BRvi5gZvy/' }] } },
-                    { seat: "সিলেট-৫ (কানাইঘাট- জাকিগঞ্জ)", candidate: "হাফেজ আনোয়ার হোসেন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1B8hgoFHkQ/' }] } },
-                    { seat: "সিলেট-৬ (বিয়ানীবাজার- গোলাপগঞ্জ)", candidate: "সেলিম উদ্দীন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1EF5TQJiAe/' }] } }
-                ],
-                "মৌলভীবাজার": [
-                    { seat: "মৌলভীবাজার-১ (জুড়- বড়লেখা)", candidate: "মাওঃ আমিনুল ইত্যাদি", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1DQg6epRXw/' }] } },
-                    { seat: "মৌলভীবাজার-২ (কুলাউড়া)", candidate: "ইঞ্জিঃ এম শাহেদ আলী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16B2M151Qr/' }] } },
-                    { seat: "মৌলভীবাজার-৩ (রাজনগর- সদর)", candidate: "মোঃ আঃ মান্নান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1BCK9TrkeM/' }] } },
-                    { seat: "মৌলভীবাজার-৪ (শ্রীমঙ্গল- কমলগঞ্জ)", candidate: "মোঃ আঃ রব", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/profile.php?id=61574032524486' }] } }
-                ],
-                "হবিগঞ্জ": [
-                    { seat: "হবিগঞ্জ-১ (নবীগঞ্জ- বাহুবল)", candidate: "মোঃ শাহজাহান আলী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16zQYmSa6x/' }] } },
-                    { seat: "হবিগঞ্জ-২ (আজমিরীগঞ্জ- বানিয়াচং)", candidate: "শেখ জিল্লুর রহমান আজমী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1JC7AaotQt/' }] } },
-                    { seat: "হবিগঞ্জ-৩ (সদর- লাখাই- শায়েস্তাগঞ্জ)", candidate: "অধ্যক্ষ কাজী মহসিন আহমদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1EkJVeUKA1/' }] } },
-                    { seat: "হবিগঞ্জ-৪ (চুনারুঘাট- মাধবপুর)", candidate: "মাওঃ মোখলিছুর রহমান (বিএনপি)", details: { campaigns: [] } } // এই প্রার্থীর তথ্যে 'বিএনপি' উল্লেখ আছে, তবুও যোগ করা হলো
-                ]
-            },
-            "চট্টগ্রাম": {
-                "ব্রাহ্মণবাড়িয়া": [
-                    { seat: "ব্রাহ্মনবাড়িয়া-১ (নাসিরনগর)", candidate: "অধ্যাঃ মেঃ আমিনুল ইসলাম", details: { campaigns: [] } },
-                    { seat: "ব্রাহ্মনবাড়িয়া-২ (সরাইল- আশুগঞ্জ)", candidate: "মাওঃ মেঃ মোবারক হোসাইন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1GYnwi9Yq7/' }] } },
-                    { seat: "ব্রাহ্মনবাড়িয়া-৩ (সদর- বিজয়নগর)", candidate: "মোঃ জুনায়েদ হাসান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1JgeByHyZr/' }] } },
-                    { seat: "ব্রাহ্মনবাড়িয়া-৪ (কসবা- আখাউড়া)", candidate: "আতাউর রহমান সরকার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1AYWqEfAiT/' }] } },
-                    { seat: "ব্রাহ্মনবাড়িয়া-৫ (নবীনগর আংশিক)", candidate: "আ্যাডঃ আঃ বাতেন", details: { campaigns: [] } },
-                    { seat: "ব্রাহ্মনবাড়িয়া-৬ (বাঞ্ছারামপুর- নবীনগর আংশিক)", candidate: "দেওয়ান নকিবুল হুদা", details: { campaigns: [] } }
-                ],
-                "কুমিল্লা": [
-                    { seat: "কুমিল্লা-১ (দাউদকান্দি- তিতাস)", candidate: "মনিরুজ্জামান বাহালুল", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CogZHDF1P/' }] } },
-                    { seat: "কুমিল্লা-২ (হোমনা- মেঘনা)", candidate: "নাজিম উদ্দীন মোল্লা", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CKCjcKdiw/' }] } },
-                    { seat: "কুমিল্লা-৩ (মুরাদনগর)", candidate: "ইউসুফ হাকিম সোহেল", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1ACr3CrbQ5/' }] } },
-                    { seat: "কুমিল্লা-৪ (দেবীদ্বার)", candidate: "সাইফুল ইসলাম শহীদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1MUFTZCNcA/' }] } },
-                    { seat: "কুমিল্লা-৫ (ব্রাহ্মণপাড়া- বুড়িচং)", candidate: "ডঃ মোবারক হোসেন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CvjPGNN8a/' }] } },
-                    { seat: "কুমিল্লা-৬ (সদর- সিটি)", candidate: "কাজি দ্বীন মোহাম্মদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CRDfXw3gT/' }] } },
-                    { seat: "কুমিল্লা-৭ (চান্দিনা)", candidate: "ব্যারিঃ মুস্তফা শাকেরুল্লাহ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1akfCjsfaU/' }] } },
-                    { seat: "কুমিল্লা-৮ (বরুড়া)", candidate: "অধ্যাঃ শফিকুল ইসলাম হেলাল", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1LPZXt9yXy/' }] } },
-                    { seat: "কুমিল্লা-৯ (লাকসাম- মনোহরগঞ্জ)", candidate: "ডাঃ সৈঃ সরোয়ার উদ্দীন সিদ্দিকী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16xdeeBUsx/' }] } },
-                    { seat: "কুমিল্লা-১০ (সদর দঃ- লালমাই- নাঙ্গলকোট)", candidate: "ইয়াসিন আরাফাত", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1E2vN4Wfvs/' }] } },
-                    { seat: "কুমিল্লা-১১ (চৌদ্দগ্রাম)", candidate: "ডঃ আবদুল্লাহ তাহের", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19gAfRFfLJ/' }] } }
-                ],
-                "চাঁদপুর": [
-                    { seat: "চাঁদপুর-১ (কচুয়া)", candidate: "মাওঃ আবু নসর আশ্রাফী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19xhbQc8K3/' }] } },
-                    { seat: "চাঁদপুর-২ (মতলব উঃ- মতলব দঃ)", candidate: "ডঃ মোঃ আঃ মোবিন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1B8b7NfVGK/' }] } },
-                    { seat: "চাঁদপুর-৩ (সদর- হাইমচর)", candidate: "এ্যাডভকেড শাহজাহান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1FatoMvZ8v/' }] } },
-                    { seat: "চাঁদপুর-৪ (ফরিদগঞ্জ)", candidate: "মওলানা বেলাল", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/17QUG5W3iP/' }] } },
-                    { seat: "চাঁদপুর-৫ (হাজীগঞ্জ- শাহরাস্তি)", candidate: "মাওঃ আবুল হোসাইন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19kKfw5tfK/' }] } }
-                ],
-                "ফেনী": [
-                    { seat: "ফেনী-১ (পরশুরাম- ফুলগাজী- ছাগলনাইয়া)", candidate: "এডঃ এস কামাল উদ্দীন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1My4md5k9j/' }] } },
-                    { seat: "ফেনী-২ (সদর)", candidate: "অধ্যাঃ লিয়াকত আলী ভূইয়া", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/ProfessorLiaqatAliBhuiyan' }] } },
-                    { seat: "ফেনী-৩ (সোনাগাজী- দাগনভূঞা)", candidate: "ডাঃ ফখরুদ্দীন মানিক", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19XkFSU3U2/' }] } }
-                ],
-                "নোয়াখালী": [
-                    { seat: "নোয়াখালী-১ (চাটখিল- সোনাইমুড়ী আংশিক)", candidate: "মাওঃ মোঃ সাইফুল্লাহ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1BHkB1VHYR/' }] } },
-                    { seat: "নোয়াখালী-২ (সেনবাগ- সোনাইমুড়ী আংশিক)", candidate: "মাওঃ সাইয়েদ আহমেদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16fprhxJpa/' }] } },
-                    { seat: "নোয়াখালী-৩ (বেগমগঞ্জ)", candidate: "মাওঃ বোরহান উদ্দিন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1CZr3d6zdk/' }] } },
-                    { seat: "নোয়াখালী-৪ (সুবর্ণচর- সদর)", candidate: "ইসহাক খন্দকার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1A6aq5BzAk/' }] } },
-                    { seat: "নোয়াখালী-৫ (কোম্পানিগঞ্জ- কবিরহাট)", candidate: "অধ্যক্ষ বেলায়েত হোসাইন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1B9hHKhT8W/' }] } },
-                    { seat: "নোয়াখালী-৬ (হাতিয়া)", candidate: "মোঃ মাহফুজল হক", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/17Fz8VcGvf/' }] } }
-                ],
-                "লক্ষ্মীপুর": [
-                    { seat: "লক্ষীপুর-১ (রামগঞ্জ)", candidate: "নাজমুল হাসান পাটোয়ারী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16BTb6wEYz/' }] } },
-                    { seat: "লক্ষীপুর-২ (রায়পুর- সদর আংশিক)", candidate: "মাষ্টার রুহুল আমিন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16wpoPG5LY/' }] } },
-                    { seat: "লক্ষীপুর-৩ (সদর আংশিক)", candidate: "ডঃ রেজাউল করীম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16JWzaQSmE/' }] } },
-                    { seat: "লক্ষীপুর-৪ (রামগতি- কমলনগর)", candidate: "এ আর হাফিজউল্লাহ", details: { campaigns: [] } }
-                ],
-                "চট্টগ্রাম": [
-                    { seat: "চট্টগ্রাম-১ (মিরসরাই)", candidate: "এ্যডঃ সাইফুর রহমান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1FwXu6DVuV/' }] } },
-                    { seat: "চট্টগ্রাম-২ (ফটিকছড়ি)", candidate: "অধ্যক্ষ নূরুল আমীন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/profile.php?id=61573137932124' }] } },
-                    { seat: "চট্টগ্রাম-৩ (সন্দ্বীপ)", candidate: "আলাউদ্দিন শিকদার", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1EpTYikJqE/' }] } },
-                    { seat: "চট্টগ্রাম-৪ (সীতাকুণ্ড- সিটি আংশিক)", candidate: "আনোয়ারুল সিদ্দিকী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1GTPg6GY2r/' }] } },
-                    { seat: "চট্টগ্রাম-৫ (হাটহাজারী- বায়েজিদ আংশিক)", candidate: "অধ্যাপক আব্দুল মালেক চৌধুরী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/professormalekchy' }] } },
-                    { seat: "চট্টগ্রাম-৬ (রাউজান)", candidate: "শাহজাহান মজ্ঞুর", details: { campaigns: [] } },
-                    { seat: "চট্টগ্রাম-৭ (রাঙ্গুনিয়া- বেয়ালখালী আংশিক)", candidate: "এটিএম রেজাউল করিম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1AMpoEmB1c/' }] } },
-                    { seat: "চট্টগ্রাম-৮ (সিটি আংশিক- বেয়ালখালী)", candidate: "ডাঃ আবু নাসের", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1F4Q39xUpJ/' }] } },
-                    { seat: "চট্টগ্রাম-৯ (সিটি আংশিক)", candidate: "ডাঃ ফজলুল হক", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/drfazluhoque' }, { type: 'facebook', label: 'ফেসবুক পেজ ২', url: 'https://www.facebook.com/drfazluctg9' }] } },
-                    { seat: "চট্টগ্রাম-১০ (সিটি আংশিক)", candidate: "অধ্যক্ষ শামসুজ্জামান হেলালী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/muhammad.shamsuzzaman.helaly' }] } },
-                    { seat: "চট্টগ্রাম-১১ (সিটি আংশিক)", candidate: "শফিউল আলম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1BfuHRgcRK/' }] } },
-                    { seat: "চট্টগ্রাম-১২ (পটিয়া)", candidate: "ডাঃ মোঃ ফরিদুল আলম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16S3gZY4gf/' }] } },
-                    { seat: "চট্টগ্রাম-১৩ (আনোয়ারা- কর্ণফুলী)", candidate: "অধ্যাঃ মাহমুদুল হাসান", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/19V3LspR28/' }] } },
-                    { seat: "চট্টগ্রাম-১৪ (চন্দনাইশ- সাতকানিয়া আংশিক)", candidate: "ডাঃ শাহদৎ হোসেন", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/profile.php?id=61574483326167' }] } },
-                    { seat: "চট্টগ্রাম-১৫ (লোহাগাড়া- সাতকানিয়া আংশিক)", candidate: "মাওঃ শাহজাহান আলী চৌধুরী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/16C6Fqptkq/' }] } },
-                    { seat: "চট্টগ্রাম-১৬ (বাঁশখালি)", candidate: "মাওঃ জহিরুল ইসলাম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1BCdr85ckm/' }] } }
-                ],
-                "কক্সবাজার": [
-                    { seat: "কক্সবাজার-১ (চকোরিয়া- পেকুয়া)", candidate: "আব্দুল্লাহ আল ফারুক", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/179ZWByRXK/' }] } },
-                    { seat: "কক্সবাজার-২ (কুতুবদিয়া- মহেশখালী)", candidate: "এ কে এইচ হামিদুর রহমান আজাদ", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1FEE7qWniA/' }] } },
-                    { seat: "কক্সবাজার-৩ (সদর- রামু- ঈদগাঁও)", candidate: "শহীদুল আলম বাহাদুর", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1BZKotas7W/' }] } },
-                    { seat: "কক্সবাজার-4 (উখিয়া- টেকনাফ)", candidate: "মাওঃ নূর আহমেদ আনোয়ারী", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক পেজ', url: 'https://www.facebook.com/share/1A29qY8GAC/' }] } }
-                ],
-                "রাঙ্গামাটি": [
-                    { seat: "পার্বত্য রাঙ্গামাটি (খাগড়াছড়ি)", candidate: "এ্যডঃ ইয়াকূব আলী চৌধুরী", details: { campaigns: [] } },
-                    { seat: "পার্বত্য রাঙ্গামাটি (রাঙ্গামাটি)", candidate: "এ্যাডঃ মোক্তার আহমেদ", details: { campaigns: [] } }
-                ],
-                "বান্দরবান": [
-                    { seat: "পার্বত্য বান্দরবান (বান্দরবান)", candidate: "এ্যাডঃ মোঃ আবুল কালাম", details: { campaigns: [{ type: 'facebook', label: 'ফেসবুক প্রোফাইল', url: 'https://www.facebook.com/Adv.abul.kalam.143045' }] } }
-                ]
+        // ADMIN LIST (STRICT) - KEEP AS IS
+        const ADMIN_EMAILS = [
+            "habiburrahmanmahi4@gmail.com",
+            "habiburrahmannawshad@gmail.com",
+            "ahnafmahi19@gmail.com"
+        ];
+
+        let currentUser = null;
+        let isAdmin = false;
+        let articleToEdit = null; 
+        
+        // Default Categories (English)
+        const defaultCategories = ["Current Affairs", "Sports", "Fact Check", "Opinion"];
+
+        // --- Category Management Functions ---
+        const loadCategories = async () => {
+            let categories = [...defaultCategories];
+            let categoryObjects = [];
+
+            // Add default categories first (non-deletable)
+            defaultCategories.forEach(name => {
+                categoryObjects.push({ id: null, name: name });
+            });
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "categories"));
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const categoryObject = { id: doc.id, name: data.name };
+                    
+                    // Only push if the name doesn't exist in defaults
+                    if(data.name && !categories.includes(data.name)) {
+                        categories.push(data.name); // Keep names list for dropdown population
+                        categoryObjects.push(categoryObject); // Use objects for management list
+                    }
+                });
+            } catch (e) {
+                console.error("Error loading categories:", e);
+            }
+            return categoryObjects; // Return objects for full management features
+        };
+        
+        const renderCategoriesMenu = async (categoriesObjects) => {
+            const menuList = document.getElementById('menu-categories');
+            if(!menuList) return;
+
+            // Clear previous items except for 'Home'
+            menuList.innerHTML = '<li><a href="#home" onclick="toggleMenu()" class="hover:text-red-600 block">Home</a></li>';
+            
+            // Add fetched and default categories
+            categoriesObjects.forEach(category => {
+                const name = category.name;
+                const item = document.createElement('li');
+                item.innerHTML = `<a href="#category/${encodeURIComponent(name)}" onclick="toggleMenu()" class="hover:text-red-600 block">${name}</a>`;
+                menuList.appendChild(item);
+            });
+
+            // Add Admin link at the end if necessary
+            if(isAdmin) {
+                const adminItem = document.createElement('li');
+                adminItem.id = 'admin-menu-link';
+                adminItem.innerHTML = `<a href="#admin" onclick="toggleMenu()" class="text-red-600 font-bold block border-l-4 border-red-600 pl-2">Admin Dashboard</a>`;
+                menuList.appendChild(adminItem);
             }
         };
 
-        // --- ৩. ইনিশিয়ালাইজেশন ও স্লাইডার ---
-        function initializePage() {
-            showSlides();
-            renderDivisionList();
-            populateDivisionOptions();
-            showPage('home');
-        }
-
-        let slideIndex = 0;
-        function showSlides() {
-            let slides = document.getElementsByClassName("slide");
-            for (let i = 0; i < slides.length; i++) {
-                slides[i].classList.remove('active-slide'); 
-            }
-            slideIndex++;
-            if (slideIndex > slides.length) {slideIndex = 1}    
-            if(slides.length > 0) {
-                slides[slideIndex-1].classList.add('active-slide');  
-                setTimeout(showSlides, 5000); 
-            }
-        }
-
-        // --- ৪. নেভিগেশন ও পেজ কন্ট্রোল ---
-        function showPage(pageId) {
-            const pages = document.querySelectorAll('.page-section');
-            pages.forEach(page => {
-                page.classList.remove('active');
-            });
+        // Auth Listener
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            isAdmin = user && ADMIN_EMAILS.includes(user.email);
+            updateAuthUI();
             
-            const targetPage = document.getElementById(pageId);
-            if(targetPage) {
-                targetPage.classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-            
-            // মেনু একটিভ স্টেট আপডেট
-            document.querySelectorAll('.btn-nav').forEach(btn => btn.classList.remove('active-nav'));
-            
-            if (pageId === 'home') {
-                 document.querySelector('.nav-menu a[onclick="showPage(\'home\')"]')?.classList.add('active-nav');
-            } else if (['candidate-list', 'division-detail', 'district-detail', 'candidate-profile'].includes(pageId)) {
-                 document.querySelector('.nav-menu a[onclick="showPage(\'candidate-list\')"]')?.classList.add('active-nav');
-            } else if (pageId === 'info-input-page') {
-                 document.querySelector('.nav-menu a[onclick="showPage(\'info-input-page\')"]')?.classList.add('active-nav');
-            } else if (pageId === 'manifesto-page') {
-                 document.querySelector('.nav-menu a[onclick="showPage(\'manifesto-page\')"]')?.classList.add('active-nav');
-            } else if (pageId === 'promise-page') {
-                 document.querySelector('.nav-menu a[onclick="showPage(\'promise-page\')"]')?.classList.add('active-nav');
-            } else if (pageId === 'objective-page') {
-                 document.querySelector('.nav-menu a[onclick="showPage(\'objective-page\')"]')?.classList.add('active-nav');
-            }
-            
-            // মোবাইল মেনু বন্ধ করা
-            document.getElementById('navMenu').classList.remove('show-mobile');
-        }
+            // Load categories and then render the menu
+            loadCategories().then(renderCategoriesMenu);
+            // Re-render admin if the hash is active and admin status changes
+            if(window.location.hash === '#admin' || window.location.hash.startsWith('#admin/edit/')) router();
+        });
 
-        function toggleMobileMenu() {
-            document.getElementById('navMenu').classList.toggle('show-mobile');
-        }
+        // UI Updates based on Auth
+        const updateAuthUI = () => {
+            const logoutBtn = document.getElementById('logout-btn');
+            const loggedOutSection = document.getElementById('logged-out-section');
+            const status = document.getElementById('auth-status');
 
-        // --- ৫. রেন্ডারিং ফাংশনসমূহ ---
-        function countSeats(divisionName) {
-            const districts = candidateData[divisionName];
-            if (!districts) return 0;
-            let count = 0;
-            for (const district in districts) {
-                count += districts[district].length;
-            }
-            return count;
-        }
-
-        function renderDivisionList() {
-            const container = document.getElementById('division-card-container');
-            container.innerHTML = '';
-            
-            const divisionIcons = {
-                "ঢাকা": "fas fa-city", "চট্টগ্রাম": "fas fa-ship", "রাজশাহী": "fas fa-leaf",
-                "খুলনা": "fas fa-water", "সিলেট": "fas fa-mosque", "বরিশাল": "fas fa-anchor",
-                "রংপুর": "fas fa-tractor", "ময়মনসিংহ": "fas fa-university"
-            };
-
-            for (const divisionName in candidateData) {
-                const totalSeats = countSeats(divisionName);
-                const totalDistricts = Object.keys(candidateData[divisionName]).length;
+            if (currentUser) {
+                loggedOutSection.classList.add('hidden');
+                logoutBtn.classList.remove('hidden');
+                logoutBtn.onclick = () => signOut(auth);
                 
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.onclick = () => renderDivisionDetail(divisionName);
-                card.innerHTML = `
-                    <i class="${divisionIcons[divisionName] || 'fas fa-map-marker-alt'} card-icon"></i>
-                    <h3>${divisionName}</h3>
-                    <p>${totalDistricts}টি জেলা | ${totalSeats}টি আসন</p>
-                `;
-                container.appendChild(card);
+                status.textContent = isAdmin ? "ADMIN MODE" : "READER MODE";
+                status.className = isAdmin ? "hidden md:block text-xs font-bold text-red-600 border border-red-200 px-2 py-1 rounded bg-red-50" : "hidden md:block text-xs font-bold text-gray-500";
+            } else {
+                loggedOutSection.classList.remove('hidden');
+                logoutBtn.classList.add('hidden');
+                status.textContent = "";
+                
+                // Attach event listeners for login buttons
+                document.getElementById('login-google-btn').onclick = loginWithGoogle;
+                document.getElementById('login-email-btn').onclick = () => {
+                    toggleMenu();
+                    window.location.hash = '#admin-login';
+                };
             }
-        }
+        };
 
-        function renderDivisionDetail(divisionName) {
-            currentDivision = divisionName;
-            document.getElementById('division-detail-title').textContent = `${divisionName} বিভাগ`;
-            const container = document.getElementById('district-card-container');
-            container.innerHTML = '';
-
-            const districts = candidateData[divisionName];
-            for (const districtName in districts) {
-                const seatCount = districts[districtName].length;
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.onclick = () => renderDistrictDetail(divisionName, districtName);
-                card.innerHTML = `
-                    <i class="fas fa-map-marked-alt card-icon"></i>
-                    <h3>${districtName}</h3>
-                    <p>${seatCount}টি নির্বাচনী আসন</p>
-                `;
-                container.appendChild(card);
+        const loginWithGoogle = async () => {
+            try {
+                const provider = new GoogleAuthProvider();
+                await signInWithPopup(auth, provider);
+                toggleMenu();
+            } catch (error) {
+                alert("Google Login Error: " + error.message);
             }
-            showPage('division-detail');
-        }
+        };
 
-        function renderDistrictDetail(divisionName, districtName) {
-            currentDistrict = districtName;
-            document.getElementById('district-detail-title').textContent = `${districtName} জেলা`;
-            document.getElementById('back-to-division-name').textContent = `${divisionName} বিভাগে`;
-            
-            const listContainer = document.getElementById('seat-candidate-list-container');
-            listContainer.innerHTML = '';
-            
-            const seats = candidateData[divisionName][districtName];
-            seats.forEach(candidate => {
-                const li = document.createElement('li');
-                li.className = 'seat-list-item';
-                li.onclick = () => showCandidateProfileDynamic(candidate.seat);
-                li.innerHTML = `
-                    <div class="seat-name">${candidate.seat}</div>
-                    <div class="candidate-preview"><i class="fas fa-user-tie"></i> ${candidate.candidate}</div>
-                `;
-                listContainer.appendChild(li);
-            });
-            showPage('district-detail');
-        }
-
-        // --- ৬. প্রোফাইল লোডিং (আপডেট করা হয়েছে: ছবির লিংক সাপোর্ট করার জন্য) ---
-        function showCandidateProfileDynamic(seat) {
-            let candidateInfo = null;
-            
-            // ১. বর্তমান জেলা অথবা পুরো ডেটাবেস সার্চ
-            if (currentDivision && currentDistrict) {
-                candidateInfo = candidateData[currentDivision][currentDistrict].find(c => c.seat === seat);
+        const loginWithEmailPassword = async (email, password) => {
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                
+                // Only allow admin login for specific email
+                if (ADMIN_EMAILS.includes(userCredential.user.email)) {
+                    alert("Admin Login Successful!");
+                    window.location.hash = '#admin';
+                } else {
+                    // Sign out non-admin users immediately after successful login
+                    await signOut(auth); 
+                    alert("Login Successful, but you are not authorized as an Admin.");
+                    window.location.hash = '#home';
+                }
+            } catch (error) {
+                alert("Login Failed: " + error.message);
             }
-            // ২. ব্যাকআপ সার্চ (যদি রিফ্রেশ করার কারণে জেলা সিলেক্টেড না থাকে)
-            if (!candidateInfo) {
-                for (const div in candidateData) {
-                    for (const dist in candidateData[div]) {
-                        const found = candidateData[div][dist].find(c => c.seat === seat);
-                        if (found) {
-                            candidateInfo = found;
-                            currentDivision = div; currentDistrict = dist;
-                            break;
-                        }
+        };
+
+        // Utility to extract YouTube ID
+        const getYouTubeId = (url) => {
+            const regex = /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+            const match = url.match(regex);
+            return (match && match[1]) ? match[1] : null;
+        };
+
+
+        // --- Renderers ---
+        const root = document.getElementById('app-root');
+        const renderLoading = () => root.innerHTML = `<div class="flex justify-center items-center h-64"><div class="loader border-gray-400"></div></div>`;
+
+        const renderHome = async (categoryFilter = null) => {
+            renderLoading();
+            try {
+                const articlesRef = collection(db, "articles");
+                let q;
+                const filterTitle = categoryFilter ? categoryFilter : 'Latest News';
+
+                if (categoryFilter && categoryFilter !== 'Home') {
+                    // Fetch all docs and filter on the client if Firestore doesn't support the specific query, 
+                    // or better: filter by category if we were using a different index/setup.
+                    // For now, let's stick to the original logic which fetches all (or 15 for home) and client filters.
+                    q = query(articlesRef, orderBy("createdAt", "desc")); 
+                } else {
+                    q = query(articlesRef, orderBy("createdAt", "desc"), limit(15));
+                }
+                
+                const querySnapshot = await getDocs(q);
+                
+                let filteredDocs = [];
+                querySnapshot.forEach(doc => {
+                    if (!categoryFilter || doc.data().category === categoryFilter) {
+                        filteredDocs.push({ id: doc.id, ...doc.data() });
                     }
-                    if (candidateInfo) break;
+                });
+
+                if (filteredDocs.length === 0) return root.innerHTML = `<div class="text-center py-20 text-gray-500">No articles found in this category.</div>`;
+
+                let html = `<h1 class="text-2xl font-bold text-gray-800 mb-6 px-4 md:px-0">${filterTitle}</h1><div class="space-y-6">`;
+                
+                filteredDocs.forEach((data) => {
+                    // Helper to format date in a standard English format (e.g., Nov 10, 2025)
+                    const dateString = data.createdAt?.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) || 'Unknown Date';
+
+                    html += `
+                    <div class="bg-white md:rounded-lg overflow-hidden shadow-sm hover:shadow-md transition mb-6 border-b md:border border-gray-100 group cursor-pointer" onclick="window.location.hash='#article/${data.id}'">
+                        <div class="relative h-64 overflow-hidden">
+                            <img src="${data.thumbnail || 'https://via.placeholder.com/800x450'}" alt="${data.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                            <div class="absolute top-4 left-4"><span class="bg-red-700 text-white text-xs font-bold px-3 py-1 rounded uppercase">${data.category}</span></div>
+                        </div>
+                        <div class="p-5 md:p-6">
+                            <h2 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-red-700">${data.title}</h2>
+                            <p class="text-gray-600 line-clamp-2 mb-2 text-lg">${data.excerpt || ''}</p>
+                            <div class="text-sm text-gray-400">${dateString}</div>
+                        </div>
+                    </div>`;
+                });
+                html += '</div>';
+                root.innerHTML = html;
+            } catch (e) { root.innerHTML = `<div class="text-center text-red-500">Error loading articles: ${e.message}</div>`; }
+        };
+
+        const renderArticle = async (id) => {
+            renderLoading();
+            try {
+                const docSnap = await getDoc(doc(db, "articles", id));
+                if (!docSnap.exists()) return root.innerHTML = '<div class="text-center py-20">Article not found.</div>';
+                
+                const data = docSnap.data();
+                
+                // Embed YouTube video if link exists
+                let videoEmbed = '';
+                const videoId = getYouTubeId(data.youtubeLink || '');
+                if (videoId) {
+                    videoEmbed = `<div class="aspect-video my-6">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>`;
                 }
+                
+                const dateString = data.createdAt?.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) || 'Unknown Date';
+
+                // Admin Edit button: Always visible to Admin on the article page
+                const adminEditButton = isAdmin ? `<button onclick="window.location.hash='#admin/edit/${id}'" class="text-sm bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 ml-4">Edit Article</button>` : '';
+
+                
+                root.innerHTML = `
+                <article class="bg-white md:rounded-lg shadow-sm overflow-hidden pb-10">
+                    <div class="px-4 md:px-8 pt-8 pb-4">
+                        <span class="text-red-600 font-bold border-b-2 border-red-600">${data.category}</span>
+                        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 leading-tight">${data.title}</h1>
+                    </div>
+                    <img src="${data.thumbnail}" alt="${data.title} Thumbnail" class="w-full max-h-[500px] object-contain bg-gray-100 mb-6">
+                    <div class="px-4 md:px-8 flex items-center gap-4 mb-6 border-b pb-6">
+                        <div class="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-brand font-bold">D</div>
+                        <div>
+                            <p class="font-bold">The Decent Desk ${adminEditButton}</p>
+                            <p class="text-xs text-gray-500">${dateString}</p>
+                        </div>
+                    </div>
+                    ${videoEmbed}
+                    <div class="px-4 md:px-8 prose prose-lg prose-red max-w-none text-gray-800 text-justify article-content">${data.body}</div>
+                </article>`;
+            } catch (e) { root.innerHTML = `<div class="text-center text-red-500">Error loading article: ${e.message}</div>`; }
+        };
+
+        const renderAdminLogin = () => {
+             // Already logged in
+            if (currentUser) {
+                window.location.hash = isAdmin ? '#admin' : '#home';
+                return;
             }
 
-            if (candidateInfo) {
-                const d = candidateInfo.details || {};
+            root.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-10 px-4">
+                    <div class="bg-white p-6 md:p-8 rounded shadow-lg w-full max-w-sm border-t-4 border-black">
+                        <h2 class="text-2xl font-bold text-center mb-6">Admin Login</h2>
+                        <form id="emailLoginForm" class="space-y-4">
+                            <input type="email" id="login-email" class="w-full border p-3 rounded focus:ring-2 ring-red-500 outline-none" placeholder="Email" required>
+                            <input type="password" id="login-password" class="w-full border p-3 rounded focus:ring-2 ring-red-500 outline-none" placeholder="Password" required>
+                            <button type="submit" class="w-full bg-red-600 text-white py-3 font-bold hover:bg-red-700 rounded transition">Login</button>
+                        </form>
+                        <div class="text-center mt-4">
+                            <a href="#home" class="text-sm text-gray-500 hover:text-black">Return to Home</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('emailLoginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
                 
-                // --- ছবি সেট করার লজিক ---
-                const profileImgElement = document.getElementById('profile-img');
-                const defaultImg = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'; // ডামি ছবি
-                
-                // যদি ডেটাবেসে 'img' লিংক থাকে, সেটি ব্যবহার হবে। না থাকলে ডামি ছবি।
-                if (candidateInfo.img && candidateInfo.img.trim() !== "") {
-                    profileImgElement.src = candidateInfo.img;
+                const btn = e.target.querySelector('button');
+                btn.innerText = "Processing...";
+                btn.disabled = true;
+
+                // Enforce login only for admin emails, as per the original logic
+                if (ADMIN_EMAILS.includes(email)) {
+                    await loginWithEmailPassword(email, password);
                 } else {
-                    profileImgElement.src = defaultImg;
-                }
-                
-                // --- বাকি তথ্য আপডেট ---
-                document.getElementById('profile-name').textContent = candidateInfo.candidate;
-                document.getElementById('profile-seat').textContent = `${seat}, ${currentDistrict}`;
-                
-                // পরিচিতি আপডেট
-                document.getElementById('bio-list-name').textContent = candidateInfo.candidate;
-                document.getElementById('bio-list-dob').textContent = d.dob || 'তথ্য আপডেট হচ্ছে...';
-                document.getElementById('bio-list-occupation').textContent = d.occupation || 'তথ্য আপডেট হচ্ছে...';
-                document.getElementById('bio-list-education').textContent = d.education || 'তথ্য আপডেট হচ্ছে...';
-                document.getElementById('bio-list-political').textContent = d.political || 'তথ্য আপডেট হচ্ছে...';
-                document.getElementById('bio-content-long').textContent = d.bio || 'এই প্রার্থীর বিস্তারিত জীবনী শীঘ্রই সংযোজন করা হবে।';
-
-                // ইশতেহার আপডেট
-                document.getElementById('manifesto-list-health').textContent = "বিনামূল্যে চিকিৎসা সেবা ও ঔষধ প্রদান।";
-                document.getElementById('manifesto-list-education').textContent = "দরিদ্র শিক্ষার্থীদের বৃত্তি ও কারিগরি প্রশিক্ষণ।";
-                document.getElementById('manifesto-list-infra').textContent = "রাস্তাঘাট সংস্কার ও জলাবদ্ধতা নিরসন।";
-                document.getElementById('manifesto-content-long').textContent = d.manifesto || 'নির্বাচনী ইশতেহারের বিস্তারিত তথ্য শীঘ্রই আসছে।';
-
-                // যোগাযোগ আপডেট
-                document.getElementById('contact-content').textContent = d.contact || 'মোবাইল: ০১৭১১-০০০০০০';
-
-                // প্রচারণা লিংক আপডেট
-                const campBox = document.getElementById('campaign-links-container');
-                campBox.innerHTML = '';
-                if (d.campaigns && d.campaigns.length > 0) {
-                    d.campaigns.forEach(link => {
-                        const card = document.createElement('div');
-                        card.className = 'social-card';
-                        let icon = 'fas fa-link';
-                        if(link.type === 'facebook') icon = 'fab fa-facebook';
-                        else if(link.type === 'youtube') icon = 'fab fa-youtube';
-                        else if(link.type === 'news') icon = 'fas fa-newspaper';
-                        
-                        card.innerHTML = `<i class="${icon}"></i> <a href="${link.url}" target="_blank">${link.label}</a>`;
-                        campBox.appendChild(card);
-                    });
-                } else {
-                    campBox.innerHTML = '<p>কোনো প্রচারণার লিংক পাওয়া যায়নি।</p>';
+                    alert("Authorization denied. Only specific admin emails are allowed to log in here.");
                 }
 
-                showPage('candidate-profile');
-                
-                // ডিফল্টভাবে 'পরিচিতি' ট্যাব ওপেন করা
-                const bioTab = document.querySelector('.profile-tabs .tab-link');
-                if(bioTab) openTab({currentTarget: bioTab}, 'bio-dynamic');
-            }
-        }
-
-        function openTab(evt, tabName) {
-            const contents = document.getElementsByClassName("tab-content");
-            for (let i = 0; i < contents.length; i++) contents[i].classList.remove("active-content");
+                btn.innerText = "Login";
+                btn.disabled = false;
+            });
+        };
+        
+        // --- Category Management Dashboard ---
+        const renderCategoryManagement = async (categoriesObjects) => {
+            renderLoading(); 
             
-            const links = document.getElementsByClassName("tab-link");
-            for (let i = 0; i < links.length; i++) links[i].classList.remove("active-tab");
-            
-            document.getElementById(tabName).classList.add("active-content");
-            if(evt && evt.currentTarget) evt.currentTarget.classList.add("active-tab");
-        }
+            // Get category names only for duplicate check
+            const currentCategoryNames = categoriesObjects.map(c => c.name);
 
-        // --- ৭. ফর্ম ফাংশন ---
-        function populateDivisionOptions() {
-            const select = document.getElementById('info-division');
-            for (const div in candidateData) {
-                const opt = document.createElement('option');
-                opt.value = div; opt.textContent = div;
-                select.appendChild(opt);
-            }
-        }
+            root.innerHTML = `
+                <div class="bg-white p-6 rounded shadow-lg border-t-4 border-red-600">
+                    <div class="flex justify-between items-center mb-6 border-b pb-2">
+                        <h2 class="text-2xl font-bold">Category Management</h2>
+                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Verified Admin</span>
+                    </div>
+                    
+                    <a href="#admin" class="text-sm text-blue-600 hover:text-blue-800 font-bold mb-4 block"><i class="fas fa-arrow-left mr-2"></i>Back to Post Dashboard</a>
 
-        function populateDistrictOptions() {
-            const divSelect = document.getElementById('info-division');
-            const distSelect = document.getElementById('info-district');
-            distSelect.innerHTML = '<option value="" selected disabled>জেলা</option>';
+                    <div class="border p-4 rounded mb-8 bg-gray-50">
+                        <h3 class="text-xl font-bold mb-3">Create New Category</h3>
+                        <div class="flex gap-2">
+                            <input type="text" id="newCategory" class="border p-2 rounded focus:ring-2 ring-red-500 outline-none w-full" placeholder="New Category Name" required>
+                            <button id="addCategoryBtn" class="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition text-sm font-bold">Add</button>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold mb-3">Edit/Delete Existing Categories</h3>
+                    <ul id="categoryList" class="divide-y divide-gray-100 border rounded">
+                        </ul>
+                </div>
+            `;
             
-            if (candidateData[divSelect.value]) {
-                for (const dist in candidateData[divSelect.value]) {
-                    const opt = document.createElement('option');
-                    opt.value = dist; opt.textContent = dist;
-                    distSelect.appendChild(opt);
-                }
-            }
-        }
+            const categoryList = document.getElementById('categoryList');
+            
+            if (categoriesObjects.length === 0) {
+                categoryList.innerHTML = '<li class="p-4 text-gray-500">No categories found.</li>';
+            } else {
+                categoriesObjects.forEach(cat => {
+                    const isEditable = cat.id !== null; 
 
-        function populateSeatOptions() {
-            const div = document.getElementById('info-division').value;
-            const dist = document.getElementById('info-district').value;
-            const seatSelect = document.getElementById('info-seat');
-            seatSelect.innerHTML = '<option value="">আসন (ঐচ্ছিক)</option>';
-            
-            if (div && dist && candidateData[div][dist]) {
-                candidateData[div][dist].forEach(c => {
-                    const opt = document.createElement('option');
-                    opt.value = c.seat; opt.textContent = c.seat;
-                    seatSelect.appendChild(opt);
+                    let actionButtons = '';
+                    if (isEditable) {
+                        actionButtons = `
+                            <button data-id="${cat.id}" data-name="${cat.name}" class="edit-category text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded hover:bg-blue-200 transition">Edit</button>
+                            <button data-id="${cat.id}" class="delete-category text-xs bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200 transition ml-2">Delete</button>
+                        `;
+                    } else {
+                        actionButtons = '<span class="text-xs text-gray-400">Default (Cannot Delete)</span>';
+                    }
+
+                    categoryList.innerHTML += `
+                        <li id="cat-item-${cat.id || cat.name}" class="flex justify-between items-center p-4 hover:bg-gray-50 transition">
+                            <span class="font-medium text-gray-900">${cat.name}</span>
+                            <div>${actionButtons}</div>
+                        </li>
+                    `;
                 });
             }
-        }
+            
+            // --- Event Handlers for Category Management ---
+            
+            // 1. Add New Category
+            document.getElementById('addCategoryBtn').addEventListener('click', async () => {
+                const newCatInput = document.getElementById('newCategory');
+                const newCatName = newCatInput.value.trim();
+                
+                if (!newCatName) {
+                    alert("Please enter a category name.");
+                    return;
+                }
+                if (currentCategoryNames.includes(newCatName)) {
+                    alert("This category already exists.");
+                    return;
+                }
 
-        function submitInfoForm() {
-            alert('আপনার তথ্য সফলভাবে জমা নেওয়া হয়েছে। শীঘ্রই যাচাই করা হবে। ধন্যবাদ!');
-            document.querySelector('#info-input-page form').reset();
-        }
+                const btn = document.getElementById('addCategoryBtn');
+                btn.innerText = "Adding...";
+                btn.disabled = true;
+
+                try {
+                    await addDoc(collection(db, "categories"), {
+                        name: newCatName,
+                        createdAt: serverTimestamp(),
+                        addedBy: currentUser.email
+                    });
+                    alert(`Category "${newCatName}" successfully added!`);
+                    window.location.reload(); 
+                } catch (e) {
+                    alert("Failed to add category: " + e.message);
+                } finally {
+                    btn.innerText = "Add";
+                    btn.disabled = false;
+                }
+            });
+
+            // 2. Edit Category
+            categoryList.querySelectorAll('.edit-category').forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    const oldName = e.target.getAttribute('data-name');
+                    const newName = prompt(`Enter a new name for category "${oldName}":`, oldName);
+                    
+                    if (newName && newName !== oldName) {
+                         if (currentCategoryNames.includes(newName)) {
+                            alert("A category with this name already exists.");
+                            return;
+                        }
+                        if(!confirm(`Are you sure you want to change the category name to "${newName}"?`)) return;
+
+                        try {
+                            await updateDoc(doc(db, "categories", id), { name: newName });
+                            alert("Category successfully updated!");
+                            window.location.reload(); 
+                        } catch (e) {
+                            alert("Failed to update: " + e.message);
+                        }
+                    } else if (newName !== null) {
+                        alert("Name was not changed or the same name was provided.");
+                    }
+                });
+            });
+
+            // 3. Delete Category
+            categoryList.querySelectorAll('.delete-category').forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    
+                    if (confirm("Are you sure you want to delete this category? All posts currently using this category will remain unchanged until manually edited.")) {
+                        try {
+                            await deleteDoc(doc(db, "categories", id));
+                            alert("Category successfully deleted.");
+                            // Reload to update the menu and list
+                            window.location.reload();
+                        } catch (e) {
+                            alert("Failed to delete: " + e.message);
+                        }
+                    }
+                });
+            });
+        };
+
+
+        const renderAdmin = async () => {
+            // Check if articleToEdit is loaded from router before proceeding
+            const isEditMode = articleToEdit !== null;
+
+            // 1. Authentication Check
+            if (!currentUser) {
+                renderAdminLogin();
+                return;
+            }
+            if (!isAdmin) {
+                root.innerHTML = `<div class="flex flex-col items-center justify-center py-20 bg-red-50 rounded border border-red-100"><i class="fas fa-ban text-4xl text-red-500 mb-4"></i><h2 class="text-xl font-bold text-red-700 mb-2">Access Denied</h2><p class="text-gray-600 text-center max-w-md">Sorry <b>${currentUser.email}</b>, you do not have permission to access this page.</p></div>`;
+                return;
+            }
+
+            renderLoading();
+            // Load categories names for the form dropdown
+            const categoriesObjects = await loadCategories();
+            const categories = categoriesObjects.map(cat => cat.name);
+            
+            // Function to render the main dashboard UI
+            const renderDashboardUI = (mode = 'new') => {
+                root.innerHTML = `
+                    <div class="bg-white p-6 rounded shadow-lg border-t-4 border-red-600">
+                        <div class="flex justify-between items-center mb-6 border-b pb-2">
+                            <h2 class="text-2xl font-bold">${mode === 'new' ? 'Create New Post' : 'Edit Post'}</h2>
+                            <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Verified Admin: ${currentUser.email}</span>
+                        </div>
+                        
+                        <div class="space-y-4 mb-6">
+                            <a href="#admin/categories" class="text-sm bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 transition font-bold"><i class="fas fa-tags mr-2"></i>Manage Categories</a>
+                            ${mode === 'edit' ? `<a href="#admin" class="text-sm bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 transition font-bold ml-2"><i class="fas fa-plus mr-2"></i>Create New Post</a>` : ''}
+                        </div>
+                        
+                        <form id="postForm" class="space-y-4">
+                            <input type="hidden" id="articleId" value="${articleToEdit ? articleToEdit.id : ''}">
+                            <input type="text" id="title" class="w-full border p-3 rounded focus:ring-2 ring-red-500 outline-none" placeholder="News Headline" value="${articleToEdit ? articleToEdit.title : ''}" required>
+                            
+                            <select id="category" class="w-full border p-3 rounded bg-white">
+                                </select>
+
+                            <input type="text" id="thumb" class="w-full border p-3 rounded" placeholder="Thumbnail Image Link (URL)" value="${articleToEdit ? articleToEdit.thumbnail : ''}" required>
+                            <input type="url" id="youtubeLink" class="w-full border p-3 rounded" placeholder="YouTube Video Link (Optional)" value="${articleToEdit ? articleToEdit.youtubeLink : ''}">
+                            
+                            <textarea id="excerpt" rows="2" class="w-full border p-3 rounded" placeholder="Short Description (Excerpt)" >${articleToEdit ? articleToEdit.excerpt : ''}</textarea>
+                            
+                            <textarea id="body" rows="10" class="w-full border p-3 rounded" placeholder="Detailed News Body (HTML allowed for image tags: <img src='...' />)" required>${articleToEdit ? articleToEdit.body : ''}</textarea>
+                            
+                            <div class="flex gap-4">
+                                <button type="submit" id="submitBtn" class="flex-grow bg-red-600 text-white py-3 font-bold hover:bg-red-700 rounded transition">
+                                    ${mode === 'new' ? 'Publish Post' : 'Update Post'}
+                                </button>
+                                ${mode === 'edit' ? `<button type="button" id="deleteBtn" class="w-1/4 bg-gray-500 text-white py-3 font-bold hover:bg-gray-600 rounded">Delete</button>` : ''}
+                            </div>
+                            <div class="text-center mt-4">
+                                <a href="#admin" class="text-sm text-gray-500 hover:text-black">${mode === 'edit' ? 'Switch to Create New Post' : 'View All Posts'}</a>
+                            </div>
+                        </form>
+                    </div>
+
+                    <h3 class="text-xl font-bold mt-10 mb-4 px-4 md:px-0">Recent Posts</h3>
+                    <div id="admin-article-list" class="bg-white shadow-sm rounded overflow-hidden">
+                        </div>
+                `;
+
+                // Populate categories dropdown
+                const categorySelect = document.getElementById('category');
+                categories.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat;
+                    option.textContent = cat;
+                    if (articleToEdit && articleToEdit.category === cat) {
+                        option.selected = true;
+                    } else if (mode === 'new' && cat === defaultCategories[0]) {
+                        option.selected = true; // Select 'Current Affairs' by default for new posts
+                    }
+                    categorySelect.appendChild(option);
+                });
+            };
+
+            // Initial render as New Post or Edit Post mode
+            renderDashboardUI(isEditMode ? 'edit' : 'new');
+
+            // Load and display recent posts for admin overview
+            const loadAdminPosts = async () => {
+                const listContainer = document.getElementById('admin-article-list');
+                listContainer.innerHTML = '<div class="p-4 text-center text-gray-500">Loading...</div>';
+                try {
+                    const q = query(collection(db, "articles"), orderBy("createdAt", "desc"), limit(10));
+                    const querySnapshot = await getDocs(q);
+                    
+                    if (querySnapshot.empty) {
+                        listContainer.innerHTML = '<div class="p-4 text-gray-500">No published articles found.</div>';
+                        return;
+                    }
+
+                    let html = '<ul class="divide-y divide-gray-100">';
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const date = data.createdAt?.toDate().toLocaleDateString('en-US') || 'No Date';
+                        html += `
+                        <li class="flex justify-between items-center p-4 hover:bg-gray-50 transition">
+                            <div class="flex-grow">
+                                <p class="font-medium text-gray-900 line-clamp-1">${data.title}</p>
+                                <span class="text-xs text-red-500 font-bold">${data.category}</span>
+                                <span class="text-xs text-gray-500 ml-2"> | ${date}</span>
+                            </div>
+                            <button onclick="window.location.hash='#admin/edit/${doc.id}'" class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded ml-4 hover:bg-blue-200">Edit</button>
+                        </li>`;
+                    });
+                    html += '</ul>';
+                    listContainer.innerHTML = html;
+                } catch (e) {
+                    listContainer.innerHTML = `<div class="p-4 text-red-500">Failed to load posts: ${e.message}</div>`;
+                }
+            };
+            loadAdminPosts();
+
+
+            // --- Event Listeners for Post Management (Submit/Delete) ---
+            
+            // 1. Form Submit Handler (Create/Update)
+            document.getElementById('postForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const id = document.getElementById('articleId').value;
+                const mode = id ? 'Update' : 'Publish';
+                if(!confirm(`Are you sure you want to ${mode.toLowerCase()} this post?`)) return;
+                
+                const btn = document.getElementById('submitBtn');
+                btn.innerText = "Processing...";
+                btn.disabled = true;
+
+                const data = {
+                    title: document.getElementById('title').value,
+                    category: document.getElementById('category').value,
+                    thumbnail: document.getElementById('thumb').value,
+                    youtubeLink: document.getElementById('youtubeLink').value,
+                    excerpt: document.getElementById('excerpt').value,
+                    body: document.getElementById('body').value,
+                    authorEmail: currentUser.email
+                };
+
+                try {
+                    if (id) {
+                        // Update existing article
+                        data.updatedAt = serverTimestamp();
+                        await updateDoc(doc(db, "articles", id), data);
+                        alert("Successfully updated!");
+                        // Go to the article page after update
+                        window.location.hash = "#article/" + id;
+                    } else {
+                        // Create new article
+                        data.createdAt = serverTimestamp();
+                        const newDoc = await addDoc(collection(db, "articles"), data);
+                        alert("Successfully published!");
+                        // Go to the new article page after publish
+                        window.location.hash = "#article/" + newDoc.id;
+                    }
+                } catch (err) {
+                    alert(`Failed to ${mode.toLowerCase()}: ` + err.message);
+                    btn.innerText = mode === 'Update' ? 'Update Post' : 'Publish Post';
+                    btn.disabled = false;
+                }
+            });
+
+            // 2. Delete Handler (Only for Edit mode)
+            if (document.getElementById('deleteBtn')) {
+                document.getElementById('deleteBtn').addEventListener('click', async () => {
+                    const id = document.getElementById('articleId').value;
+                    if (!id || !confirm("Are you sure you want to DELETE this post? This action cannot be undone.")) return;
+                    
+                    const btn = document.getElementById('deleteBtn');
+                    btn.innerText = "Deleting...";
+                    btn.disabled = true;
+
+                    try {
+                        await deleteDoc(doc(db, "articles", id));
+                        alert("Post successfully deleted.");
+                        window.location.hash = "#admin";
+                    } catch (e) {
+                        alert("Failed to delete: " + e.message);
+                        btn.innerText = "Delete";
+                        btn.disabled = false;
+                    }
+                });
+            }
+        };
+
+        // --- Routing ---
+        const router = async () => {
+            const hash = window.location.hash;
+            const parts = hash.split('/');
+
+            // Reset edit state first
+            articleToEdit = null;
+
+            if(!hash || hash === '#home') renderHome();
+            else if(parts[0] === '#article' && parts[1]) renderArticle(parts[1]);
+            else if(parts[0] === '#category' && parts[1]) renderHome(decodeURIComponent(parts[1]));
+            else if(hash === '#admin-login') renderAdminLogin();
+            else if(hash === '#admin') renderAdmin();
+            else if(hash === '#admin/categories') {
+                if(!isAdmin) { window.location.hash = '#admin-login'; return; } // Auth check
+                renderCategoryManagement(await loadCategories()); 
+            }
+            else if(parts[0] === '#admin' && parts[1] === 'edit' && parts[2]) {
+                if(!isAdmin) { window.location.hash = '#admin-login'; return; } // Auth check
+                renderLoading();
+                try {
+                    const docSnap = await getDoc(doc(db, "articles", parts[2]));
+                    if (docSnap.exists()) {
+                        articleToEdit = { id: docSnap.id, ...docSnap.data() };
+                        renderAdmin(); // Renders in Edit mode
+                    } else {
+                        alert("Article not found.");
+                        window.location.hash = '#admin';
+                    }
+                } catch (e) {
+                    alert("Failed to load article: " + e.message);
+                    window.location.hash = '#admin';
+                }
+            }
+        };
+
+        window.addEventListener('hashchange', router);
+        window.addEventListener('load', router);
+
+        // Menu Logic
+        window.toggleMenu = () => {
+            const menu = document.getElementById('side-menu');
+            const overlay = document.getElementById('side-menu-overlay');
+            if(menu.classList.contains('translate-x-full')) {
+                menu.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(()=>overlay.classList.remove('opacity-0'),10);
+            } else {
+                menu.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(()=>overlay.classList.add('hidden'),300);
+            }
+        };
     </script>
 </body>
 </html>
