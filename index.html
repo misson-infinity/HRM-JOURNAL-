@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script type="importmap">
@@ -24,346 +23,129 @@
     </script>
 
     <style>
-        /* ---------------------------------------------------- */
-        /* BASE & TYPOGRAPHY - Optimized for Readability */
-        /* ---------------------------------------------------- */
-        body { 
-            font-family: 'Baloo Da 2', sans-serif; 
-            background-color: #f5f7fa; /* Lighter, more professional background */
-            color: #1a1a1a; 
-            font-weight: 500;
-        }
+        body { font-family: 'Baloo Da 2', sans-serif; background-color: #f5f7fa; color: #1a1a1a; font-weight: 500; }
         .font-brand { font-family: 'Playfair Display', serif; }
-        
-        /* Premium Scrollbar */
         .custom-scroll::-webkit-scrollbar { width: 8px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background-color: #991b1b; border-radius: 4px; } /* Dark Red */
+        .custom-scroll::-webkit-scrollbar-thumb { background-color: #991b1b; border-radius: 4px; }
         .custom-scroll::-webkit-scrollbar-track { background: #e5e7eb; }
-        
-        /* Loader Style */
         .loader { border: 4px solid #f3f3f3; border-top: 4px solid #dc2626; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        /* Professional Headline Style - Responsive Sizing */
-        .headline-lg {
-            color: #1a1a1a; 
-            font-weight: 800; 
-            font-size: 2rem; /* Mobile */
-            line-height: 1.3; 
-            transition: color 0.3s;
-        }
-        @media (min-width: 768px) { /* Tablet/Desktop */
-            .headline-lg {
-                font-size: 3rem; 
-                line-height: 1.2;
-            }
-        }
-        
-        /* Article Content Styling for maximum readability (Body Text) */
-        .article-content { 
-            font-size: 1.0rem; /* Mobile base font size */
-            line-height: 1.8; 
-            text-align: justify;
-            color: #333333;
-        }
-        @media (min-width: 768px) {
-             .article-content {
-                font-size: 1.15rem; /* Desktop body font size */
-                line-height: 2;
-            }
-        }
+        .headline-lg { color: #1a1a1a; font-weight: 800; font-size: 2rem; line-height: 1.3; transition: color 0.3s; }
+        @media (min-width: 768px) { .headline-lg { font-size: 3rem; line-height: 1.2; } }
+        .article-content { font-size: 1.0rem; line-height: 1.8; text-align: justify; color: #333333; }
+        @media (min-width: 768px) { .article-content { font-size: 1.15rem; line-height: 2; } }
         .article-content p { margin-bottom: 1.5rem; }
         .article-content h2, .article-content h3 { font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; color: #374151; }
-        .article-content img { 
-            max-width: 100%; 
-            height: auto; 
-            display: block; 
-            margin: 3rem auto; 
-            border-radius: 0.75rem; 
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); 
-        }
-        
-        /* Brand Icon Style */
-        .brand-icon {
-            height: 30px; /* Smaller on mobile */
-            width: auto; 
-            margin-left: 0.25rem;
-            margin-right: 0.25rem;
-            vertical-align: middle; 
-        }
-        @media (min-width: 768px) {
-             .brand-icon {
-                height: 36px;
-            }
-        }
-        
-        /* Language Toggle Customization */
-        .lang-btn {
-            padding: 0.4rem 0.8rem;
-            font-size: 0.75rem; /* Smaller button on mobile */
-            font-weight: 700;
-            border: 1px solid #e5e7eb;
-            transition: all 0.2s;
-        }
-        @media (min-width: 768px) {
-             .lang-btn {
-                padding: 0.4rem 1rem;
-                font-size: 0.875rem;
-            }
-        }
-        .lang-btn.active {
-            background-color: #dc2626; /* Red 600 */
-            color: white;
-            border-color: #dc2626;
-            box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
-        }
-        .lang-btn:not(.active):hover {
-            background-color: #f3f4f6;
-            color: #4b5563;
-        }
+        .article-content img { max-width: 100%; height: auto; display: block; margin: 3rem auto; border-radius: 0.75rem; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); }
+        .brand-icon { height: 30px; width: auto; margin-left: 0.25rem; margin-right: 0.25rem; display: inline-block; }
+        @media (min-width: 768px) { .brand-icon { height: 36px; } }
     </style>
+    
+    <script>
+        // Only English UI Text
+        const UI_TEXT = {
+            'news': 'News', 
+            'home': 'Home', 
+            'admin_dashboard': 'Admin Dashboard', 
+            'login_google': 'Google Login', 
+            'login_admin': 'Admin Login (Email/Pass)', 
+            'logout': 'Logout', 
+            'latest_news': 'Latest News', 
+            'read_more': 'Read More', 
+            'article_not_found': 'Article not found.', 
+            'no_articles_in_category': 'No articles found in this category.', 
+            'error_loading_article': 'Error loading article:', 
+            'article_edit': 'Edit Article', 
+            'author_name': 'Infinity Stream News Desk', 
+            'admin_login_title': 'Admin Login', 
+            'email': 'Email', 
+            'password': 'Password', 
+            'login': 'Login', 
+            'processing': 'Processing...', 
+            'back_to_home': 'Back to Home', 
+            'admin_access_denied_title': 'Access Denied', 
+            'admin_access_denied_body': 'Sorry, you are not authorized to access this page.', 
+            'new_post': 'Create New Post', 
+            'edit_post': 'Edit Post', 
+            'verified_admin': 'VERIFIED ADMIN', 
+            'manage_categories': 'Manage Categories', 
+            'create_new_post': 'Create New Post', 
+            'article_title': 'News Headline', 
+            'thumbnail_link': 'Thumbnail Image Link (Optional)', 
+            'youtube_link': 'YouTube Video Link (Optional)', 
+            'excerpt': 'Excerpt', 
+            'body_content': 'Detailed News (You can use HTML image tag: <img src=\'...\' />)', 
+            'publish_post': 'Publish Post', 
+            'update_post': 'Update Post', 
+            'delete_post': 'Delete', 
+            'recent_posts': 'Recent Posts', 
+            'loading': 'Loading...', 
+            'no_published_articles': 'No published articles found.', 
+            'edit': 'Edit', 
+            'category_management': 'Category Management', 
+            'add_new_category': 'Create New Category', 
+            'new_category_name': 'New Category Name', 
+            'add': 'Add', 
+            'existing_categories': 'Edit/Delete Existing Categories', 
+            'default_category': 'Default (Cannot be deleted)', 
+            'update_success': 'Successfully Updated!', 
+            'publish_success': 'Successfully Published!', 
+            'article_not_found_alert': 'Article not found.', 
+            'loading_fail': 'Failed to load posts:', 
+            'category_loading_fail': 'Error loading categories:', 
+            'admin_mode': 'ADMIN MODE', 
+            'reader_mode': 'READER MODE', 
+            'unknown_date': 'Unknown Date', 
+            'category_add_success': 'successfully added', 
+            'category_update_success': 'successfully updated', 
+            'category_delete_success': 'successfully deleted', 
+            'go_back_to_dashboard': 'Go back to Post Dashboard',
+        };
+    </script>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <script>
-        const LANG_EN = 'en';
-        const LANG_BN = 'bn';
-        let currentLang = 'bn'; 
-        
-        // --- TEXT CONSTANTS for Internationalization (i18n) ---
-        const UI_TEXT = {
-            'bn': {
-                'news_suffix': 'নিউজ',
-                'home': 'হোম',
-                'admin_dashboard': 'অ্যাডমিন ড্যাশবোর্ড',
-                'login_google': 'গুগল লগইন',
-                'login_admin': 'অ্যাডমিন লগইন (ইমেইল/পাস)',
-                'logout': 'লগআউট',
-                'latest_news': 'সর্বশেষ খবর',
-                'read_more': 'আরো পড়ুন',
-                'article_not_found': 'নিবন্ধটি খুঁজে পাওয়া যায়নি।',
-                'no_articles_in_category': 'এই ক্যাটাগরিতে কোনো নিবন্ধ পাওয়া যায়নি।',
-                'error_loading_article': 'নিবন্ধ লোড করতে সমস্যা:',
-                'article_edit': 'নিবন্ধ সম্পাদনা',
-                'author_name': 'ইনফিনিটি স্ট্রিম নিউজ ডেস্ক',
-                'admin_login_title': 'অ্যাডমিন লগইন',
-                'email': 'ইমেইল',
-                'password': 'পাসওয়ার্ড',
-                'login': 'লগইন',
-                'processing': 'প্রসেসিং...',
-                'back_to_home': 'হোমে ফিরে যান',
-                'admin_access_denied_title': 'অ্যাক্সেস ডিনাইড',
-                'admin_access_denied_body': 'দুঃখিত, এই পেজটি অ্যাক্সেস করার অনুমতি আপনার নেই।',
-                'new_post': 'নতুন পোস্ট তৈরি করুন',
-                'edit_post': 'পোস্ট সম্পাদনা করুন',
-                'verified_admin': 'ভেরিফায়েড অ্যাডমিন',
-                'manage_categories': 'ক্যাটাগরি ম্যানেজ করুন',
-                'create_new_post': 'নতুন পোস্ট তৈরি করুন',
-                'article_title': 'খবরের শিরোনাম',
-                'thumbnail_link': 'থাম্বনেল ছবির লিঙ্ক (ঐচ্ছিক)',
-                'youtube_link': 'ইউটিউব ভিডিও লিঙ্ক (ঐচ্ছিক)',
-                'excerpt': 'সংক্ষিপ্ত বিবরণ',
-                'body_content': 'বিস্তারিত খবর (HTML image tag ব্যবহার করা যাবে: <img src=\'...\' />)',
-                'publish_post': 'পোস্ট প্রকাশ করুন',
-                'update_post': 'পোস্ট আপডেট করুন',
-                'delete_post': 'মুছে ফেলুন',
-                'recent_posts': 'সাম্প্রতিক পোস্ট',
-                'loading': 'লোড হচ্ছে...',
-                'no_published_articles': 'কোনো প্রকাশিত নিবন্ধ পাওয়া যায়নি।',
-                'edit': 'সম্পাদনা',
-                'category_management': 'ক্যাটাগরি ম্যানেজমেন্ট',
-                'add_new_category': 'নতুন ক্যাটাগরি তৈরি করুন',
-                'new_category_name': 'নতুন ক্যাটাগরির নাম',
-                'add': 'যোগ করুন',
-                'existing_categories': 'বিদ্যমান ক্যাটাগরি সম্পাদনা/মুছে ফেলুন',
-                'default_category': 'ডিফল্ট (মুছে ফেলা যাবে না)',
-                'update_success': 'সফলভাবে আপডেট করা হয়েছে!',
-                'publish_success': 'সফলভাবে প্রকাশিত হয়েছে!',
-                'article_not_found_alert': 'নিবন্ধটি খুঁজে পাওয়া যায়নি।',
-                'loading_fail': 'পোস্ট লোড করতে ব্যর্থ:',
-                'category_loading_fail': 'ক্যাটাগরি লোড করতে ব্যর্থ:',
-                'admin_mode': 'ADMIN MODE',
-                'reader_mode': 'READER MODE',
-                'unknown_date': 'অজানা তারিখ',
-                'category_add_success': 'সফলভাবে যোগ করা হয়েছে',
-                'category_update_success': 'সফলভাবে আপডেট করা হয়েছে',
-                'category_delete_success': 'সফলভাবে মুছে ফেলা হয়েছে',
-                'go_back_to_dashboard': 'পোস্ট ড্যাশবোর্ডে ফিরে যান',
-            },
-            'en': {
-                'news_suffix': 'News',
-                'home': 'Home',
-                'admin_dashboard': 'Admin Dashboard',
-                'login_google': 'Google Login',
-                'login_admin': 'Admin Login (Email/Pass)',
-                'logout': 'Logout',
-                'latest_news': 'Latest News',
-                'read_more': 'Read More',
-                'article_not_found': 'Article not found.',
-                'no_articles_in_category': 'No articles found in this category.',
-                'error_loading_article': 'Error loading article:',
-                'article_edit': 'Edit Article',
-                'author_name': 'Infinity Stream News Desk',
-                'admin_login_title': 'Admin Login',
-                'email': 'Email',
-                'password': 'Password',
-                'login': 'Login',
-                'processing': 'Processing...',
-                'back_to_home': 'Back to Home',
-                'admin_access_denied_title': 'Access Denied',
-                'admin_access_denied_body': 'Sorry, you are not authorized to access this page.',
-                'new_post': 'Create New Post',
-                'edit_post': 'Edit Post',
-                'verified_admin': 'VERIFIED ADMIN',
-                'manage_categories': 'Manage Categories',
-                'create_new_post': 'Create New Post',
-                'article_title': 'News Headline',
-                'thumbnail_link': 'Thumbnail Image Link (Optional)',
-                'youtube_link': 'YouTube Video Link (Optional)',
-                'excerpt': 'Excerpt',
-                'body_content': 'Detailed News (You can use HTML image tag: <img src=\'...\' />)',
-                'publish_post': 'Publish Post',
-                'update_post': 'Update Post',
-                'delete_post': 'Delete',
-                'recent_posts': 'Recent Posts',
-                'loading': 'Loading...',
-                'no_published_articles': 'No published articles found.',
-                'edit': 'Edit',
-                'category_management': 'Category Management',
-                'add_new_category': 'Create New Category',
-                'new_category_name': 'New Category Name',
-                'add': 'Add',
-                'existing_categories': 'Edit/Delete Existing Categories',
-                'default_category': 'Default (Cannot be deleted)',
-                'update_success': 'Successfully Updated!',
-                'publish_success': 'Successfully Published!',
-                'article_not_found_alert': 'Article not found.',
-                'loading_fail': 'Failed to load posts:',
-                'category_loading_fail': 'Error loading categories:',
-                'admin_mode': 'ADMIN MODE',
-                'reader_mode': 'READER MODE',
-                'unknown_date': 'Unknown Date',
-                'category_add_success': 'successfully added',
-                'category_update_success': 'successfully updated',
-                'category_delete_success': 'successfully deleted',
-                'go_back_to_dashboard': 'Go back to Post Dashboard',
-            }
-        };
-
-        // Function to get translated text
-        const t = (key) => UI_TEXT[currentLang][key] || key;
-        
-        // Function to set the language and reload the UI
-        const setLanguage = (lang) => {
-            currentLang = lang;
-            localStorage.setItem('portalLang', lang);
-            updateLanguageUI();
-            router(); // Re-render content to apply new language texts
-        }
-
-        // Language UI Update function (called on load and language change)
-        const updateLanguageUI = () => {
-            const langEnBtn = document.getElementById('lang-en-btn');
-            const langBnBtn = document.getElementById('lang-bn-btn');
-
-            // 1. Language Buttons
-            if (langEnBtn && langBnBtn) {
-                langEnBtn.classList.toggle('active', currentLang === LANG_EN);
-                langBnBtn.classList.toggle('active', currentLang === LANG_BN);
-            }
-            
-            // 2. Auth Status
-            const status = document.getElementById('auth-status');
-            if(status) {
-                if (currentUser) {
-                    status.textContent = isAdmin ? t('admin_mode') : t('reader_mode');
-                } else {
-                    status.textContent = "";
-                }
-            }
-            
-            // 3. Side Menu Text
-            const menuHomeLink = document.getElementById('menu-home-link');
-            if(menuHomeLink) menuHomeLink.innerText = t('home');
-            
-            const logoutBtn = document.getElementById('logout-btn');
-            const loginGoogleBtn = document.getElementById('login-google-btn');
-            const loginEmailBtn = document.getElementById('login-email-btn');
-
-            if(logoutBtn) logoutBtn.innerText = t('logout');
-            if(loginGoogleBtn) loginGoogleBtn.innerHTML = `<i class="fab fa-google"></i> ${t('login_google')}`;
-            if(loginEmailBtn) loginEmailBtn.innerText = t('login_admin');
-            
-            // 4. Update Categories
-            loadCategories().then(renderCategoriesMenu);
-            updateAuthUI(); // Ensure auth buttons are updated on language change
-        };
-        
-        // Initialize language from localStorage
-        window.addEventListener('load', () => {
-            const storedLang = localStorage.getItem('portalLang');
-            if (storedLang && (storedLang === LANG_EN || storedLang === LANG_BN)) {
-                currentLang = storedLang;
-            } else {
-                currentLang = LANG_BN; // Default to Bengali
-            }
-            // Router will be called after Firebase Auth is checked
-            // updateLanguageUI will be called inside onAuthStateChanged
-        });
-    </script>
     <header class="bg-white sticky top-0 z-40 border-b border-gray-200 shadow-md h-16 md:h-20 flex items-center">
         <div class="container mx-auto px-4 md:px-6 lg:px-8 flex justify-between items-center relative max-w-7xl">
-            <a href="#home" class="flex items-center gap-1 group">
-                <div class="relative flex items-center">
+            <a href="#home" class="flex items-end gap-1 group">
+                <div class="flex items-end relative">
                     <span class="font-brand text-2xl md:text-4xl font-bold tracking-tight text-red-600">Infinity</span>
                     <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3ZGAKLh5xvrm4t5qAkDx-V1ZtOOojJxFFBZFeqjKcDW-P1YSHlwgZtV9DxrcurPE9lKEoZH5bk0C8nV69oAAllM5wxtcRy2cxZociXMx4MtOpuet6snChXDz0UTGXpnmkC9hhRs6dyHC77rM0KID9lZeACuS280CebuXqr4NrPJEqlOABfargbi7CW5I/s808/1000067315.jpg" alt="Stream Icon" class="brand-icon" />
                     <span class="font-brand text-2xl md:text-4xl font-bold tracking-tight text-gray-900">Stream</span>
                 </div>
-                <sup class="text-[10px] md:text-[12px] uppercase font-bold text-red-600 mt-2 ml-1 border px-1.5 py-0.5 md:px-2 border-red-400 bg-red-100 rounded-full">${t('news_suffix')}</sup>
+                <sup class="text-[10px] md:text-[12px] uppercase font-bold text-red-600 ml-1 border px-1.5 py-0.5 md:px-2 border-red-400 bg-red-100 rounded-full mb-0.5">News Portal</sup>
             </a>
 
             <div class="flex items-center gap-3 md:gap-4">
                 <div id="auth-status" class="hidden lg:block text-xs font-bold text-gray-500"></div>
-                <div class="hidden md:flex items-center text-sm font-medium rounded-full overflow-hidden shadow-inner bg-white">
-                    <button id="lang-en-btn" onclick="setLanguage(LANG_EN)" class="lang-btn rounded-l-full">Eng</button>
-                    <button id="lang-bn-btn" onclick="setLanguage(LANG_BN)" class="lang-btn rounded-r-full">বাংলা</button>
-                </div>
-                <button onclick="toggleMenu()" class="text-2xl md:text-3xl text-gray-800 hover:text-red-600 focus:outline-none">
+                <button onclick="window.toggleMenu()" class="text-2xl md:text-3xl text-gray-800 hover:text-red-600 focus:outline-none">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
         </div>
     </header>
 
-    <div id="side-menu-overlay" class="fixed inset-0 bg-black/70 z-50 hidden transition-opacity duration-300 opacity-0" onclick="toggleMenu()"></div>
+    <div id="side-menu-overlay" class="fixed inset-0 bg-black/70 z-50 hidden transition-opacity duration-300 opacity-0" onclick="window.toggleMenu()"></div>
     <div id="side-menu" class="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-white z-50 transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col">
         <div class="flex justify-between items-center p-6 border-b bg-gray-50">
             <h2 class="font-brand text-2xl font-bold text-red-600">Infinity Stream</h2>
-            <button onclick="toggleMenu()" class="text-2xl text-gray-500 hover:text-red-500"><i class="fas fa-times"></i></button>
+            <button onclick="window.toggleMenu()" class="text-2xl text-gray-500 hover:text-red-500"><i class="fas fa-times"></i></button>
         </div>
         <div class="flex-grow overflow-y-auto custom-scroll p-6">
-            <div class="md:hidden text-center mb-6">
-                <div class="flex items-center text-sm font-medium rounded-full overflow-hidden shadow-inner bg-white border border-gray-200">
-                    <button id="lang-en-btn-mobile" onclick="setLanguage(LANG_EN)" class="lang-btn rounded-l-full flex-grow">Eng</button>
-                    <button id="lang-bn-btn-mobile" onclick="setLanguage(LANG_BN)" class="lang-btn rounded-r-full flex-grow">বাংলা</button>
-                </div>
-            </div>
-            
             <ul id="menu-categories" class="space-y-4 text-lg font-medium text-gray-800">
-                <li><a id="menu-home-link" href="#home" onclick="toggleMenu()" class="hover:text-red-600 block">${t('home')}</a></li>
             </ul>
         </div>
         <div class="p-6 bg-gray-50 border-t shadow-inner">
             <div id="logged-out-section" class="space-y-3">
                 <button id="login-google-btn" class="w-full border border-gray-300 py-3 rounded-lg text-sm font-bold bg-white hover:bg-gray-100 flex items-center justify-center gap-2 transition">
-                    <i class="fab fa-google text-red-500"></i> ${t('login_google')}
+                    <i class="fab fa-google text-red-500"></i> <span id="txt-login-google">Google Login</span>
                 </button>
                 <button id="login-email-btn" class="w-full bg-red-600 text-white py-3 rounded-lg text-sm font-bold hover:bg-red-700 transition">
-                    ${t('login_admin')}
+                     <span id="txt-login-admin">Admin Login</span>
                 </button>
             </div>
             <button id="logout-btn" class="w-full border border-red-300 py-3 rounded-lg text-sm font-bold mb-4 hidden bg-red-50 text-red-600 hover:bg-red-100 transition">
-                ${t('logout')}
+                Logout
             </button>
             <div class="flex gap-6 text-2xl text-gray-500 justify-center mt-6">
                 <i class="fab fa-facebook-square hover:text-red-600 transition"></i>
@@ -383,12 +165,12 @@
         </div>
     </footer>
 
-    <script type="module">
+        <script type="module">
         import { initializeApp } from "firebase/app";
         import { getFirestore, collection, getDocs, getDoc, addDoc, doc, query, orderBy, limit, serverTimestamp, updateDoc, deleteDoc } from "firebase/firestore";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 
-        // --- Firebase Config (KEEP AS IS) ---
+        // --- Firebase Config ---
         const firebaseConfig = {
             apiKey: "AIzaSyBlVYaMOrpj2JbE59eeRoO8TdKGwBFTQJM",
             authDomain: "infinity-stream-13726.firebaseapp.com",
@@ -403,90 +185,112 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
         
-        // --- ADMIN LIST (KEEP AS IS) ---
+        // --- STATE & CONFIG ---
         const ADMIN_EMAILS = [
             "habiburrahmanmahi4@gmail.com",
             "habiburrahmannawshad@gmail.com",
             "ahnafmahi19@gmail.com"
         ];
+        const defaultCategories = ["Current Affairs", "Sports", "Fact Check", "Opinion"];
+        const CUSTOM_ICON_URL = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3ZGAKLh5xvrm4t5qAkDx-V1ZtOOojJxFFBZFeqjKcDW-P1YSHlwgZtV9DxrcurPE9lKEoZH5bk0C8nV69oAAllM5wxtcRy2cxZociXMx4MtOpuet6snChXDz0UTGXpnmkC9hhRs6dyHC77rM0KID9lZeACuS280CebuXqr4NrPJEqlOABfargbi7CW5I/s808/1000067315.jpg";
 
         let currentUser = null;
         let isAdmin = false;
-        let articleToEdit = null; 
-        
-        // --- CONSTANTS ---
-        const defaultCategories = ["Current Affairs", "Sports", "Fact Check", "Opinion"];
-        const DEFAULT_THUMBNAIL = "https://via.placeholder.com/1600x900/e5e7eb/4b5563?text=Infinity+Stream+News"; 
-        const AUTHOR_NAME = 'Infinity Stream News Desk';
-        const CUSTOM_ICON_URL = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3ZGAKLh5xvrm4t5qAkDx-V1ZtOOojJxFFBZFeqjKcDW-P1YSHlwgZtV9DxrcurPE9lKEoZH5bk0C8nV69oAAllM5wxtcRy2cxZociXMx4MtOpuet6snChXDz0UTGXpnmkC9hhRs6dyHC77rM0KID9lZeACuS280CebuXqr4NrPJEqlOABfargbi7CW5I/s808/1000067315.jpg";
+        let articleToEdit = null;
+        let isAuthReady = false;
 
-        // --- Category Management Functions ---
+        // UI TEXT Directly inside Module to prevent loading errors
+        const UI_TEXT = {
+            'news': 'News', 'home': 'Home', 'admin_dashboard': 'Admin Dashboard', 'login_google': 'Google Login', 
+            'login_admin': 'Admin Login (Email/Pass)', 'logout': 'Logout', 'latest_news': 'Latest News', 
+            'read_more': 'Read More', 'article_not_found': 'Article not found.', 'no_articles_in_category': 'No articles found in this category.', 
+            'error_loading_article': 'Error loading article:', 'article_edit': 'Edit Article', 'author_name': 'Infinity Stream News Desk', 
+            'admin_login_title': 'Admin Login', 'email': 'Email', 'password': 'Password', 'login': 'Login', 
+            'processing': 'Processing...', 'back_to_home': 'Back to Home', 'admin_access_denied_title': 'Access Denied', 
+            'admin_access_denied_body': 'Sorry, you are not authorized to access this page.', 'new_post': 'Create New Post', 
+            'edit_post': 'Edit Post', 'verified_admin': 'VERIFIED ADMIN', 'manage_categories': 'Manage Categories', 
+            'create_new_post': 'Create New Post', 'article_title': 'News Headline', 'thumbnail_link': 'Thumbnail Image Link (Optional)', 
+            'youtube_link': 'YouTube Video Link (Optional)', 'excerpt': 'Excerpt', 'body_content': 'Detailed News', 
+            'publish_post': 'Publish Post', 'update_post': 'Update Post', 'delete_post': 'Delete', 'recent_posts': 'Recent Posts', 
+            'loading': 'Loading...', 'no_published_articles': 'No published articles found.', 'edit': 'Edit', 
+            'category_management': 'Category Management', 'add_new_category': 'Create New Category', 'new_category_name': 'New Category Name', 
+            'add': 'Add', 'existing_categories': 'Edit/Delete Existing Categories', 'default_category': 'Default (Cannot be deleted)', 
+            'update_success': 'Successfully Updated!', 'publish_success': 'Successfully Published!', 'article_not_found_alert': 'Article not found.', 
+            'loading_fail': 'Failed to load posts:', 'category_loading_fail': 'Error loading categories:', 'admin_mode': 'ADMIN MODE', 
+            'reader_mode': 'READER MODE', 'unknown_date': 'Unknown Date', 'category_add_success': 'successfully added', 
+            'category_update_success': 'successfully updated', 'category_delete_success': 'successfully deleted', 
+            'go_back_to_dashboard': 'Go back to Post Dashboard'
+        };
+
+        const t = (key) => UI_TEXT[key] || key;
+
+        // --- GLOBAL FUNCTIONS ---
+        window.toggleMenu = () => {
+            const menu = document.getElementById('side-menu');
+            const overlay = document.getElementById('side-menu-overlay');
+            if(menu.classList.contains('translate-x-full')) {
+                menu.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(()=>overlay.classList.remove('opacity-0'),10);
+            } else {
+                menu.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(()=>overlay.classList.add('hidden'),300);
+            }
+        };
+
+        // --- CORE FUNCTIONS ---
         const loadCategories = async () => {
-            let categories = [...defaultCategories];
             let categoryObjects = [];
-
+            // Add defaults first
             defaultCategories.forEach(name => {
-                categoryObjects.push({ id: null, name: name });
+                categoryObjects.push({ id: null, name: name, isDefault: true });
             });
-
+            
             try {
-                const querySnapshot = await getDocs(collection(db, "categories"));
+                const categoriesRef = collection(db, "categories");
+                const q = query(categoriesRef, orderBy("name"));
+                const querySnapshot = await getDocs(q);
+                
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    const categoryObject = { id: doc.id, name: data.name };
-                    
-                    if(data.name && !categories.includes(data.name)) {
-                        categories.push(data.name); 
-                        categoryObjects.push(categoryObject); 
+                    // Prevent duplicates
+                    if(data.name && !defaultCategories.includes(data.name)) {
+                        categoryObjects.push({ id: doc.id, name: data.name, isDefault: false }); 
                     }
                 });
             } catch (e) {
-                console.error(t('category_loading_fail'), e);
+                console.error("Error loading categories from DB, showing defaults only:", e);
             }
+            
+            // Sort English A-Z
+            categoryObjects.sort((a, b) => a.name.localeCompare(b.name, 'en'));
             return categoryObjects; 
         };
-        
-        const renderCategoriesMenu = async (categoriesObjects) => {
+
+        const renderCategoriesMenu = (categoriesObjects) => {
             const menuList = document.getElementById('menu-categories');
             if(!menuList) return;
 
-            menuList.innerHTML = `<li><a id="menu-home-link" href="#home" onclick="toggleMenu()" class="hover:text-red-600 block">${t('home')}</a></li>`;
+            menuList.innerHTML = `<li><a href="#home" onclick="window.toggleMenu()" class="hover:text-red-600 block">${t('home')}</a></li>`;
             
             categoriesObjects.forEach(category => {
-                const name = category.name;
                 const item = document.createElement('li');
-                item.innerHTML = `<a href="#category/${encodeURIComponent(name)}" onclick="toggleMenu()" class="hover:text-red-600 block">${name}</a>`;
+                item.innerHTML = `<a href="#category/${encodeURIComponent(category.name)}" onclick="window.toggleMenu()" class="hover:text-red-600 block">${category.name}</a>`;
                 menuList.appendChild(item);
             });
 
             if(isAdmin) {
                 const adminItem = document.createElement('li');
-                adminItem.id = 'admin-menu-link';
-                adminItem.innerHTML = `<a href="#admin" onclick="toggleMenu()" class="text-red-600 font-bold block border-l-4 border-red-600 pl-2">${t('admin_dashboard')}</a>`;
+                adminItem.innerHTML = `<a href="#admin" onclick="window.toggleMenu()" class="text-red-600 font-bold block border-l-4 border-red-600 pl-2">${t('admin_dashboard')}</a>`;
                 menuList.appendChild(adminItem);
             }
         };
 
-        // --- Auth Listener ---
-        onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            isAdmin = user && ADMIN_EMAILS.includes(user.email);
-            updateLanguageUI(); // Call language update here to ensure user/admin status is reflected
-            router();
-        });
-
-        // --- UI Updates based on Auth ---
         const updateAuthUI = () => {
             const logoutBtn = document.getElementById('logout-btn');
             const loggedOutSection = document.getElementById('logged-out-section');
             const status = document.getElementById('auth-status');
-            const langEnBtnMobile = document.getElementById('lang-en-btn-mobile');
-            const langBnBtnMobile = document.getElementById('lang-bn-btn-mobile');
-            
-            // Sync mobile language buttons
-            if (langEnBtnMobile) langEnBtnMobile.classList.toggle('active', currentLang === LANG_EN);
-            if (langBnBtnMobile) langBnBtnMobile.classList.toggle('active', currentLang === LANG_BN);
-
 
             if (currentUser) {
                 loggedOutSection.classList.add('hidden');
@@ -502,50 +306,59 @@
                 
                 document.getElementById('login-google-btn').onclick = loginWithGoogle;
                 document.getElementById('login-email-btn').onclick = () => {
-                    toggleMenu();
+                    window.toggleMenu();
                     window.location.hash = '#admin-login';
                 };
             }
         };
 
+        const initUI = async () => {
+             // Static Text
+             const btnGoogle = document.getElementById('txt-login-google');
+             if(btnGoogle) btnGoogle.textContent = t('login_google');
+             
+             const btnAdmin = document.getElementById('txt-login-admin');
+             if(btnAdmin) btnAdmin.textContent = t('login_admin');
+             
+             const btnLogout = document.getElementById('logout-btn');
+             if(btnLogout) btnLogout.textContent = t('logout');
+
+             // Load Categories
+             const cats = await loadCategories();
+             renderCategoriesMenu(cats);
+             updateAuthUI();
+        }
+
+        // --- AUTH ACTIONS ---
         const loginWithGoogle = async () => {
             try {
                 const provider = new GoogleAuthProvider();
                 await signInWithPopup(auth, provider);
-                toggleMenu();
+                window.toggleMenu();
             } catch (error) {
-                alert("Google Login Error: " + error.message);
+                alert("Login Error: " + error.message);
             }
         };
 
         const loginWithEmailPassword = async (email, password) => {
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                
-                if (ADMIN_EMAILS.includes(userCredential.user.email)) {
-                    alert("Admin Login Successful!");
-                    window.location.hash = '#admin';
-                } else {
-                    await signOut(auth); 
-                    alert("Login Successful, but you are not authorized as an Admin.");
-                    window.location.hash = '#home';
-                }
             } catch (error) {
                 alert("Login Failed: " + error.message);
+                throw error;
             }
         };
 
-        // Utility to extract YouTube ID (KEEP AS IS)
+        // --- RENDERERS ---
+        const root = document.getElementById('app-root');
+        const renderLoading = () => root.innerHTML = `<div class="flex justify-center items-center h-64"><div class="loader"></div><p class="text-gray-600 ml-4 font-bold">${t('loading')}</p></div>`;
+
         const getYouTubeId = (url) => {
+            if(!url) return null;
             const regex = /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
             const match = url.match(regex);
             return (match && match[1]) ? match[1] : null;
         };
-
-
-        // --- Renderers ---
-        const root = document.getElementById('app-root');
-        const renderLoading = () => root.innerHTML = `<div class="flex justify-center items-center h-64"><div class="loader"></div><p class="text-gray-600 ml-4 font-bold">${t('loading')}</p></div>`;
 
         const renderHome = async (categoryFilter = null) => {
             renderLoading();
@@ -561,8 +374,8 @@
                 }
                 
                 const querySnapshot = await getDocs(q);
-                
                 let filteredDocs = [];
+                
                 querySnapshot.forEach(doc => {
                     if (!categoryFilter || doc.data().category === categoryFilter) {
                         filteredDocs.push({ id: doc.id, ...doc.data() });
@@ -572,20 +385,16 @@
                 if (filteredDocs.length === 0) return root.innerHTML = `<div class="text-center py-20 text-gray-500 text-xl font-semibold">${t('no_articles_in_category')}</div>`;
 
                 let html = `
-                    <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-8 border-b-4 border-red-600 pb-3 inline-block">
-                        ${filterTitle}
-                    </h1>
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-8 border-b-4 border-red-600 pb-3 inline-block">${filterTitle}</h1>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">`;
                 
                 filteredDocs.forEach((data) => {
-                    const dateString = data.createdAt?.toDate().toLocaleDateString(currentLang === LANG_BN ? 'bn-BD' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' }) || t('unknown_date');
+                    const dateString = data.createdAt?.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) || t('unknown_date');
                     const thumbnailSrc = data.thumbnail || null; 
-                    const hasThumbnail = !!thumbnailSrc;
                     
-                    // Advanced Article Card Design - Optimized for Grid
                     html += `
                     <div class="bg-white rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 group cursor-pointer" onclick="window.location.hash='#article/${data.id}'">
-                        ${hasThumbnail ? `
+                        ${thumbnailSrc ? `
                         <div class="h-56 relative overflow-hidden">
                             <img src="${thumbnailSrc}" alt="${data.title}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
                             <div class="absolute top-4 left-4"><span class="bg-red-700 text-white text-xs font-bold px-3 py-1 rounded-full uppercase shadow-lg">${data.category}</span></div>
@@ -613,22 +422,10 @@
                 if (!docSnap.exists()) return root.innerHTML = `<div class="text-center py-20 text-xl font-semibold">${t('article_not_found')}</div>`;
                 
                 const data = docSnap.data();
-                
-                let videoEmbed = '';
                 const videoId = getYouTubeId(data.youtubeLink || '');
-                if (videoId) {
-                    // Optimized video embed size
-                    videoEmbed = `<div class="aspect-video my-6 md:my-8 mx-auto w-full max-w-4xl">
-                        <iframe class="w-full h-full rounded-lg md:rounded-xl shadow-xl md:shadow-2xl" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>`;
-                }
-                
-                const dateString = data.createdAt?.toDate().toLocaleDateString(currentLang === LANG_BN ? 'bn-BD' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) || t('unknown_date');
-                const thumbnailSrc = data.thumbnail || null;
-                
+                const dateString = data.createdAt?.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) || t('unknown_date');
                 const adminEditButton = isAdmin ? `<button onclick="window.location.hash='#admin/edit/${id}'" class="text-[10px] md:text-xs bg-blue-600 text-white px-2 py-1 rounded-full hover:bg-blue-700 ml-2 md:ml-4 transition font-semibold">${t('article_edit')}</button>` : '';
 
-                
                 root.innerHTML = `
                 <article class="bg-white rounded-lg md:rounded-xl shadow-xl md:shadow-2xl overflow-hidden pb-8 md:pb-10 border border-gray-100">
                     <div class="px-4 md:px-12 pt-6 md:pt-8 pb-4">
@@ -646,9 +443,9 @@
                         </div>
                     </div>
 
-                    ${thumbnailSrc ? `<img src="${thumbnailSrc}" alt="${data.title} Thumbnail" class="w-full max-h-[400px] md:max-h-[500px] object-cover bg-gray-100 mb-6 shadow-xl">` : ''}
+                    ${data.thumbnail ? `<img src="${data.thumbnail}" alt="${data.title}" class="w-full max-h-[400px] md:max-h-[500px] object-cover bg-gray-100 mb-6 shadow-xl">` : ''}
                     
-                    ${videoEmbed}
+                    ${videoId ? `<div class="aspect-video my-6 md:my-8 mx-auto w-full max-w-4xl"><iframe class="w-full h-full rounded-lg md:rounded-xl shadow-xl md:shadow-2xl" src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe></div>` : ''}
                     
                     <div class="px-4 md:px-12 prose prose-xl prose-red max-w-none text-gray-800 article-content">${data.body}</div>
                 </article>`;
@@ -656,12 +453,9 @@
         };
 
         const renderAdminLogin = () => {
-            if (currentUser) {
-                window.location.hash = isAdmin ? '#admin' : '#home';
-                return;
-            }
+            if (currentUser && isAdmin) { window.location.hash = '#admin'; return; }
+            if (currentUser && !isAdmin) { window.location.hash = '#home'; return; }
 
-            // Optimized form layout for mobile and desktop
             root.innerHTML = `
                 <div class="flex flex-col items-center justify-center py-6 md:py-10 px-4">
                     <div class="bg-white p-6 md:p-10 rounded-xl shadow-2xl w-full max-w-md border-t-8 border-red-600">
@@ -682,27 +476,32 @@
                 e.preventDefault();
                 const email = document.getElementById('login-email').value;
                 const password = document.getElementById('login-password').value;
-                
                 const btn = e.target.querySelector('button');
                 const originalText = btn.innerText;
-                btn.innerText = t('processing');
-                btn.disabled = true;
-
-                if (ADMIN_EMAILS.includes(email)) {
-                    await loginWithEmailPassword(email, password);
-                } else {
-                    alert("Authorization denied. Only specific admin emails are allowed to log in here.");
+                
+                if (!ADMIN_EMAILS.includes(email)) {
+                    alert("Authorization denied. Only specific admin emails are allowed.");
+                    return;
                 }
 
-                btn.innerText = originalText;
-                btn.disabled = false;
+                btn.innerText = t('processing');
+                btn.disabled = true;
+                try {
+                    await loginWithEmailPassword(email, password);
+                } catch(err) {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
             });
         };
-        
-        // --- Category Management Dashboard ---
-        const renderCategoryManagement = async (categoriesObjects) => {
-            renderLoading(); 
-            
+
+        const renderCategoryManagement = async () => {
+             // Auth Check
+             if (!isAuthReady) { renderLoading(); return; }
+             if (!isAdmin) { window.location.hash = '#admin-login'; return; }
+
+            renderLoading();
+            const categoriesObjects = await loadCategories();
             const currentCategoryNames = categoriesObjects.map(c => c.name);
 
             root.innerHTML = `
@@ -711,7 +510,6 @@
                         <h2 class="text-2xl md:text-3xl font-bold text-gray-800">${t('category_management')}</h2>
                         <span class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">${t('verified_admin')}</span>
                     </div>
-                    
                     <a href="#admin" class="text-sm text-blue-600 hover:text-blue-800 font-bold mb-6 block"><i class="fas fa-arrow-left mr-2"></i>${t('go_back_to_dashboard')}</a>
 
                     <div class="border border-red-200 p-4 md:p-5 rounded-lg mb-8 bg-red-50">
@@ -721,241 +519,134 @@
                             <button id="addCategoryBtn" class="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition text-sm font-bold shadow-md md:w-auto">${t('add')}</button>
                         </div>
                     </div>
-                    
-                    <h3 class="text-xl font-bold mb-3 text-gray-800">${t('existing_categories')}</h3>
-                    <ul id="categoryList" class="divide-y divide-gray-200 border border-gray-200 rounded-lg shadow-inner">
-                        </ul>
-                </div>
-            `;
+                    <ul id="categoryList" class="divide-y divide-gray-200 border border-gray-200 rounded-lg shadow-inner"></ul>
+                </div>`;
             
             const categoryList = document.getElementById('categoryList');
-            
-            if (categoriesObjects.length === 0) {
-                categoryList.innerHTML = '<li class="p-4 text-gray-500">No categories found.</li>';
-            } else {
-                categoriesObjects.forEach(cat => {
-                    const isEditable = cat.id !== null; 
+            categoriesObjects.forEach(cat => {
+                const isEditable = !cat.isDefault;
+                const buttons = isEditable ? `
+                    <button data-id="${cat.id}" data-name="${cat.name}" class="edit-cat text-[10px] md:text-xs bg-blue-100 text-blue-700 px-2 md:px-3 py-1 rounded-full font-bold">Edit</button>
+                    <button data-id="${cat.id}" class="del-cat text-[10px] md:text-xs bg-red-100 text-red-700 px-2 md:px-3 py-1 rounded-full ml-2 font-bold">Delete</button>` 
+                    : `<span class="text-xs text-gray-400 font-semibold">${t('default_category')}</span>`;
 
-                    let actionButtons = '';
-                    if (isEditable) {
-                        actionButtons = `
-                            <button data-id="${cat.id}" data-name="${cat.name}" class="edit-category text-[10px] md:text-xs bg-blue-100 text-blue-700 px-2 md:px-3 py-1 rounded-full hover:bg-blue-200 transition font-bold">Edit</button>
-                            <button data-id="${cat.id}" class="delete-category text-[10px] md:text-xs bg-red-100 text-red-700 px-2 md:px-3 py-1 rounded-full hover:bg-red-200 transition ml-2 font-bold">Delete</button>
-                        `;
-                    } else {
-                        actionButtons = `<span class="text-xs text-gray-400 font-semibold">${t('default_category')}</span>`;
-                    }
+                categoryList.innerHTML += `<li class="flex justify-between items-center p-4 hover:bg-gray-50 transition"><span class="font-medium text-gray-900">${cat.name}</span><div>${buttons}</div></li>`;
+            });
 
-                    categoryList.innerHTML += `
-                        <li class="flex justify-between items-center p-4 hover:bg-gray-50 transition">
-                            <span class="font-medium text-gray-900 text-sm md:text-base">${cat.name}</span>
-                            <div>${actionButtons}</div>
-                        </li>
-                    `;
-                });
-            }
-            
-            // --- Event Handlers for Category Management (KEEP AS IS) ---
-            
+            // Handlers
             document.getElementById('addCategoryBtn').addEventListener('click', async () => {
-                const newCatInput = document.getElementById('newCategory');
-                const newCatName = newCatInput.value.trim();
-                
-                if (!newCatName) { alert("Please enter a category name."); return; }
-                if (currentCategoryNames.includes(newCatName)) { alert("This category already exists."); return; }
-
-                const btn = document.getElementById('addCategoryBtn');
-                btn.innerText = t('processing');
-                btn.disabled = true;
-
+                const name = document.getElementById('newCategory').value.trim();
+                if(!name || currentCategoryNames.includes(name)) return alert("Invalid or duplicate name.");
                 try {
-                    await addDoc(collection(db, "categories"), {
-                        name: newCatName,
-                        createdAt: serverTimestamp(),
-                        addedBy: currentUser.email
-                    });
-                    alert(`Category "${newCatName}" ${t('category_add_success')}!`);
-                    window.location.reload(); 
-                } catch (e) {
-                    alert("Failed to add category: " + e.message);
-                } finally {
-                    btn.innerText = t('add');
-                    btn.disabled = false;
+                    await addDoc(collection(db, "categories"), { name, createdAt: serverTimestamp(), addedBy: currentUser.email });
+                    renderCategoryManagement(); // Re-render
+                } catch(e) { alert(e.message); }
+            });
+
+            document.querySelectorAll('.edit-cat').forEach(b => b.addEventListener('click', async (e) => {
+                const id = e.target.getAttribute('data-id');
+                const oldName = e.target.getAttribute('data-name');
+                const newName = prompt("New Name:", oldName);
+                if(newName && newName.trim() !== oldName) {
+                    await updateDoc(doc(db, "categories", id), { name: newName.trim() });
+                    renderCategoryManagement();
                 }
-            });
+            }));
 
-            categoryList.querySelectorAll('.edit-category').forEach(button => {
-                button.addEventListener('click', async (e) => {
-                    const id = e.target.getAttribute('data-id');
-                    const oldName = e.target.getAttribute('data-name');
-                    const newName = prompt(`Enter a new name for category "${oldName}":`, oldName);
-                    
-                    if (newName && newName.trim() !== oldName) {
-                         if (currentCategoryNames.includes(newName.trim())) { alert("A category with this name already exists."); return; }
-                        if(!confirm(`Are you sure you want to change the category name to "${newName.trim()}"?`)) return;
-
-                        try {
-                            await updateDoc(doc(db, "categories", id), { name: newName.trim() });
-                            alert(t('category_update_success'));
-                            window.location.reload(); 
-                        } catch (e) {
-                            alert("Failed to update: " + e.message);
-                        }
-                    } else if (newName !== null) {
-                        alert("Name was not changed or the same name was provided.");
-                    }
-                });
-            });
-
-            categoryList.querySelectorAll('.delete-category').forEach(button => {
-                button.addEventListener('click', async (e) => {
-                    const id = e.target.getAttribute('data-id');
-                    
-                    if (confirm("Are you sure you want to delete this category? All posts currently using this category will remain unchanged until manually edited.")) {
-                        try {
-                            await deleteDoc(doc(db, "categories", id));
-                            alert(t('category_delete_success'));
-                            window.location.reload();
-                        } catch (e) {
-                            alert("Failed to delete: " + e.message);
-                        }
-                    }
-                });
-            });
+            document.querySelectorAll('.del-cat').forEach(b => b.addEventListener('click', async (e) => {
+                if(confirm("Delete this category?")) {
+                    await deleteDoc(doc(db, "categories", e.target.getAttribute('data-id')));
+                    renderCategoryManagement();
+                }
+            }));
         };
 
         const renderAdmin = async () => {
-            const isEditMode = articleToEdit !== null;
-
-            // 1. Authentication Check
-            if (!currentUser) {
-                renderAdminLogin();
+            // Wait for auth init
+            if (!isAuthReady) {
+                renderLoading();
                 return;
             }
-            if (!isAdmin) {
-                root.innerHTML = `<div class="flex flex-col items-center justify-center py-20 bg-red-50 rounded-xl border border-red-200 shadow-md"><i class="fas fa-ban text-4xl text-red-500 mb-4"></i><h2 class="text-xl font-bold text-red-700 mb-2">${t('admin_access_denied_title')}</h2><p class="text-gray-600 text-center max-w-md">${t('admin_access_denied_body').replace('।', `। <b>(${currentUser.email})</b>`)}</p></div>`;
+
+            if (!currentUser || !isAdmin) {
+                // If logged in as non-admin
+                if (currentUser) {
+                     root.innerHTML = `<div class="flex flex-col items-center justify-center py-20 bg-red-50 rounded-xl border border-red-200 shadow-md"><i class="fas fa-ban text-4xl text-red-500 mb-4"></i><h2 class="text-xl font-bold text-red-700 mb-2">${t('admin_access_denied_title')}</h2><p class="text-gray-600 text-center max-w-md">${t('admin_access_denied_body')} <b>(${currentUser.email})</b></p></div>`;
+                } else {
+                    renderAdminLogin();
+                }
                 return;
             }
 
             renderLoading();
             const categoriesObjects = await loadCategories();
             const categories = categoriesObjects.map(cat => cat.name);
-            
-            // Function to render the main dashboard UI
-            const renderDashboardUI = (mode = 'new') => {
-                root.innerHTML = `
-                    <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl border-t-8 border-red-600">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b pb-4">
-                            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">${mode === 'new' ? t('new_post') : t('edit_post')}</h2>
-                            <span class="text-xs mt-2 md:mt-0 bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">${t('verified_admin')}: ${currentUser.email}</span>
-                        </div>
-                        
-                        <div class="flex flex-wrap gap-3 mb-8">
-                            <a href="#admin/categories" class="text-sm bg-gray-200 text-gray-800 py-2 px-4 rounded-full hover:bg-gray-300 transition font-bold"><i class="fas fa-tags mr-2"></i>${t('manage_categories')}</a>
-                            ${mode === 'edit' ? `<a href="#admin" class="text-sm bg-red-100 text-red-700 py-2 px-4 rounded-full hover:bg-red-200 transition font-bold"><i class="fas fa-plus mr-2"></i>${t('create_new_post')}</a>` : ''}
-                        </div>
-                        
-                        <form id="postForm" class="space-y-4 md:space-y-5">
-                            <input type="hidden" id="articleId" value="${articleToEdit ? articleToEdit.id : ''}">
-                            <input type="text" id="title" class="w-full border p-3 md:p-4 rounded-lg text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('article_title')}" value="${articleToEdit ? articleToEdit.title : ''}" required>
-                            
-                            <select id="category" class="w-full border p-3 md:p-4 rounded-lg bg-white text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner">
-                                </select>
+            const mode = articleToEdit ? 'edit' : 'new';
 
-                            <input type="url" id="thumb" class="w-full border p-3 md:p-4 rounded-lg text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('thumbnail_link')}" value="${articleToEdit ? articleToEdit.thumbnail : ''}">
-                            <input type="url" id="youtubeLink" class="w-full border p-3 md:p-4 rounded-lg text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('youtube_link')}" value="${articleToEdit ? articleToEdit.youtubeLink : ''}">
-                            
-                            <textarea id="excerpt" rows="3" class="w-full border p-3 md:p-4 rounded-lg text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('excerpt')}" >${articleToEdit ? articleToEdit.excerpt : ''}</textarea>
-                            
-                            <textarea id="body" rows="15" class="w-full border p-3 md:p-4 rounded-lg text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('body_content')}" required>${articleToEdit ? articleToEdit.body : ''}</textarea>
-                            
-                            <div class="flex flex-col md:flex-row gap-4 pt-2">
-                                <button type="submit" id="submitBtn" class="flex-grow bg-red-600 text-white py-3 md:py-4 font-extrabold hover:bg-red-700 rounded-lg transition shadow-xl text-base">
-                                    ${mode === 'new' ? t('publish_post') : t('update_post')}
-                                </button>
-                                ${mode === 'edit' ? `<button type="button" id="deleteBtn" class="w-full md:w-1/4 bg-gray-500 text-white py-3 md:py-4 font-extrabold hover:bg-gray-600 rounded-lg transition shadow-xl text-base">${t('delete_post')}</button>` : ''}
-                            </div>
-                        </form>
+            root.innerHTML = `
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl border-t-8 border-red-600">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b pb-4">
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-800">${mode === 'new' ? t('new_post') : t('edit_post')}</h2>
+                        <span class="text-xs mt-2 md:mt-0 bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">${t('verified_admin')}: ${currentUser.email}</span>
                     </div>
-
-                    <h3 class="text-xl md:text-2xl font-bold mt-10 md:mt-12 mb-4 text-gray-800">${t('recent_posts')}</h3>
-                    <div id="admin-article-list" class="bg-white shadow-xl rounded-xl overflow-hidden border border-gray-100">
-                        </div>
-                `;
-
-                // Populate categories dropdown
-                const categorySelect = document.getElementById('category');
-                categories.forEach(cat => {
-                    const option = document.createElement('option');
-                    option.value = cat;
-                    option.textContent = cat;
-                    if (articleToEdit && articleToEdit.category === cat) {
-                        option.selected = true;
-                    } else if (mode === 'new' && cat === defaultCategories[0]) {
-                        option.selected = true;
-                    }
-                    categorySelect.appendChild(option);
-                });
-            };
-
-            renderDashboardUI(isEditMode ? 'edit' : 'new');
-
-            // Load and display recent posts for admin overview
-            const loadAdminPosts = async () => {
-                const listContainer = document.getElementById('admin-article-list');
-                listContainer.innerHTML = `<div class="p-4 text-center text-gray-500">${t('loading')}</div>`;
-                try {
-                    const q = query(collection(db, "articles"), orderBy("createdAt", "desc"), limit(10));
-                    const querySnapshot = await getDocs(q);
                     
-                    if (querySnapshot.empty) {
-                        listContainer.innerHTML = `<div class="p-4 text-gray-500">${t('no_published_articles')}</div>`;
-                        return;
-                    }
+                    <div class="flex flex-wrap gap-3 mb-8">
+                        <a href="#admin/categories" class="text-sm bg-gray-200 text-gray-800 py-2 px-4 rounded-full hover:bg-gray-300 transition font-bold"><i class="fas fa-tags mr-2"></i>${t('manage_categories')}</a>
+                        ${mode === 'edit' ? `<a href="#admin" class="text-sm bg-red-100 text-red-700 py-2 px-4 rounded-full hover:bg-red-200 transition font-bold"><i class="fas fa-plus mr-2"></i>${t('create_new_post')}</a>` : ''}
+                    </div>
+                    
+                    <form id="postForm" class="space-y-4 md:space-y-5">
+                        <input type="hidden" id="articleId" value="${articleToEdit ? articleToEdit.id : ''}">
+                        <input type="text" id="title" class="w-full border p-3 md:p-4 rounded-lg text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('article_title')}" value="${articleToEdit ? articleToEdit.title : ''}" required>
+                        <select id="category" class="w-full border p-3 md:p-4 rounded-lg bg-white text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner"></select>
+                        <input type="url" id="thumb" class="w-full border p-3 md:p-4 rounded-lg text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('thumbnail_link')}" value="${articleToEdit ? articleToEdit.thumbnail : ''}">
+                        <input type="url" id="youtubeLink" class="w-full border p-3 md:p-4 rounded-lg text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('youtube_link')}" value="${articleToEdit ? articleToEdit.youtubeLink : ''}">
+                        <textarea id="excerpt" rows="3" class="w-full border p-3 md:p-4 rounded-lg text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('excerpt')}">${articleToEdit ? articleToEdit.excerpt : ''}</textarea>
+                        <textarea id="body" rows="15" class="w-full border p-3 md:p-4 rounded-lg text-base focus:ring-4 ring-red-500 outline-none transition shadow-inner" placeholder="${t('body_content')}" required>${articleToEdit ? articleToEdit.body : ''}</textarea>
+                        
+                        <div class="flex flex-col md:flex-row gap-4 pt-2">
+                            <button type="submit" id="submitBtn" class="flex-grow bg-red-600 text-white py-3 md:py-4 font-extrabold hover:bg-red-700 rounded-lg transition shadow-xl text-base">${mode === 'new' ? t('publish_post') : t('update_post')}</button>
+                            ${mode === 'edit' ? `<button type="button" id="deleteBtn" class="w-full md:w-1/4 bg-gray-500 text-white py-3 md:py-4 font-extrabold hover:bg-gray-600 rounded-lg transition shadow-xl text-base">${t('delete_post')}</button>` : ''}
+                        </div>
+                    </form>
+                </div>
+                <h3 class="text-xl md:text-2xl font-bold mt-10 md:mt-12 mb-4 text-gray-800">${t('recent_posts')}</h3>
+                <div id="admin-article-list" class="bg-white shadow-xl rounded-xl overflow-hidden border border-gray-100"></div>`;
 
-                    let html = '<ul class="divide-y divide-gray-100">';
-                    querySnapshot.forEach((doc) => {
-                        const data = doc.data();
-                        const date = data.createdAt?.toDate().toLocaleDateString(currentLang === LANG_BN ? 'bn-BD' : 'en-US') || t('unknown_date');
-                        html += `
-                        <li class="flex justify-between items-center p-4 hover:bg-gray-50 transition">
-                            <div class="flex-grow">
-                                <p class="font-medium text-gray-900 line-clamp-1 text-sm md:text-base">${data.title}</p>
-                                <span class="text-xs text-red-600 font-bold">${data.category}</span>
-                                <span class="text-xs text-gray-500 ml-2"> | ${date}</span>
-                            </div>
-                            <button onclick="window.location.hash='#admin/edit/${doc.id}'" class="text-[10px] md:text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full ml-4 hover:bg-blue-200 font-bold">${t('edit')}</button>
-                        </li>`;
-                    });
-                    html += '</ul>';
-                    listContainer.innerHTML = html;
-                } catch (e) {
-                    listContainer.innerHTML = `<div class="p-4 text-red-500">${t('loading_fail')} ${e.message}</div>`;
-                }
-            };
-            loadAdminPosts();
+            // Populate Dropdown
+            const catSelect = document.getElementById('category');
+            categories.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat; opt.textContent = cat;
+                if((articleToEdit && articleToEdit.category === cat) || (!articleToEdit && cat === defaultCategories[0])) opt.selected = true;
+                catSelect.appendChild(opt);
+            });
 
+            // Load Recent Posts List
+            const listDiv = document.getElementById('admin-article-list');
+            const q = query(collection(db, "articles"), orderBy("createdAt", "desc"), limit(10));
+            getDocs(q).then(snap => {
+                if(snap.empty) { listDiv.innerHTML = `<div class="p-4 text-gray-500">${t('no_published_articles')}</div>`; return; }
+                let html = '<ul class="divide-y divide-gray-100">';
+                snap.forEach(doc => {
+                    const d = doc.data();
+                    const date = d.createdAt?.toDate().toLocaleDateString('en-US') || '-';
+                    html += `<li class="flex justify-between items-center p-4 hover:bg-gray-50 transition"><div class="flex-grow"><p class="font-medium text-gray-900 line-clamp-1 text-sm">${d.title}</p><span class="text-xs text-red-600 font-bold">${d.category}</span><span class="text-xs text-gray-500 ml-2">| ${date}</span></div><button onclick="window.location.hash='#admin/edit/${doc.id}'" class="text-[10px] md:text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full ml-4 font-bold">${t('edit')}</button></li>`;
+                });
+                listDiv.innerHTML = html + '</ul>';
+            });
 
-            // --- Event Listeners for Post Management (Submit/Delete) ---
-            
+            // Handle Submit
             document.getElementById('postForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                
                 const id = document.getElementById('articleId').value;
-                const mode = id ? 'Update' : 'Publish';
-                if(!confirm(`Are you sure you want to ${mode === 'Update' ? 'update' : 'publish'} this post?`)) return;
-                
                 const btn = document.getElementById('submitBtn');
-                const originalText = btn.innerText;
-                btn.innerText = t('processing');
-                btn.disabled = true;
+                btn.innerText = t('processing'); btn.disabled = true;
 
-                const thumbnailValue = document.getElementById('thumb').value.trim();
-                
                 const data = {
                     title: document.getElementById('title').value,
                     category: document.getElementById('category').value,
-                    thumbnail: thumbnailValue || '', 
+                    thumbnail: document.getElementById('thumb').value.trim(),
                     youtubeLink: document.getElementById('youtubeLink').value,
                     excerpt: document.getElementById('excerpt').value,
                     body: document.getElementById('body').value,
@@ -963,66 +654,52 @@
                 };
 
                 try {
-                    if (id) {
+                    if(id) {
                         data.updatedAt = serverTimestamp();
                         await updateDoc(doc(db, "articles", id), data);
                         alert(t('update_success'));
-                        window.location.hash = "#article/" + id;
                     } else {
                         data.createdAt = serverTimestamp();
-                        const newDoc = await addDoc(collection(db, "articles"), data);
+                        await addDoc(collection(db, "articles"), data);
                         alert(t('publish_success'));
-                        window.location.hash = "#article/" + newDoc.id;
                     }
-                } catch (err) {
-                    alert(`${mode === 'Update' ? 'Update' : 'Publish'} Failed: ` + err.message);
-                    btn.innerText = originalText;
-                    btn.disabled = false;
-                }
+                    window.location.hash = "#admin";
+                } catch(err) { alert(err.message); btn.disabled = false; }
             });
-
-            if (document.getElementById('deleteBtn')) {
+            
+            if(document.getElementById('deleteBtn')) {
                 document.getElementById('deleteBtn').addEventListener('click', async () => {
-                    const id = document.getElementById('articleId').value;
-                    if (!id || !confirm("Are you sure you want to delete this post? This action cannot be undone.")) return;
-                    
-                    const btn = document.getElementById('deleteBtn');
-                    btn.innerText = t('processing');
-                    btn.disabled = true;
-
-                    try {
-                        await deleteDoc(doc(db, "articles", id));
-                        alert("Post successfully deleted.");
+                    if(confirm("Permanently delete?")) {
+                        await deleteDoc(doc(db, "articles", document.getElementById('articleId').value));
                         window.location.hash = "#admin";
-                    } catch (e) {
-                        alert("Failed to delete: " + e.message);
-                        btn.innerText = t('delete_post');
-                        btn.disabled = false;
                     }
                 });
             }
         };
 
-        // --- Routing ---
+        // --- ROUTING ---
         const router = async () => {
             const hash = window.location.hash;
             const parts = hash.split('/');
 
-            articleToEdit = null;
+            // Reset edit state unless we are specifically in edit mode route
+            if(!(parts[0] === '#admin' && parts[1] === 'edit')) {
+                articleToEdit = null;
+            }
 
             if(!hash || hash === '#home') renderHome();
             else if(parts[0] === '#article' && parts[1]) renderArticle(parts[1]);
             else if(parts[0] === '#category' && parts[1]) renderHome(decodeURIComponent(parts[1]));
             else if(hash === '#admin-login') renderAdminLogin();
             else if(hash === '#admin') renderAdmin();
-            else if(hash === '#admin/categories') {
-                if(!isAdmin) { window.location.hash = '#admin-login'; return; }
-                renderCategoryManagement(await loadCategories()); 
-            }
+            else if(hash === '#admin/categories') renderCategoryManagement();
             else if(parts[0] === '#admin' && parts[1] === 'edit' && parts[2]) {
+                if(!isAuthReady) { renderLoading(); return; } // Wait for auth
                 if(!isAdmin) { window.location.hash = '#admin-login'; return; }
-                renderLoading();
-                try {
+                
+                // Fetch only if we haven't already OR if the ID is different
+                if(!articleToEdit || articleToEdit.id !== parts[2]) {
+                    renderLoading();
                     const docSnap = await getDoc(doc(db, "articles", parts[2]));
                     if (docSnap.exists()) {
                         articleToEdit = { id: docSnap.id, ...docSnap.data() };
@@ -1031,29 +708,21 @@
                         alert(t('article_not_found_alert'));
                         window.location.hash = '#admin';
                     }
-                } catch (e) {
-                    alert("Failed to load article: " + e.message);
-                    window.location.hash = '#admin';
+                } else {
+                    renderAdmin();
                 }
             }
         };
 
-        window.addEventListener('hashchange', router);
+        // --- INITIALIZATION ---
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            isAdmin = user && ADMIN_EMAILS.includes(user.email);
+            isAuthReady = true; // Signal that auth is done loading
+            initUI();
+            router();
+        });
 
-        // Menu Logic (KEEP AS IS)
-        window.toggleMenu = () => {
-            const menu = document.getElementById('side-menu');
-            const overlay = document.getElementById('side-menu-overlay');
-            if(menu.classList.contains('translate-x-full')) {
-                menu.classList.remove('translate-x-full');
-                overlay.classList.remove('hidden');
-                setTimeout(()=>overlay.classList.remove('opacity-0'),10);
-            } else {
-                menu.classList.add('translate-x-full');
-                overlay.classList.add('opacity-0');
-                setTimeout(()=>overlay.classList.add('hidden'),300);
-            }
-        };
+        window.addEventListener('hashchange', router);
     </script>
-</body>
 </html>
