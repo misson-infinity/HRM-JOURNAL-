@@ -100,6 +100,10 @@
             'category_update_success': 'successfully updated', 
             'category_delete_success': 'successfully deleted', 
             'go_back_to_dashboard': 'Go back to Post Dashboard',
+            // --- NEW UI TEXT FOR NEW FEATURES ---
+            'share_article': 'Share Article',
+            'copy_link': 'Copy Link',
+            'react_to_article': 'React to this Article',
         };
     </script>
 </head>
@@ -107,13 +111,14 @@
 
     <header class="bg-white sticky top-0 z-40 border-b border-gray-200 shadow-md h-16 md:h-20 flex items-center">
         <div class="container mx-auto px-4 md:px-6 lg:px-8 flex justify-between items-center relative max-w-7xl">
-            <a href="#home" class="flex items-end gap-1 group">
+            <a href="#home" class="flex flex-col items-start gap-0 group">
                 <div class="flex items-end relative">
                     <span class="font-brand text-2xl md:text-4xl font-bold tracking-tight text-red-600">Infinity</span>
-                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3ZGAKLh5xvrm4t5qAkDx-V1ZtOOojJxFFBZFeqjKcDW-P1YSHlwgZtV9DxrcurPE9lKEoZH5bk0C8nV69oAAllM5wxtcRy2cxZociXMx4MtOpuet6snChXDz0UTGXpnmkC9hhRs6dyHC77rM0KID9lZeACuS280CebuXqr4NrPJEqlOABfargbi7CW5I/s808/1000067315.jpg" alt="Stream Icon" class="brand-icon" />
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3ZGAKLh5xvrm4t5qAkDx-V1ZtOOojJxFFBZFeqjKcDW-P1YSHlwgZtV9DxrcurPE9lKEoZH5bk0C8nV69oAAllM5wxtcRy2cxZociXMx4MtOpuet6snChXDz0UTGXpnmkC9hhRs6dyHC77rM0KID9lZeACuS280CebuXqr4NrPJEqlOABfargbiCW5I/s808/1000067315.jpg" alt="Stream Icon" class="brand-icon" />
                     <span class="font-brand text-2xl md:text-4xl font-bold tracking-tight text-gray-900">Stream</span>
+                    <span class="text-xs md:text-sm font-bold text-gray-400 ml-2 tracking-wide">News Portal</span>
                 </div>
-                <sup class="text-[10px] md:text-[12px] uppercase font-bold text-red-600 ml-1 border px-1.5 py-0.5 md:px-2 border-red-400 bg-red-100 rounded-full mb-0.5">News Portal</sup>
+              <span id="header-date-time" class="text-[10px] md:text-xs font-bold text-gray-500 mt-1 px-0 py-[1px]"></span>
             </a>
 
             <div class="flex items-center gap-3 md:gap-4">
@@ -192,7 +197,7 @@
             "ahnafmahi19@gmail.com"
         ];
         const defaultCategories = ["Current Affairs", "Sports", "Fact Check", "Opinion"];
-        const CUSTOM_ICON_URL = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3ZGAKLh5xvrm4t5qAkDx-V1ZtOOojJxFFBZFeqjKcDW-P1YSHlwgZtV9DxrcurPE9lKEoZH5bk0C8nV69oAAllM5wxtcRy2cxZociXMx4MtOpuet6snChXDz0UTGXpnmkC9hhRs6dyHC77rM0KID9lZeACuS280CebuXqr4NrPJEqlOABfargbi7CW5I/s808/1000067315.jpg";
+        const CUSTOM_ICON_URL = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3ZGAKLh5xvrm4t5qAkDx-V1ZtOOojJxFFBZFeqjKcDW-P1YSHlwgZtV9DxrcurPE9lKEoZH5bk0C8nV69oAAllM5wxtcRy2cxZociXMx4MtOpuet6snChXDz0UTGXpnmkC9hhRs6dyHC77rM0KID9lZeACuS280CebuXqr4NrPJEqlOABfargbiCW5I/s808/1000067315.jpg";
 
         let currentUser = null;
         let isAdmin = false;
@@ -219,10 +224,44 @@
             'loading_fail': 'Failed to load posts:', 'category_loading_fail': 'Error loading categories:', 'admin_mode': 'ADMIN MODE', 
             'reader_mode': 'READER MODE', 'unknown_date': 'Unknown Date', 'category_add_success': 'successfully added', 
             'category_update_success': 'successfully updated', 'category_delete_success': 'successfully deleted', 
-            'go_back_to_dashboard': 'Go back to Post Dashboard'
+            'go_back_to_dashboard': 'Go back to Post Dashboard',
+            'share_article': 'Share Article', // New
+            'copy_link': 'Copy Link', // New
+            'react_to_article': 'React to this Article', // New
         };
 
         const t = (key) => UI_TEXT[key] || key;
+        
+        // --- NEW GLOBAL FUNCTIONS FOR REACTIONS AND SHARING ---
+
+        /**
+         * Simulates adding a reaction. In a real application, this would update
+         * a Firestore document's reaction count.
+         */
+        window.handleReaction = (reactionType, articleId) => {
+            console.log(`User reacted with: ${reactionType} to article ID: ${articleId}`);
+            // ALERT: This is for demonstration. A real feature requires database integration.
+            alert(`Thanks for reacting with ${reactionType}! (Feature in development)`);
+        };
+
+        /**
+         * Handles copying the current article's URL to the clipboard.
+         */
+        window.copyArticleLink = () => {
+             // Since the URL is hash-based, we use the current window location
+             const articleUrl = window.location.href;
+             navigator.clipboard.writeText(articleUrl).then(() => {
+                const copyBtn = document.getElementById('copyLinkBtn');
+                if (copyBtn) {
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = `<i class="fas fa-check mr-1"></i> Copied!`;
+                    setTimeout(() => { copyBtn.innerHTML = originalText; }, 2000);
+                }
+             }).catch(err => {
+                console.error('Could not copy text: ', err);
+                alert("Failed to copy link. Please copy it manually from your browser's address bar.");
+             });
+        };
 
         // --- GLOBAL FUNCTIONS ---
         window.toggleMenu = () => {
@@ -238,6 +277,30 @@
                 setTimeout(()=>overlay.classList.add('hidden'),300);
             }
         };
+
+        // NEW FUNCTION: Update the live date and time in the header
+        const updateHeaderDateTime = () => {
+            const dateTimeElement = document.getElementById('header-date-time');
+            if(dateTimeElement) {
+                const now = new Date();
+                // Format: Day, Month Day, Year | HH:MM AM/PM
+                const options = { 
+                    weekday: 'short', 
+                    month: 'short', 
+                    day: 'numeric', 
+                    year: 'numeric', 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    hour12: true 
+                };
+                // Use a generic locale or 'en-US' for consistency
+                const formattedDateTime = now.toLocaleDateString('en-US', options).toUpperCase().replace(/, /g, ' | ');
+                dateTimeElement.textContent = formattedDateTime;
+            }
+        }
+        // Set up interval to update time every 60 seconds (60000ms)
+        setInterval(updateHeaderDateTime, 60000);
+
 
         // --- CORE FUNCTIONS ---
         const loadCategories = async () => {
@@ -327,6 +390,7 @@
              const cats = await loadCategories();
              renderCategoriesMenu(cats);
              updateAuthUI();
+             updateHeaderDateTime(); // Initial call for date/time
         }
 
         // --- AUTH ACTIONS ---
@@ -423,14 +487,58 @@
                 
                 const data = docSnap.data();
                 const videoId = getYouTubeId(data.youtubeLink || '');
+                // Date string now includes time for full display
                 const dateString = data.createdAt?.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) || t('unknown_date');
                 const adminEditButton = isAdmin ? `<button onclick="window.location.hash='#admin/edit/${id}'" class="text-[10px] md:text-xs bg-blue-600 text-white px-2 py-1 rounded-full hover:bg-blue-700 ml-2 md:ml-4 transition font-semibold">${t('article_edit')}</button>` : '';
+
+                // --- NEW: SHARE AND REACTION FEATURES HTML ---
+                const articleUrl = window.location.href;
+                const articleTitle = encodeURIComponent(data.title);
+                const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`;
+                const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(articleUrl)}&text=${articleTitle}`;
+
+                const shareAndReactionSection = `
+                    <div class="px-4 md:px-12 mt-8 pt-6 border-t border-gray-200">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            
+                            <div class="md:w-1/2">
+                                <h3 class="text-lg font-bold text-gray-800 mb-3">${t('share_article')}</h3>
+                                <div class="flex flex-wrap gap-3">
+                                    <a href="${facebookShareUrl}" target="_blank" class="flex items-center bg-blue-600 text-white text-sm font-bold px-3 py-2 rounded-lg hover:bg-blue-700 transition shadow-md">
+                                        <i class="fab fa-facebook-f mr-2"></i> Facebook
+                                    </a>
+                                    <a href="${twitterShareUrl}" target="_blank" class="flex items-center bg-black text-white text-sm font-bold px-3 py-2 rounded-lg hover:bg-gray-800 transition shadow-md">
+                                        <i class="fa-brands fa-x-twitter mr-2"></i> X (Twitter)
+                                    </a>
+                                    <button id="copyLinkBtn" onclick="window.copyArticleLink()" class="flex items-center bg-gray-200 text-gray-800 text-sm font-bold px-3 py-2 rounded-lg hover:bg-gray-300 transition shadow-md">
+                                        <i class="fas fa-link mr-2"></i> ${t('copy_link')}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="md:w-1/2">
+                                <h3 class="text-lg font-bold text-gray-800 mb-3">${t('react_to_article')}</h3>
+                                <div class="flex gap-3">
+                                    <button onclick="window.handleReaction('👍', '${id}')" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">👍</button>
+                                    <button onclick="window.handleReaction('❤️', '${id}')" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">❤️</button>
+                                    <button onclick="window.handleReaction('😂', '${id}')" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">😂</button>
+                                    <button onclick="window.handleReaction('😢', '${id}')" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">😢</button>
+                                    <button onclick="window.handleReaction('😡', '${id}')" class="text-2xl hover:scale-110 transition duration-150 p-2 bg-gray-100 rounded-full shadow-md">😡</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                // --- END NEW HTML ---
 
                 root.innerHTML = `
                 <article class="bg-white rounded-lg md:rounded-xl shadow-xl md:shadow-2xl overflow-hidden pb-8 md:pb-10 border border-gray-100">
                     <div class="px-4 md:px-12 pt-6 md:pt-8 pb-4">
                         <span class="text-red-700 font-extrabold text-xs md:text-sm uppercase tracking-widest bg-red-50 px-3 py-1 rounded-full">${data.category}</span>
-                        <h1 class="headline-lg mt-3 md:mt-4 mb-4 md:mb-6 leading-tight text-gray-900">${data.title}</h1>
+                        
+                        <h1 class="headline-lg mt-3 md:mt-4 mb-1 md:mb-2 leading-tight text-gray-900">${data.title}</h1>
+                        <p class="text-sm text-gray-500 font-medium mb-4">Published: ${dateString}</p>
+                        
                     </div>
                     
                     <div class="px-4 md:px-12 flex items-center gap-4 mb-6 pb-4 md:pb-6 border-b border-gray-200">
@@ -439,7 +547,7 @@
                         </div>
                         <div>
                             <p class="font-bold text-sm md:text-base text-gray-800">${t('author_name')} ${adminEditButton}</p>
-                            <p class="text-xs text-gray-500">${dateString}</p>
+                            <p class="text-xs text-gray-500"></p>
                         </div>
                     </div>
 
@@ -448,7 +556,9 @@
                     ${videoId ? `<div class="aspect-video my-6 md:my-8 mx-auto w-full max-w-4xl"><iframe class="w-full h-full rounded-lg md:rounded-xl shadow-xl md:shadow-2xl" src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe></div>` : ''}
                     
                     <div class="px-4 md:px-12 prose prose-xl prose-red max-w-none text-gray-800 article-content">${data.body}</div>
-                </article>`;
+
+                    ${shareAndReactionSection}
+                    </article>`;
             } catch (e) { root.innerHTML = `<div class="text-center text-red-500">${t('error_loading_article')} ${e.message}</div>`; }
         };
 
