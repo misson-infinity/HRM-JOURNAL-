@@ -582,7 +582,13 @@
     </template>
 
     <script>
-        const firebaseConfig = { apiKey: "AIzaSyCOuYUqDgdRk0n4KZXVCIn1Nlh2TO10-I8", authDomain: "bgc-campus.firebaseapp.com", databaseURL: "https://bgc-campus-default-rtdb.firebaseio.com", projectId: "bgc-campus", storageBucket: "bgc-campus.firebasestorage.app", messagingSenderId: "318178229172", appId: "1:318178229172:web:ff2a519ee31219ddd4d0e1" };
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional const
+firebaseConfig = { apiKey: "AIzaSyB0UlO_oK960Us7ZjfbHJp39GGXbiNTCYk",
+authDomain: "onushilon-9029d.firebaseapp.com", databaseURL:
+"https://onushilon-9029d-default-rtdb.asia-southeast1.firebasedatabase.app",
+projectId: "onushilon-9029d", storageBucket:
+"onushilon-9029d.firebasestorage.app", messagingSenderId: "485451638833", appId:
+"1:485451638833:web:22f770bfa28caa1f1f8d10", measurementId: "G-HHMSLQE76Q" };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(); const db = firebase.firestore();
         let currentUser = null; let userDoc = null; let userDocListener = null;
